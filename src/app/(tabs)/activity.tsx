@@ -1,5 +1,5 @@
-import ExploreScreen from "@/features/explore/ExploreScreen";
+import ActivityScreen from "@/features/activity/ActivityScreen";
 
 export default function Screen() {
-    return <ExploreScreen />;
+    return <ActivityScreen />;
 }
