@@ -1,5 +1,6 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
+import RingChart from "@/shared/components/ui/RingChart";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Dimensions, Text, View } from "react-native";
 
@@ -73,9 +74,23 @@ export default function TodayActivity() {
                                 })}
                             </RowView>
                         </ColView>
-                        <View className="h-24 rounded-full aspect-square border-12 border-primary">
+                        <View className="hidden h-24 rounded-full aspect-square border-12 border-primary">
                             <View className="flex-1 justify-center items-center">
-                                <Text className="text-2xl font-medium">
+                                <Text className="text-xl font-medium">
+                                    {progress.toFixed(0)}
+                                    <Text className="text-sm">%</Text>
+                                </Text>
+                            </View>
+                        </View>
+                        <View className="bg-card">
+                            <RingChart
+                                pct={progress}
+                                radius={32}
+                                strokeWidth={10}
+                                trackColor="transparent"
+                            />
+                            <View className="absolute top-0 left-0 w-full h-full flex-1 justify-center items-center">
+                                <Text className="text-xl font-medium">
                                     {progress.toFixed(0)}
                                     <Text className="text-sm">%</Text>
                                 </Text>

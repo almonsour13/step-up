@@ -1,5 +1,6 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
+import RingChart from "@/shared/components/ui/RingChart";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { format } from "date-fns";
@@ -92,11 +93,17 @@ export default function RecentActivity() {
                         <Card key={i}>
                             <RowView className="gap-4">
                                 {/* tempaory icon holder */}
-                                <View className="h-20 rounded-full aspect-square border-8 border-primary">
-                                    <View className="flex-1 justify-center items-center">
-                                        <Text className="text-2xl font-medium text-foreground">
+                                <View className="bg-card">
+                                    <RingChart
+                                        pct={progress}
+                                        radius={26}
+                                        strokeWidth={8}
+                                        trackColor="transparent"
+                                    />
+                                    <View className="absolute top-0 left-0 w-full h-full flex-1 justify-center items-center">
+                                        <Text className="text-sm font-medium text-foreground">
                                             {progress.toFixed(0)}
-                                            <Text className="text-sm">%</Text>
+                                            <Text className="text-xs">%</Text>
                                         </Text>
                                     </View>
                                 </View>
@@ -115,9 +122,11 @@ export default function RecentActivity() {
                                     </RowView>
                                     <RowView className="items-center">
                                         <Text className="text-2xl text-foreground font-medium">
-                                            {activity.steps}{" "}
-                                            <Text className="text-xs font-normal text-muted-foreground">
-                                                / {activity.goal} steps
+                                            {activity.steps.toLocaleString()}{" "}
+                                            <Text className="text-xs text-muted-foreground">
+                                                /{" "}
+                                                {activity.goal.toLocaleString()}{" "}
+                                                steps
                                             </Text>
                                         </Text>
                                     </RowView>
@@ -135,6 +144,7 @@ export default function RecentActivity() {
                                                             size={12}
                                                             className="text-primary"
                                                         />
+                                                        {/* <View className="w-1.5 h-1.5 rounded-full bg-primary" /> */}
                                                         <Text className="text-sm text-foreground font-semibold">
                                                             {stat.value}{" "}
                                                             {stat.unit && (
