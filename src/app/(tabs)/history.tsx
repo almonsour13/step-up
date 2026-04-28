@@ -1,5 +1,5 @@
-import ProfileScreen from "@/features/profile/ProfileScreen";
+import HistoryScreen from "@/features/history/HistoryScreen";
 
 export default function Screen() {
-    return <ProfileScreen />;
+    return <HistoryScreen />;
 }

@@ -20,14 +20,14 @@ export default function MainNavigation() {
             active: true,
         },
         {
-            label: "Explore",
-            href: "/explore",
-            icon: "earth",
+            label: "Activity",
+            href: "/activity",
+            icon: "footsteps",
         },
         {
-            label: "Profile",
-            href: "/profile",
-            icon: "person",
+            label: "History",
+            href: "/history",
+            icon: "time",
         },
     ];
     const isItemActive = (href: Href) => {
@@ -39,7 +39,7 @@ export default function MainNavigation() {
     if (HIDE_ON_THIS_ROUTE.includes(pathname)) return null;
 
     return (
-        <View className="px-8 h-20 rounded-t-2xl bg-card border border-b-0 border-border">
+        <View className="px-8 h-20">
             <RowView className="flex-1 justify-between items-center">
                 {menus.map((menu, index) => {
                     const isActive = isItemActive(menu.href);
@@ -49,7 +49,7 @@ export default function MainNavigation() {
                             key={menu.label}
                             onPress={() => router.push(menu.href)}
                         >
-                            <ColView className="gap-1 min-h-12 justify-center items-center">
+                            <ColView className="gap-2 min-h-12 justify-center items-center">
                                 <Ionicons
                                     name={menu.icon}
                                     size={24}
@@ -58,9 +58,15 @@ export default function MainNavigation() {
                                         isActive && "text-primary",
                                     )}
                                 />
+                                <View
+                                    className={clsx(
+                                        "h-2 aspect-square rounded-full bg-primary",
+                                        !isActive && "opacity-0",
+                                    )}
+                                />
                                 <Text
                                     className={clsx(
-                                        "text-xs text-muted-foreground",
+                                        "hidden text-xs text-muted-foreground",
                                         isActive && "text-primary",
                                     )}
                                 >
