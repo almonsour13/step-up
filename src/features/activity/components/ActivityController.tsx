@@ -6,7 +6,7 @@ export default function ActivityController() {
     return (
         <RowView className="justify-center">
             <TouchableOpacity className="h-24 aspect-square rounded-full bg-primary justify-center items-center">
-                <Ionicons name="play" size={28} />
+                <Ionicons name="play" size={28} className="text-white" />
             </TouchableOpacity>
         </RowView>
     );
