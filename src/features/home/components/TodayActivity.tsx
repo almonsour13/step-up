@@ -47,7 +47,7 @@ export default function TodayActivity() {
                                     return (
                                         <ColView
                                             key={stat.label}
-                                            className="justify-center items-start gap-0"
+                                            className="justify-center items-start gap-0.5"
                                         >
                                             <RowView className="items-end gap-1">
                                                 <Text className="text-xl text-foreground font-semibold">
@@ -88,6 +88,7 @@ export default function TodayActivity() {
                                 radius={32}
                                 strokeWidth={10}
                                 trackColor="transparent"
+                                startDeg={180}
                             />
                             <View className="absolute top-0 left-0 w-full h-full flex-1 justify-center items-center">
                                 <Text className="text-xl font-medium">

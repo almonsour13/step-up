@@ -61,7 +61,7 @@ export default function MainNavigation() {
                                 <View
                                     className={clsx(
                                         "h-2 aspect-square rounded-full bg-primary",
-                                        !isActive && "opacity-0",
+                                        !isActive && "hidden",
                                     )}
                                 />
                                 <Text
