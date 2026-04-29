@@ -9,6 +9,8 @@ interface RingChartProps {
     strokeLinecap?: StrokeLinecap;
     trackColor?: string;
     progressColor?: string;
+    gapDeg?: number;
+    startDeg?: number; // 0 = 12 o'clock, 90 = 3 o'clock, 180 = 6 o'clock, etc.
 }
 
 export default function RingChart({
@@ -18,37 +20,41 @@ export default function RingChart({
     strokeLinecap = "round",
     trackColor = "#e5e7eb",
     progressColor = "#3b82f6",
+    gapDeg = 0,
+    startDeg = 0,
 }: RingChartProps) {
-    const RADIUS = radius;
-    const STROKE_WIDTH = strokeWidth;
-    const CENTER = RADIUS + STROKE_WIDTH;
-    const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
-    const SIZE = (RADIUS + STROKE_WIDTH) * 2;
+    const CENTER = radius + strokeWidth;
+    const CIRCUMFERENCE = 2 * Math.PI * radius;
+    const SIZE = (radius + strokeWidth) * 2;
 
-    const dashLength = (pct / 100) * CIRCUMFERENCE;
+    const gapLength = (gapDeg / 360) * CIRCUMFERENCE;
+    const trackArcLength = CIRCUMFERENCE - gapLength * 2;
+    const progressArcLength = (pct / 100) * trackArcLength;
+
+    // -90 normalizes 0 to 12 o'clock, startDeg rotates from there, gapDeg offsets for the gap
+    const rotation = -90 + startDeg + gapDeg;
 
     return (
         <Svg width={SIZE} height={SIZE}>
-            <G rotation="-90" origin={`${CENTER}, ${CENTER}`}>
-                {/* Background track */}
+            <G rotation={rotation} origin={`${CENTER}, ${CENTER}`}>
                 <Circle
                     cx={CENTER}
                     cy={CENTER}
-                    r={RADIUS}
+                    r={radius}
                     fill="transparent"
                     stroke={trackColor}
-                    strokeWidth={STROKE_WIDTH}
+                    strokeWidth={strokeWidth}
+                    strokeDasharray={`${trackArcLength} ${CIRCUMFERENCE}`}
+                    strokeLinecap={strokeLinecap}
                 />
-
-                {/* Progress arc */}
                 <Circle
                     cx={CENTER}
                     cy={CENTER}
-                    r={RADIUS}
+                    r={radius}
                     fill="transparent"
-                    stroke={progressColor} // ✅ FIXED
-                    strokeWidth={STROKE_WIDTH}
-                    strokeDasharray={`${dashLength} ${CIRCUMFERENCE}`}
+                    stroke={progressColor}
+                    strokeWidth={strokeWidth}
+                    strokeDasharray={`${progressArcLength} ${CIRCUMFERENCE}`}
                     strokeLinecap={strokeLinecap}
                 />
             </G>

@@ -99,6 +99,7 @@ export default function RecentActivity() {
                                         radius={26}
                                         strokeWidth={8}
                                         trackColor="transparent"
+                                        startDeg={180}
                                     />
                                     <View className="absolute top-0 left-0 w-full h-full flex-1 justify-center items-center">
                                         <Text className="text-sm font-medium text-foreground">
