@@ -1,9 +1,13 @@
+import { useActivityState } from "@/features/activity/hooks/use-activity-state";
+import ActiveActivityBanner from "@/shared/components/ActiveActivityBanner";
 import MainNavigation from "@/shared/components/layout/MainNavigation";
 import { Stack } from "expo-router";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabLayout() {
+    useActivityState();
+
     return (
         <>
             <SafeAreaView style={{ flex: 1 }}>
@@ -11,9 +15,10 @@ export default function TabLayout() {
                     screenOptions={{
                         headerShown: false,
                         contentStyle: { backgroundColor: "transparent" },
-                        animation: "none",
+                        animation: "fade",
                     }}
                 />
+                <ActiveActivityBanner />
                 <MainNavigation />
             </SafeAreaView>
         </>
