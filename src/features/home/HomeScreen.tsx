@@ -14,6 +14,7 @@ export default function HomeScreen() {
                         Home
                     </Text>
                 </View>
+                {/* add content here */}
                 <View className="px-4">
                     <Card className="h-48" />
                 </View>
