@@ -15,7 +15,7 @@ export default function ActivityProgress() {
                         <Text className="text-xs tracking-widest uppercase text-muted-foreground">
                             steps
                         </Text>
-                        <Text className="text-6xl text-white font-medium">
+                        <Text className="text-6xl text-primary font-medium">
                             {current.toLocaleString()}
                         </Text>
                         <View className="flex-row items-center gap-2 mt-1">

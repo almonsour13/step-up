@@ -1,18 +1,30 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
+import { formatDuration } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text } from "react-native";
+import { useActivityStore } from "../stores/use-activity.store";
 
 export default function ActivityStatistic() {
-    const stats: {
-        label: string;
-        value: string;
-        unit?: string;
-        icon: keyof typeof Ionicons.glyphMap;
-    }[] = [
-        { label: "Duration", value: "01:23", icon: "time" },
-        { label: "Distance", value: "4.8", unit: "km", icon: "location" },
-        { label: "Calories", value: "285", unit: "kcal", icon: "flame" },
+    const { status, duration } = useActivityStore();
+    const stats = [
+        {
+            label: "Duration",
+            value: formatDuration(duration),
+            icon: "time" as const,
+        },
+        {
+            label: "Distance",
+            value: "4.8",
+            unit: "km",
+            icon: "location" as const,
+        },
+        {
+            label: "Calories",
+            value: "285",
+            unit: "kcal",
+            icon: "flame" as const,
+        },
     ];
     return (
         <RowView className="justify-between gap-2">

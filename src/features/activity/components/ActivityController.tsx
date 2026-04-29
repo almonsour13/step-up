@@ -1,30 +1,44 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
+import { clsx } from "clsx";
 import { Text, TouchableOpacity } from "react-native";
-
-type ActivityState = "idle" | "running" | "paused";
+import { useActivityStore } from "../stores/use-activity.store";
 
 export default function ActivityController() {
-    const [state, setState] = useState<ActivityState>("idle");
+    const status = useActivityStore((s) => s.status);
+    const start = useActivityStore((s) => s.start);
+    const pause = useActivityStore((s) => s.pause);
+    const resume = useActivityStore((s) => s.resume);
+    const discard = useActivityStore((s) => s.discard);
 
-    const isRunning = state === "running";
-    const isPaused = state === "paused";
+    const isRunning = status === "active";
+    const isPaused = status === "paused";
 
-    const handleMain = () => {
-        if (state === "idle" || state === "paused") setState("running");
-        else setState("paused");
+    const handleMain = async () => {
+        if (isRunning) {
+            await pause();
+        } else if (isPaused) {
+            await resume();
+        } else {
+            await start();
+        }
     };
 
-    const handleReset = () => setState("idle");
-
+    const handleReset = async () => {
+        await discard();
+    };
+    const isDisabled = status === "idle" || isRunning;
     return (
         <RowView className="justify-center items-end gap-6">
             {/* Reset */}
             <ColView className="items-center gap-1.5">
                 <TouchableOpacity
                     onPress={handleReset}
-                    className="h-[52px] aspect-square rounded-full bg-card border border-border items-center justify-center"
+                    disabled={isDisabled}
+                    className={clsx(
+                        "h-16 aspect-square rounded-full bg-card items-center justify-center",
+                        isDisabled && "opacity-50",
+                    )}
                 >
                     <Ionicons
                         name="refresh"
@@ -40,7 +54,12 @@ export default function ActivityController() {
                 <TouchableOpacity
                     onPress={handleMain}
                     activeOpacity={0.8}
-                    className="h-24 aspect-square rounded-full bg-primary items-center justify-center"
+                    className={clsx(
+                        "h-24 aspect-square rounded-full items-center justify-center",
+                        isRunning
+                            ? "bg-destructive animate-pulse"
+                            : "bg-primary",
+                    )}
                 >
                     <Ionicons
                         name={isRunning ? "pause" : "play"}
@@ -53,16 +72,24 @@ export default function ActivityController() {
                 </Text>
             </ColView>
 
-            {/* History / lap */}
+            {/* Lap */}
             <ColView className="items-center gap-1.5">
-                <TouchableOpacity className="h-[52px] aspect-square rounded-full bg-card border border-border items-center justify-center">
+                <TouchableOpacity
+                    disabled={isDisabled}
+                    className={clsx(
+                        "h-16 aspect-square rounded-full bg-primary items-center justify-center",
+                        isDisabled && "opacity-50",
+                    )}
+                >
                     <Ionicons
-                        name="flag-outline"
+                        name="checkmark"
                         size={20}
-                        className="text-muted-foreground"
+                        className="text-white"
                     />
                 </TouchableOpacity>
-                <Text className="text-[10px] text-muted-foreground">Lap</Text>
+                <Text className="text-[10px] text-muted-foreground">
+                    Finish
+                </Text>
             </ColView>
         </RowView>
     );
