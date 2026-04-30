@@ -1,7 +1,5 @@
-import { activityStorageService } from "@/shared/services/activity-storage.service";
-import { Activity } from "@/shared/types/type";
-import { formatDuration } from "@/shared/utils/activity.utils";
-import { useEffect, useMemo, useState } from "react";
+import { useActivityStore } from "@/shared/stores/use-activity.store";
+import { useMemo } from "react";
 
 const TEMP_USER = {
     weightKg: 65,
@@ -9,53 +7,39 @@ const TEMP_USER = {
 };
 
 export const useTodayActivity = () => {
-    const [todayActivities, setTodayActivities] = useState<Activity[]>([]);
+    const activities = useActivityStore((s) => s.activities);
 
-    async function fetchTodayActivities() {
-        const data = await activityStorageService.getToday();
-        setTodayActivities(data);
-    }
+    return useMemo(() => {
+        const startOfToday = new Date();
+        startOfToday.setHours(0, 0, 0, 0);
 
-    useEffect(() => {
-        fetchTodayActivities();
-    }, []);
+        const endOfToday = new Date();
+        endOfToday.setHours(23, 59, 59, 999);
 
-    // ─── Aggregations ─────────────────────────────
+        const filtered = activities.filter((activity) => {
+            const createdAt = new Date(activity.createdAt);
+            return createdAt >= startOfToday && createdAt <= endOfToday;
+        });
 
-    const totalSteps = useMemo(() => {
-        return todayActivities.reduce((sum, a) => sum + a.steps, 0);
-    }, [todayActivities]);
+        const totalSteps = filtered.reduce((sum, a) => sum + a.steps, 0);
+        const totalGoalSteps = filtered.reduce(
+            (sum, a) => sum + (a.goalStep ?? 0),
+            0,
+        );
+        const totalDuration = filtered.reduce((sum, a) => sum + a.duration, 0);
+        const totalCalories = Math.round(totalSteps * 0.04);
+        const totalDistance = +(totalSteps * 0.0008).toFixed(2);
+        const totalProgress = (totalSteps / totalGoalSteps) * 100;
 
-    const totalGoalSteps = useMemo(() => {
-        return todayActivities.reduce((sum, a) => sum + (a.goalStep ?? 0), 0);
-    }, [todayActivities]);
+        const totalSeconds = Math.floor(totalDuration / 1000);
+        const hours = Math.floor(totalSeconds / 3600);
+        const mins = Math.floor((totalSeconds % 3600) / 60);
+        const duration = `${hours}h ${mins}m`;
 
-    const totalDuration = useMemo(() => {
-        return todayActivities.reduce((sum, a) => sum + a.duration, 0);
-    }, [todayActivities]);
-
-    const totalCalories = useMemo(() => {
-        // simple estimate (you can improve later)
-        return Math.round(totalSteps * 0.04);
-    }, [totalSteps]);
-
-    const totalDistance = useMemo(() => {
-        // rough estimate: 1 step ≈ 0.0008 km
-        return +(totalSteps * 0.0008).toFixed(2);
-    }, [totalSteps]);
-
-    const totalProgress = useMemo(() => {
-        if (totalGoalSteps === 0) return 0;
-        return totalSteps / totalGoalSteps;
-    }, [totalSteps, totalGoalSteps]);
-
-    // ─── Stats UI ─────────────────────────────
-
-    const stats = useMemo(
-        () => [
+        const stats = [
             {
                 label: "Duration",
-                value: formatDuration(totalDuration),
+                value: duration,
                 icon: "time" as const,
             },
             {
@@ -70,15 +54,14 @@ export const useTodayActivity = () => {
                 unit: "kcal",
                 icon: "flame" as const,
             },
-        ],
-        [totalDuration, totalDistance, totalCalories],
-    );
+        ];
 
-    return {
-        todayActivities,
-        totalSteps,
-        totalGoalSteps,
-        totalProgress,
-        stats,
-    };
+        return {
+            todayActivities: filtered,
+            totalSteps,
+            totalGoalSteps,
+            totalProgress,
+            stats,
+        };
+    }, [activities]);
 };

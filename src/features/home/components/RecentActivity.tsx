@@ -1,129 +1,99 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
 import RingChart from "@/shared/components/ui/RingChart";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { format } from "date-fns";
-import { Text, View } from "react-native";
+import { format, isToday, isYesterday } from "date-fns";
+import { useRouter } from "expo-router";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useRecentActivities } from "../hooks/use-recent-activity";
 
-import { useRecentActivityStore } from "../stores/use-recent-activity.store";
+function formatActivityDate(date: Date) {
+    if (isToday(date)) return "Today";
+    if (isYesterday(date)) return "Yesterday";
+    return format(date, "MMM d");
+}
+
 export default function RecentActivity() {
-    const recentActivities = useRecentActivityStore((s) => s.recentActivities);
-
+    const recentActivities = useRecentActivities();
+    const router = useRouter();
     return (
         <ColView className="gap-2">
-            <RowView className="px-4 justify-between">
-                <Text className="text-base text-foreground">
-                    Recent Activity
+            <RowView className="px-4 justify-between items-center">
+                <Text className="text-base font-medium text-foreground">
+                    Recent activity
                 </Text>
-                <Text className="text-base text-muted-foreground">See All</Text>
+                <TouchableOpacity onPress={() => router.push("/history")}>
+                    <Text className="text-sm text-primary">See all</Text>
+                </TouchableOpacity>
             </RowView>
-            <ColView className="px-4 gap-2 ">
-                {recentActivities.map((activity, i) => {
-                    const start = new Date(activity.startTime);
-                    const end = new Date(activity.endTime);
 
-                    const durationMin =
-                        (end.getTime() - start.getTime()) / 60000;
-                    const hours = Math.floor(durationMin / 60);
-                    const mins = Math.floor(durationMin % 60);
-                    const duration = `${hours}h ${mins}m`;
+            <ColView className="px-4 gap-2">
+                {recentActivities.length === 0 ? (
+                    <Card>
+                        <RowView className="items-center gap-4">
+                            <View className="flex-1 gap-1">
+                                <Text className="text-[11px] text-muted-foreground">
+                                    No activity yet
+                                </Text>
 
-                    const progress = (activity.steps / activity.goalStep) * 100;
-                    const stats = [
-                        {
-                            label: "Duration",
-                            value: duration,
-                            icon: "time" as const,
-                        },
-                        {
-                            label: "Distance",
-                            value: activity.distance,
-                            unit: "km",
-                            icon: "location" as const,
-                        },
-                        {
-                            label: "Calories",
-                            value: activity.calories,
-                            unit: "kcal",
-                            icon: "flame" as const,
-                        },
-                    ];
-                    return (
-                        <Card key={i}>
-                            <RowView className="gap-4">
-                                {/* tempaory icon holder */}
-                                <View className="bg-card">
-                                    <RingChart
-                                        pct={progress}
-                                        radius={26}
-                                        strokeWidth={8}
-                                        trackColor="transparent"
-                                        startDeg={180}
-                                    />
-                                    <View className="absolute top-0 left-0 w-full h-full flex-1 justify-center items-center">
-                                        <Text className="text-sm font-medium text-foreground">
-                                            {progress.toFixed(0)}
-                                            <Text className="text-xs">%</Text>
-                                        </Text>
-                                    </View>
-                                </View>
-                                <ColView className="flex-1 gap-1">
-                                    <RowView className="justify-between">
-                                        <Text className="text-muted-foreground text-xs">
-                                            {format(start, "MMMM dd")} •{" "}
-                                            {format(start, "p")} -{" "}
+                                <Text className="text-[22px] leading-none font-medium text-foreground">
+                                    0 steps
+                                </Text>
+
+                                <Text className="text-[11px] text-muted-foreground">
+                                    Start your first run to track progress
+                                </Text>
+                            </View>
+                        </RowView>
+                    </Card>
+                ) : (
+                    recentActivities.map((activity, i) => {
+                        const start = new Date(activity.startTime);
+                        const end = new Date(activity.endTime);
+                        const progress = Math.min(
+                            (activity.steps / activity.goalStep) * 100,
+                            100,
+                        );
+                        const met = activity.steps >= activity.goalStep;
+
+                        return (
+                            <Card key={i}>
+                                <RowView className="items-center gap-4">
+                                    <ColView className="flex-1 gap-1">
+                                        <Text className="text-[11px] text-muted-foreground">
+                                            {formatActivityDate(start)} ·{" "}
+                                            {format(start, "p")} –{" "}
                                             {format(end, "p")}
                                         </Text>
-                                        <MaterialIcons
-                                            name="arrow-forward-ios"
-                                            size={12}
-                                            className="text-muted-foreground"
-                                        />
-                                    </RowView>
-                                    <RowView className="items-center">
-                                        <Text className="text-2xl text-foreground font-medium">
-                                            {activity.steps.toLocaleString()}{" "}
-                                            <Text className="text-xs text-muted-foreground">
+                                        <RowView className="items-baseline gap-1">
+                                            <Text className="text-[22px] leading-none font-medium text-foreground">
+                                                {activity.steps.toLocaleString()}
+                                            </Text>
+                                            <Text className="text-[11px] text-muted-foreground">
                                                 /{" "}
                                                 {activity.goalStep.toLocaleString()}{" "}
                                                 steps
                                             </Text>
-                                        </Text>
-                                    </RowView>
+                                        </RowView>
+                                    </ColView>
 
-                                    <RowView className="gap-4">
-                                        {stats.map((stat) => {
-                                            return (
-                                                <ColView
-                                                    key={stat.label}
-                                                    className="justify-start items-center gap-0"
-                                                >
-                                                    <RowView className="items-center gap-1">
-                                                        <Ionicons
-                                                            name={stat.icon}
-                                                            size={12}
-                                                            className="text-primary"
-                                                        />
-                                                        {/* <View className="w-1.5 h-1.5 rounded-full bg-primary" /> */}
-                                                        <Text className="text-sm text-foreground font-semibold">
-                                                            {stat.value}{" "}
-                                                            {stat.unit && (
-                                                                <Text className="text-xs font-normal text-muted-foreground">
-                                                                    {stat.unit}
-                                                                </Text>
-                                                            )}
-                                                        </Text>
-                                                    </RowView>
-                                                </ColView>
-                                            );
-                                        })}
-                                    </RowView>
-                                </ColView>
-                            </RowView>
-                        </Card>
-                    );
-                })}
+                                    <View className="relative items-center justify-center">
+                                        <RingChart
+                                            pct={progress}
+                                            radius={20}
+                                            strokeWidth={4}
+                                            strokeLinecap="round"
+                                            trackColor="rgba(128,128,128,0.1)"
+                                            color={met ? "#639922" : "white"}
+                                        />
+                                        <Text className="absolute text-[10px] font-medium text-primary">
+                                            {Math.round(progress)}%
+                                        </Text>
+                                    </View>
+                                </RowView>
+                            </Card>
+                        );
+                    })
+                )}
             </ColView>
         </ColView>
     );

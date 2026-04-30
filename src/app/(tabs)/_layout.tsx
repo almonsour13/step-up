@@ -1,14 +1,29 @@
 import { useActivityState } from "@/features/activity/hooks/use-activity-state";
-import { initializeHomeStates } from "@/features/home/helper/initial-home-states";
 import ActiveActivityBanner from "@/shared/components/ActiveActivityBanner";
 import MainNavigation from "@/shared/components/layout/MainNavigation";
+import { useActivity } from "@/shared/hooks/use-activity";
+import { useUserStore } from "@/shared/stores/use-user.store";
 import { Stack } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabLayout() {
     useActivityState();
-    initializeHomeStates();
+    useActivity();
+    const { profile, setProfile } = useUserStore();
+
+    useEffect(() => {
+        if (!profile) {
+            setProfile({
+                name: "Monsour",
+                age: 23,
+                height: 165,
+                weight: 65,
+                gender: "male",
+            });
+        }
+    }, [profile]);
+
     return (
         <>
             <SafeAreaView style={{ flex: 1 }}>

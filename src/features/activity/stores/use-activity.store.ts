@@ -7,12 +7,14 @@ type ActivityState = {
     status: ActivityStatus;
     duration: number;
     steps: number;
+    goalSteps: number;
 };
 
 type ActivityAction = {
     setStatus: (status: ActivityStatus) => void;
     setDuration: (duration: number) => void;
     setSteps: (steps: number) => void;
+    setGoalSteps: (goalSteps: number) => void;
     start: () => Promise<void>;
     pause: () => Promise<void>;
     resume: () => Promise<void>;
@@ -24,6 +26,7 @@ const INITIAL_STATE: ActivityState = {
     status: "idle",
     duration: 0,
     steps: 0,
+    goalSteps: 5000,
 };
 
 export const useActivityStore = create<ActivityState & ActivityAction>(
@@ -32,6 +35,7 @@ export const useActivityStore = create<ActivityState & ActivityAction>(
         setStatus: (status) => set({ status }),
         setDuration: (duration) => set({ duration }),
         setSteps: (steps) => set({ steps }),
+        setGoalSteps: (goalSteps) => set({ goalSteps }),
 
         start: async () => {
             await activityService.start();

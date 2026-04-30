@@ -37,7 +37,7 @@ export default function ActivityController() {
                     onPress={handleReset}
                     disabled={isDisabled}
                     className={clsx(
-                        "h-16 aspect-square rounded-full bg-card items-center justify-center",
+                        "h-20 aspect-square rounded-full bg-card items-center justify-center",
                         isDisabled && "opacity-50",
                     )}
                 >
@@ -56,7 +56,7 @@ export default function ActivityController() {
                     onPress={handleMain}
                     activeOpacity={0.8}
                     className={clsx(
-                        "h-24 aspect-square rounded-full items-center justify-center",
+                        "h-32 aspect-square rounded-full items-center justify-center",
                         isRunning ? "bg-destructive" : "bg-primary",
                     )}
                 >
@@ -75,7 +75,7 @@ export default function ActivityController() {
                 <TouchableOpacity
                     disabled={isDisabled}
                     className={clsx(
-                        "h-16 aspect-square rounded-full bg-primary items-center justify-center",
+                        "h-20 aspect-square rounded-full bg-primary items-center justify-center",
                         isDisabled && "opacity-50",
                     )}
                     onPress={finish}

@@ -1,5 +1,5 @@
-import { useActivityStatistic } from "@/features/activity/hooks/use-activity-statistic";
 import { useActivityStore } from "@/features/activity/stores/use-activity.store";
+import { formatDuration } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "expo-router";
@@ -11,16 +11,30 @@ export default function ActiveActivityBanner() {
     const translateY = useRef(new Animated.Value(0)).current;
     const isHidden = useRef(false);
 
-    const status = useActivityStore((s) => s.status);
     const router = useRouter();
     const pathname = usePathname();
+    const duration = useActivityStore((s) => s.duration);
+    const steps = useActivityStore((s) => s.steps);
+    const status = useActivityStore((s) => s.status);
     const start = useActivityStore((s) => s.start);
     const pause = useActivityStore((s) => s.pause);
     const resume = useActivityStore((s) => s.resume);
     const isRunning = status === "active";
     const isPaused = status === "paused";
-    const stats = useActivityStatistic();
 
+    const stats = [
+        {
+            label: "Duration",
+            value: formatDuration(duration),
+            icon: "time-outline" as const,
+        },
+        {
+            label: "Steps",
+            value: steps.toLocaleString(),
+            icon: "footsteps-outline" as const,
+            unit: "",
+        },
+    ];
     const handleStateAction = async () => {
         if (isRunning) {
             await pause();
@@ -41,7 +55,7 @@ export default function ActiveActivityBanner() {
             bounciness: 0,
             speed: 20,
         }).start();
-    }, [pathname]);
+    }, [hide]);
 
     if (hide) return null;
     return (
@@ -56,17 +70,17 @@ export default function ActiveActivityBanner() {
                             return (
                                 <RowView
                                     key={stat.label}
-                                    className="items-center gap-1"
+                                    className="items-center gap-2"
                                 >
                                     <Ionicons
                                         name={stat.icon}
-                                        size={20}
-                                        className="text-white"
+                                        size={16}
+                                        className="text-white/50"
                                     />
-                                    <Text className="text-xl text-white font-medium">
+                                    <Text className="text-base text-white font-medium">
                                         {stat.value}{" "}
                                         {stat.unit && (
-                                            <Text className="text-xs text-muted pb-1">
+                                            <Text className="text- font-normal text-muted pb-1">
                                                 {stat.unit}
                                             </Text>
                                         )}

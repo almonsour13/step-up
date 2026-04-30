@@ -7,7 +7,13 @@ class ActivityStorage {
     );
 
     async getAll(): Promise<Activity[]> {
-        return (await this.activitiesStore.get()) ?? [];
+        const activities = (await this.activitiesStore.get()) ?? [];
+
+        return activities.sort(
+            (a, b) =>
+                new Date(b.createdAt).getTime() -
+                new Date(a.createdAt).getTime(),
+        );
     }
 
     async save(activity: Activity): Promise<void> {
@@ -34,6 +40,48 @@ class ActivityStorage {
             const createdAt = new Date(activity.createdAt);
             return createdAt >= startOfToday && createdAt <= endOfToday;
         });
+    }
+    async getThisWeek(): Promise<Activity[]> {
+        const activities = await this.getAll();
+
+        const today = new Date();
+        const current = new Date(today);
+
+        // Get Monday (start of week)
+        const day = current.getDay(); // 0 = Sunday
+        const diff = day === 0 ? -6 : 1 - day;
+
+        const startOfWeek = new Date(current);
+        startOfWeek.setDate(current.getDate() + diff);
+        startOfWeek.setHours(0, 0, 0, 0);
+
+        // End of week (Sunday)
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(startOfWeek.getDate() + 6);
+        endOfWeek.setHours(23, 59, 59, 999);
+
+        return activities.filter((activity) => {
+            const createdAt = new Date(activity.createdAt);
+            return createdAt >= startOfWeek && createdAt <= endOfWeek;
+        });
+    }
+    async getRecentByDays(days: number = 7): Promise<Activity[]> {
+        const activities = await this.getAll();
+
+        const now = new Date();
+        const past = new Date();
+        past.setDate(now.getDate() - days);
+
+        return activities
+            .filter((a) => {
+                const createdAt = new Date(a.createdAt);
+                return createdAt >= past && createdAt <= now;
+            })
+            .sort(
+                (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime(),
+            );
     }
 
     async delete(id: string): Promise<void> {

@@ -6,83 +6,97 @@ import { Text, View } from "react-native";
 import { useTodayActivity } from "../hooks/use-today-activity";
 
 export default function TodayActivity() {
-    const { totalSteps, totalGoalSteps, stats, totalProgress } =
-        useTodayActivity();
+    const {
+        totalSteps,
+        totalGoalSteps,
+        stats,
+        totalProgress,
+        todayActivities,
+    } = useTodayActivity();
+
+    const met = totalSteps >= totalGoalSteps;
     return (
         <ColView className="gap-2">
-            <RowView className="px-4 justify-between">
-                <Text className="text-base text-foreground">
-                    Today Activity
+            <RowView className="px-4 justify-between items-center">
+                <Text className="text-base font-medium text-foreground">
+                    Today's activity
                 </Text>
+                {todayActivities.length > 0 && (
+                    <Text className="text-sm text-primary">
+                        {todayActivities.length} session
+                        {todayActivities.length > 1 ? "s" : ""}
+                    </Text>
+                )}
             </RowView>
-            <ColView className="px-4">
-                <Card className="w-full">
-                    <RowView className="justify-between">
-                        <ColView className="flex-1">
-                            <Text className="text-4xl text-foreground font-medium">
-                                {totalSteps}{" "}
-                                <Text className="text-sm text-muted-foreground">
-                                    / {totalGoalSteps} steps
-                                </Text>
-                            </Text>
 
-                            <RowView className="gap-4">
-                                {stats.map((stat) => {
-                                    return (
-                                        <ColView
-                                            key={stat.label}
-                                            className="justify-center items-start gap-0.5"
-                                        >
-                                            <RowView className="items-end gap-1">
-                                                <Text className="text-xl text-foreground font-semibold">
-                                                    {stat.value}
-                                                </Text>
-                                                {stat.unit && (
-                                                    <Text className="text-xs text-muted-foreground pb-1">
-                                                        {stat.unit}
-                                                    </Text>
-                                                )}
-                                            </RowView>
-                                            <RowView className="gap-1 items-center">
-                                                <Ionicons
-                                                    name={stat.icon}
-                                                    size={12}
-                                                    className="text-primary"
-                                                />
-                                                <Text className="text-xs font-normal text-muted-foreground">
-                                                    {stat.label}
-                                                </Text>
-                                            </RowView>
-                                        </ColView>
-                                    );
-                                })}
+            <ColView className="px-4 gap-2">
+                {/* Steps card */}
+                <Card className="w-full">
+                    <RowView className="justify-between items-center">
+                        <ColView className="gap-2">
+                            <RowView className="items-baseline gap-1.5">
+                                <Text className="text-4xl leading-none font-medium text-foreground">
+                                    {totalSteps.toLocaleString()}
+                                </Text>
+                                <Text className="text-xs text-muted-foreground">
+                                    / {totalGoalSteps.toLocaleString()} steps
+                                </Text>
                             </RowView>
+
+                            {/* Progress bar */}
+                            <View className="h-1 w-48 rounded-full bg-muted/40 overflow-hidden">
+                                <View
+                                    className="h-full rounded-full bg-primary"
+                                    style={{
+                                        width: `${Math.min(totalProgress, 100)}%`,
+                                    }}
+                                />
+                            </View>
                         </ColView>
-                        <View className="hidden h-24 rounded-full aspect-square border-12 border-primary">
-                            <View className="flex-1 justify-center items-center">
-                                <Text className="text-xl font-medium">
-                                    {totalProgress.toFixed(0)}
-                                    <Text className="text-sm">%</Text>
-                                </Text>
-                            </View>
-                        </View>
-                        <View className="bg-card">
+
+                        <View className="relative items-center justify-center">
                             <RingChart
-                                pct={totalProgress}
-                                radius={32}
-                                strokeWidth={10}
-                                trackColor="transparent"
-                                startDeg={180}
+                                pct={Math.min(totalProgress, 100)}
+                                radius={28}
+                                strokeWidth={6}
+                                strokeLinecap="round"
+                                trackColor="rgba(128,128,128,0.1)"
+                                color={met ? "#639922" : "white"}
                             />
-                            <View className="absolute top-0 left-0 w-full h-full flex-1 justify-center items-center">
-                                <Text className="text-xl font-medium">
-                                    {totalProgress.toFixed(0)}
-                                    <Text className="text-sm">%</Text>
-                                </Text>
-                            </View>
+                            <Text className="absolute text-[11px] font-medium text-primary">
+                                {totalProgress.toFixed(0)}
+                                <Text className="text-[9px]">%</Text>
+                            </Text>
                         </View>
                     </RowView>
                 </Card>
+
+                {/* Stat cards */}
+                <RowView className="gap-2">
+                    {stats.map((stat) => (
+                        <Card key={stat.label} className="flex-1 gap-1.5">
+                            <Ionicons
+                                name={stat.icon}
+                                size={14}
+                                className="text-primary"
+                            />
+                            <ColView className="gap-0.5">
+                                <Text className="text-base leading-none font-medium text-foreground">
+                                    {stat.value}
+                                    {stat.unit && (
+                                        <Text className="text-[10px] font-normal text-muted-foreground">
+                                            {" "}
+                                            {stat.unit}
+                                        </Text>
+                                    )}
+                                </Text>
+                                <Text className="text-[10px] text-muted-foreground">
+                                    {stat.label}
+                                </Text>
+                            </ColView>
+                        </Card>
+                    ))}
+                </RowView>
             </ColView>
         </ColView>
     );

@@ -1,36 +1,65 @@
-import { ColView, RowView } from "@/shared/components/CustomView";
+import { RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
+import {
+    calcCalories,
+    calcDistanceKm,
+    formatDuration,
+} from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text } from "react-native";
-import { useActivityStatistic } from "../hooks/use-activity-statistic";
+import { useActivityStore } from "../stores/use-activity.store";
+const TEMP_USER = {
+    weightKg: 65,
+    heightCm: 165,
+};
 
 export default function ActivityStatistic() {
-    const stats = useActivityStatistic();
+    const duration = useActivityStore((s) => s.duration);
+    const steps = useActivityStore((s) => s.steps);
+    const stats = [
+        {
+            label: "Duration",
+            value: formatDuration(duration),
+            icon: "time" as const,
+        },
+        {
+            label: "Distance",
+            value: calcDistanceKm(steps, TEMP_USER.heightCm).toFixed(2),
+            unit: "km",
+            icon: "location" as const,
+        },
+        {
+            label: "Calories",
+            value: calcCalories(steps, TEMP_USER.weightKg).toFixed(1),
+            unit: "kcal",
+            icon: "flame" as const,
+        },
+    ];
 
     return (
-        <RowView className="justify-between gap-2">
+        <RowView className="gap-2.5">
             {stats.map((stat) => (
-                <Card key={stat.label} className="flex-1">
-                    <ColView className="gap-1 items-start">
+                <Card key={stat.label} className="flex-1 gap-1">
+                    <RowView className="gap-1">
                         <Ionicons
                             name={stat.icon}
-                            size={24}
+                            size={12}
                             className="text-primary"
                         />
-                        <RowView className="items-end gap-1">
-                            <Text className="text-3xl text-foreground font-semibold">
-                                {stat.value}
-                            </Text>
-                            {stat.unit && (
-                                <Text className="text-xs text-muted-foreground pb-1">
-                                    {stat.unit}
-                                </Text>
-                            )}
-                        </RowView>
-                        <Text className="text-xs font-light text-muted-foreground">
+                        <Text className="text-xs text-muted-foreground">
                             {stat.label}
                         </Text>
-                    </ColView>
+                    </RowView>
+                    <RowView className="items-baseline gap-1">
+                        <Text className="text-2xl leading-none font-medium text-foreground">
+                            {stat.value}
+                        </Text>
+                        {stat.unit && (
+                            <Text className="text-[10px] text-muted-foreground">
+                                {stat.unit}
+                            </Text>
+                        )}
+                    </RowView>
                 </Card>
             ))}
         </RowView>

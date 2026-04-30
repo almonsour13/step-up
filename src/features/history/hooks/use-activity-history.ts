@@ -1,20 +1,5 @@
-import { activityStorageService } from "@/shared/services/activity-storage.service";
-import { Activity } from "@/shared/types/type";
-import { useEffect, useState } from "react";
+import { useActivityStore } from "@/shared/stores/use-activity.store";
 
 export const useActivityHistory = () => {
-    const [activities, setActivities] = useState<Activity[] | []>([]);
-
-    async function fetchActivities() {
-        const data = await activityStorageService.getAll();
-        setActivities(data);
-    }
-    useEffect(() => {
-        fetchActivities();
-    }, []);
-
-    return {
-        activities,
-        setActivities,
-    };
+    return useActivityStore((s) => s.activities);
 };

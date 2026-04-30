@@ -6,7 +6,7 @@ import {
     formatDuration,
 } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { format } from "date-fns";
+import { format, isToday, isYesterday } from "date-fns";
 import { Text, View } from "react-native";
 import { useActivityHistory } from "../hooks/use-activity-history";
 
@@ -14,11 +14,17 @@ const TEMP_USER = {
     weightKg: 65,
     heightCm: 165,
 };
+function formatActivityDate(date: Date) {
+    if (isToday(date)) return "Today";
+    if (isYesterday(date)) return "Yesterday";
+    return format(date, "MMM d");
+}
+
 export default function ActivityHistoryList() {
-    const { activities, setActivities } = useActivityHistory();
+    const activityHistory = useActivityHistory();
     return (
         <ColView className="px-4">
-            {activities.map((activity, i) => {
+            {activityHistory.map((activity, i) => {
                 const start = new Date(activity.startTime);
                 const end = new Date(activity.endTime);
 
@@ -53,8 +59,9 @@ export default function ActivityHistoryList() {
                     <Card key={activity.id}>
                         <ColView>
                             <RowView className="justify-between items-center">
-                                <Text className="text-xs text-muted-foreground">
-                                    {format(activity.createdAt, "EEEE, MMM d")}
+                                <Text className="text-[11px] text-muted-foreground">
+                                    {formatActivityDate(start)} ·{" "}
+                                    {format(start, "p")} – {format(end, "p")}
                                 </Text>
                                 <View
                                     className={`px-2 py-0.5 rounded-full ${met ? "bg-primary" : "bg-muted"}`}

@@ -1,17 +1,17 @@
-import { activityStorageService } from "@/shared/services/activity-storage.service";
-import { useEffect } from "react";
-import { useRecentActivityStore } from "../stores/use-recent-activity.store";
+import { useActivityStore } from "@/shared/stores/use-activity.store";
+import { useMemo } from "react";
 
-export const useRecentActivity = () => {
-    const setRecentActivities = useRecentActivityStore(
-        (s) => s.setRecentActivities,
-    );
+export const useRecentActivities = (limit = 10) => {
+    const activities = useActivityStore((s) => s.activities);
 
-    async function fetchActivities() {
-        const data = await activityStorageService.getAll();
-        setRecentActivities(data);
-    }
-    useEffect(() => {
-        fetchActivities();
-    }, []);
+    return useMemo(() => {
+        return activities
+            .slice() // avoid mutating original array
+            .sort(
+                (a, b) =>
+                    new Date(b.createdAt).getTime() -
+                    new Date(a.createdAt).getTime(),
+            )
+            .slice(0, limit);
+    }, [activities, limit]);
 };

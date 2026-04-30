@@ -10,6 +10,7 @@ export const useActivityState = () => {
         return activityService.onStatsUpdate((stats) => {
             setDuration(stats.duration);
             setSteps(stats.steps);
+            console.log("[feature:Activity: use acitivity stats hook]", stats);
         });
     }, []);
 };
