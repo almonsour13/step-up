@@ -6,49 +6,9 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { format } from "date-fns";
 import { Text, View } from "react-native";
 
+import { useRecentActivityStore } from "../stores/use-recent-activity.store";
 export default function RecentActivity() {
-    const activities = [
-        {
-            startTime: "2026-04-29T20:00:00",
-            endTime: "2026-04-29T22:30:00",
-            steps: 5400,
-            goal: 7000,
-            distance: 4.8,
-            calories: 285,
-        },
-        {
-            startTime: "2026-04-28T18:10:00",
-            endTime: "2026-04-28T19:40:00",
-            steps: 6200,
-            goal: 7000,
-            distance: 5.3,
-            calories: 310,
-        },
-        {
-            startTime: "2026-04-27T06:30:00",
-            endTime: "2026-04-27T07:45:00",
-            steps: 4100,
-            goal: 7000,
-            distance: 3.6,
-            calories: 220,
-        },
-        {
-            startTime: "2026-04-26T17:00:00",
-            endTime: "2026-04-26T18:50:00",
-            steps: 7800,
-            goal: 7000,
-            distance: 6.9,
-            calories: 420,
-        },
-        {
-            startTime: "2026-04-25T19:15:00",
-            endTime: "2026-04-25T20:10:00",
-            steps: 3200,
-            goal: 7000,
-            distance: 2.9,
-            calories: 180,
-        },
-    ];
+    const recentActivities = useRecentActivityStore((s) => s.recentActivities);
 
     return (
         <ColView className="gap-2">
@@ -59,7 +19,7 @@ export default function RecentActivity() {
                 <Text className="text-base text-muted-foreground">See All</Text>
             </RowView>
             <ColView className="px-4 gap-2 ">
-                {activities.map((activity, i) => {
+                {recentActivities.map((activity, i) => {
                     const start = new Date(activity.startTime);
                     const end = new Date(activity.endTime);
 
@@ -69,7 +29,7 @@ export default function RecentActivity() {
                     const mins = Math.floor(durationMin % 60);
                     const duration = `${hours}h ${mins}m`;
 
-                    const progress = (activity.steps / activity.goal) * 100;
+                    const progress = (activity.steps / activity.goalStep) * 100;
                     const stats = [
                         {
                             label: "Duration",
@@ -126,7 +86,7 @@ export default function RecentActivity() {
                                             {activity.steps.toLocaleString()}{" "}
                                             <Text className="text-xs text-muted-foreground">
                                                 /{" "}
-                                                {activity.goal.toLocaleString()}{" "}
+                                                {activity.goalStep.toLocaleString()}{" "}
                                                 steps
                                             </Text>
                                         </Text>

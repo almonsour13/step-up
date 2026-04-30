@@ -2,7 +2,8 @@ import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format, subDays } from "date-fns";
-import { ScrollView, Text, View } from "react-native";
+import { ScrollView, Text } from "react-native";
+import ActivityHistoryList from "./components/ActivityHistoryList";
 
 const activities = [
     {
@@ -140,7 +141,7 @@ export default function HistoryScreen() {
 
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
-            <ColView className="flex-1 gap-5 pb-8">
+            <ColView className="flex-1 gap-5 pb-4">
                 {/* Header */}
                 <ColView className="px-4 pt-10 gap-0.5">
                     <Text className="text-2xl font-medium text-foreground">
@@ -187,161 +188,7 @@ export default function HistoryScreen() {
                         </Card>
                     ))}
                 </RowView>
-
-                {/* Weekly bar chart */}
-                <ColView className="px-4 gap-2">
-                    <Text className="text-sm font-medium text-foreground">
-                        This week
-                    </Text>
-                    <Card className="py-4 px-4">
-                        <RowView
-                            className="justify-between items-end"
-                            style={{ height: 80 }}
-                        >
-                            {WEEKLY_STEPS.map((steps, i) => {
-                                const barH = Math.max(
-                                    6,
-                                    (steps / BAR_MAX) * 64,
-                                );
-                                const met = steps >= 7000;
-                                const isToday = i === 6;
-                                return (
-                                    <ColView
-                                        key={i}
-                                        className="items-center gap-1.5"
-                                        style={{ flex: 1 }}
-                                    >
-                                        <View
-                                            style={{ height: barH }}
-                                            className={`w-5 rounded-full ${met ? "bg-primary" : isToday ? "bg-primary opacity-40" : "bg-muted"}`}
-                                        />
-                                        <Text
-                                            className={`text-[10px] ${isToday ? "text-primary font-medium" : "text-muted-foreground"}`}
-                                        >
-                                            {BAR_DAYS[i]}
-                                        </Text>
-                                    </ColView>
-                                );
-                            })}
-                        </RowView>
-                        <View className="h-px bg-border mt-3 mb-2" />
-                        <RowView className="justify-between">
-                            <Text className="text-[11px] text-muted-foreground">
-                                Weekly total
-                            </Text>
-                            <Text className="text-[11px] font-medium text-foreground">
-                                {WEEKLY_STEPS.reduce(
-                                    (a, b) => a + b,
-                                    0,
-                                ).toLocaleString()}{" "}
-                                steps
-                            </Text>
-                        </RowView>
-                    </Card>
-                </ColView>
-
-                {/* Grouped activity list */}
-                {Object.entries(groups).map(([period, items]) => (
-                    <ColView key={period} className="gap-2">
-                        <RowView className="px-4 justify-between items-center">
-                            <Text className="text-sm font-medium text-foreground">
-                                {period}
-                            </Text>
-                            <Text className="text-xs text-muted-foreground">
-                                {items.length} sessions
-                            </Text>
-                        </RowView>
-
-                        <ColView className="px-4 gap-2">
-                            {items.map((activity, i) => {
-                                const pct = Math.round(
-                                    (activity.steps / activity.goal) * 100,
-                                );
-                                const met = activity.steps >= activity.goal;
-                                const h = Math.floor(activity.duration / 60);
-                                const m = activity.duration % 60;
-                                const dur = h > 0 ? `${h}h ${m}m` : `${m}m`;
-
-                                return (
-                                    <Card key={i} className="gap-2.5">
-                                        {/* Row 1 — date + badge */}
-                                        <RowView className="justify-between items-center">
-                                            <Text className="text-xs text-muted-foreground">
-                                                {format(
-                                                    activity.date,
-                                                    "EEEE, MMM d",
-                                                )}
-                                            </Text>
-                                            <View
-                                                className={`px-2 py-0.5 rounded-full ${met ? "bg-teal-50" : "bg-muted"}`}
-                                            >
-                                                <Text
-                                                    className={`text-[10px] font-medium ${met ? "text-teal-700" : "text-muted-foreground"}`}
-                                                >
-                                                    {met
-                                                        ? "✓ Goal met"
-                                                        : `${pct}%`}
-                                                </Text>
-                                            </View>
-                                        </RowView>
-
-                                        {/* Row 2 — steps */}
-                                        <RowView className="items-baseline gap-1.5">
-                                            <Text className="text-2xl font-medium text-foreground tracking-tight">
-                                                {activity.steps.toLocaleString()}
-                                            </Text>
-                                            <Text className="text-xs text-muted-foreground">
-                                                steps
-                                            </Text>
-                                        </RowView>
-
-                                        {/* Progress bar */}
-                                        <View className="h-1 rounded-full bg-muted overflow-hidden">
-                                            <View
-                                                className="h-full rounded-full bg-primary"
-                                                style={{
-                                                    width: `${Math.min(100, pct)}%`,
-                                                }}
-                                            />
-                                        </View>
-
-                                        {/* Row 3 — stats */}
-                                        <RowView className="gap-4">
-                                            {[
-                                                {
-                                                    icon: "time" as const,
-                                                    value: dur,
-                                                },
-                                                {
-                                                    icon: "location" as const,
-                                                    value: `${activity.distance} km`,
-                                                },
-                                                {
-                                                    icon: "flame" as const,
-                                                    value: `${activity.calories} kcal`,
-                                                },
-                                            ].map((s) => (
-                                                <RowView
-                                                    key={s.icon}
-                                                    className="items-center gap-1"
-                                                >
-                                                    <Ionicons
-                                                        name={s.icon}
-                                                        size={12}
-                                                        className="text-muted-foreground"
-                                                    />
-                                                    <Text className="text-xs text-muted-foreground">
-                                                        {s.value}
-                                                    </Text>
-                                                </RowView>
-                                            ))}
-                                        </RowView>
-                                    </Card>
-                                );
-                            })}
-                        </ColView>
-                    </ColView>
-                ))}
+                <ActivityHistoryList />
             </ColView>
         </ScrollView>
     );

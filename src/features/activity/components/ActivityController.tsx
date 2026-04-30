@@ -9,6 +9,7 @@ export default function ActivityController() {
     const start = useActivityStore((s) => s.start);
     const pause = useActivityStore((s) => s.pause);
     const resume = useActivityStore((s) => s.resume);
+    const finish = useActivityStore((s) => s.stop);
     const discard = useActivityStore((s) => s.discard);
 
     const isRunning = status === "active";
@@ -56,9 +57,7 @@ export default function ActivityController() {
                     activeOpacity={0.8}
                     className={clsx(
                         "h-24 aspect-square rounded-full items-center justify-center",
-                        isRunning
-                            ? "bg-destructive animate-pulse"
-                            : "bg-primary",
+                        isRunning ? "bg-destructive" : "bg-primary",
                     )}
                 >
                     <Ionicons
@@ -72,7 +71,6 @@ export default function ActivityController() {
                 </Text>
             </ColView>
 
-            {/* Lap */}
             <ColView className="items-center gap-1.5">
                 <TouchableOpacity
                     disabled={isDisabled}
@@ -80,6 +78,7 @@ export default function ActivityController() {
                         "h-16 aspect-square rounded-full bg-primary items-center justify-center",
                         isDisabled && "opacity-50",
                     )}
+                    onPress={finish}
                 >
                     <Ionicons
                         name="checkmark"

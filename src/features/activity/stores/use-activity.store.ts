@@ -6,12 +6,13 @@ export type ActivityStatus = "idle" | "active" | "paused";
 type ActivityState = {
     status: ActivityStatus;
     duration: number;
+    steps: number;
 };
 
 type ActivityAction = {
     setStatus: (status: ActivityStatus) => void;
     setDuration: (duration: number) => void;
-
+    setSteps: (steps: number) => void;
     start: () => Promise<void>;
     pause: () => Promise<void>;
     resume: () => Promise<void>;
@@ -22,6 +23,7 @@ type ActivityAction = {
 const INITIAL_STATE: ActivityState = {
     status: "idle",
     duration: 0,
+    steps: 0,
 };
 
 export const useActivityStore = create<ActivityState & ActivityAction>(
@@ -29,6 +31,7 @@ export const useActivityStore = create<ActivityState & ActivityAction>(
         ...INITIAL_STATE,
         setStatus: (status) => set({ status }),
         setDuration: (duration) => set({ duration }),
+        setSteps: (steps) => set({ steps }),
 
         start: async () => {
             await activityService.start();
@@ -43,7 +46,8 @@ export const useActivityStore = create<ActivityState & ActivityAction>(
             set({ status: "active" });
         },
         stop: async () => {
-            set({ status: "idle" });
+            await activityService.stop();
+            set(INITIAL_STATE);
         },
         discard: async () => {
             await activityService.discard();

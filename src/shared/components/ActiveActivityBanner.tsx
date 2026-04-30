@@ -1,5 +1,5 @@
+import { useActivityStatistic } from "@/features/activity/hooks/use-activity-statistic";
 import { useActivityStore } from "@/features/activity/stores/use-activity.store";
-import { formatDuration } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "expo-router";
@@ -12,7 +12,6 @@ export default function ActiveActivityBanner() {
     const isHidden = useRef(false);
 
     const status = useActivityStore((s) => s.status);
-    const duration = useActivityStore((s) => s.duration);
     const router = useRouter();
     const pathname = usePathname();
     const start = useActivityStore((s) => s.start);
@@ -20,6 +19,7 @@ export default function ActiveActivityBanner() {
     const resume = useActivityStore((s) => s.resume);
     const isRunning = status === "active";
     const isPaused = status === "paused";
+    const stats = useActivityStatistic();
 
     const handleStateAction = async () => {
         if (isRunning) {
@@ -44,29 +44,6 @@ export default function ActiveActivityBanner() {
     }, [pathname]);
 
     if (hide) return null;
-
-    const stats = [
-        {
-            label: "Duration",
-            value: formatDuration(duration),
-            icon: "time" as const,
-            isVisible: true,
-        },
-        {
-            label: "Distance",
-            value: "4.8",
-            unit: "km",
-            icon: "location" as const,
-            isVisible: true,
-        },
-        {
-            label: "Calories",
-            value: "285",
-            unit: "kcal",
-            icon: "flame" as const,
-            isVisible: true,
-        },
-    ];
     return (
         <Animated.View>
             <TouchableOpacity

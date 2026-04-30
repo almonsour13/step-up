@@ -2,10 +2,13 @@ import { ColView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
 import RingChart from "@/shared/components/ui/RingChart";
 import { Text, View } from "react-native";
+import { useActivityStore } from "../stores/use-activity.store";
 
 export default function ActivityProgress() {
+    const steps = useActivityStore((s) => s.steps);
+
     const goal = 5000;
-    const current = 3400;
+    const current = steps;
     const pct = (current / goal) * 100;
     return (
         <Card className="aspect-square justify-center items-center">
@@ -26,7 +29,7 @@ export default function ActivityProgress() {
                             </View>
                             <View className="px-3 py-1 rounded-full bg-muted">
                                 <Text className="text-xs font-medium text-primary">
-                                    {pct}%
+                                    {pct.toFixed(1)}%
                                 </Text>
                             </View>
                         </View>

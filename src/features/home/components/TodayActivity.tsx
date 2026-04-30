@@ -2,28 +2,12 @@ import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
 import RingChart from "@/shared/components/ui/RingChart";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Dimensions, Text, View } from "react-native";
+import { Text, View } from "react-native";
+import { useTodayActivity } from "../hooks/use-today-activity";
 
-const { width } = Dimensions.get("window");
 export default function TodayActivity() {
-    const goal = 7000;
-    const steps = 5400;
-    const progress = (steps / goal) * 100;
-    const stats = [
-        { label: "Duration", value: "01:23", icon: "time" as const },
-        {
-            label: "Distance",
-            value: "4.8",
-            unit: "km",
-            icon: "location" as const,
-        },
-        {
-            label: "Calories",
-            value: "285",
-            unit: "kcal",
-            icon: "flame" as const,
-        },
-    ];
+    const { totalSteps, totalGoalSteps, stats, totalProgress } =
+        useTodayActivity();
     return (
         <ColView className="gap-2">
             <RowView className="px-4 justify-between">
@@ -36,9 +20,9 @@ export default function TodayActivity() {
                     <RowView className="justify-between">
                         <ColView className="flex-1">
                             <Text className="text-4xl text-foreground font-medium">
-                                {steps}{" "}
+                                {totalSteps}{" "}
                                 <Text className="text-sm text-muted-foreground">
-                                    / {goal} steps
+                                    / {totalGoalSteps} steps
                                 </Text>
                             </Text>
 
@@ -77,14 +61,14 @@ export default function TodayActivity() {
                         <View className="hidden h-24 rounded-full aspect-square border-12 border-primary">
                             <View className="flex-1 justify-center items-center">
                                 <Text className="text-xl font-medium">
-                                    {progress.toFixed(0)}
+                                    {totalProgress.toFixed(0)}
                                     <Text className="text-sm">%</Text>
                                 </Text>
                             </View>
                         </View>
                         <View className="bg-card">
                             <RingChart
-                                pct={progress}
+                                pct={totalProgress}
                                 radius={32}
                                 strokeWidth={10}
                                 trackColor="transparent"
@@ -92,7 +76,7 @@ export default function TodayActivity() {
                             />
                             <View className="absolute top-0 left-0 w-full h-full flex-1 justify-center items-center">
                                 <Text className="text-xl font-medium">
-                                    {progress.toFixed(0)}
+                                    {totalProgress.toFixed(0)}
                                     <Text className="text-sm">%</Text>
                                 </Text>
                             </View>
