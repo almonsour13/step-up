@@ -1,7 +1,11 @@
+import ActivityDetailsDrawer, {
+    ActivityDetailsDrawerHandle,
+} from "@/shared/components/ActivityDetailsDrawer";
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
 import clsx from "clsx";
 import { format, isSameDay } from "date-fns";
+import { useRef } from "react";
 import { Text, View } from "react-native";
 import { useThisWeekActivityProgress } from "../hooks/use-this-week-activity-progress";
 
@@ -14,6 +18,7 @@ function getMotivation(pct: number) {
 }
 export default function ThisWeekActivityProgress() {
     const days = useThisWeekActivityProgress();
+    const drawerRef = useRef<ActivityDetailsDrawerHandle>(null);
 
     const totalSteps = days
         .filter((d) => !d.isFuture)
@@ -130,6 +135,7 @@ export default function ThisWeekActivityProgress() {
                     </ColView>
                 </ColView>
             </Card>
+            <ActivityDetailsDrawer ref={drawerRef} />
         </View>
     );
 }
