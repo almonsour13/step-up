@@ -9,6 +9,7 @@ type RecentActivityState = {
 type RecentActivityAction = {
     setIsLoading: (value: boolean) => void;
     setRecentActivities: (activities: Activity[]) => void;
+    addRecentActivity: (activity: Activity) => void;
 };
 
 const INITIAL_STATE: RecentActivityState = {
@@ -30,4 +31,8 @@ export const useRecentActivityStore = create<
         set({
             recentActivities: activities,
         }),
+    addRecentActivity: (activity) =>
+        set((state) => ({
+            recentActivities: [...state.recentActivities, activity],
+        })),
 }));

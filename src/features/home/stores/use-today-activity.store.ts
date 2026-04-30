@@ -9,6 +9,7 @@ type TodayActivityState = {
 type TodayActivityAction = {
     setIsLoading: (value: boolean) => void;
     setTodayActivities: (activities: Activity[]) => void;
+    addTodayActivity: (activity: Activity) => void;
 };
 
 const INITIAL_STATE: TodayActivityState = {
@@ -30,4 +31,8 @@ export const useTodayActivityStore = create<
         set({
             TodayActivities: activities,
         }),
+    addTodayActivity: (activity) =>
+        set((state) => ({
+            TodayActivities: [...state.TodayActivities, activity],
+        })),
 }));
