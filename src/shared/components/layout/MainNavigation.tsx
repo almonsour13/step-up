@@ -21,21 +21,30 @@ function MainNavigation() {
             active: true,
         },
         {
+            label: "History",
+            href: "/history",
+            icon: "time",
+        },
+        {
             label: "Activity",
             href: "/activity",
             icon: "footsteps",
         },
         {
-            label: "History",
-            href: "/history",
-            icon: "time",
+            label: "Statistic",
+            href: "/statistic",
+            icon: "bar-chart",
+        },
+        {
+            label: "Settings",
+            href: "../settings",
+            icon: "settings",
         },
     ];
     const isItemActive = (href: Href) => {
         if (href === "/") return pathname === "/";
         return pathname.startsWith(href.toString());
     };
-
     const HIDE_ON_THIS_ROUTE = ["/run"];
     if (HIDE_ON_THIS_ROUTE.includes(pathname)) return null;
 
