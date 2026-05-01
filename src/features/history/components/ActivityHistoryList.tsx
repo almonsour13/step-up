@@ -1,3 +1,4 @@
+import ActivityCard from "@/features/home/components/ui/ActivityCard";
 import ActivityDetailsDrawer, {
     ActivityDetailsDrawerHandle,
 } from "@/shared/components/ActivityDetailsDrawer";
@@ -6,13 +7,11 @@ import ActivitySessionsDrawer, {
 } from "@/shared/components/ActivitySessionsDrawer";
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
-import { useUserStore } from "@/shared/stores/use-user.store";
-import { getActivityStats } from "@/shared/utils/activity-stats.utils";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { format, isToday, isYesterday } from "date-fns";
 import { useRef } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import { useActivityHistory } from "../hooks/use-activity-history";
+import ActivityHistoryFilter from "./ActivityHistoryFilter";
 
 function formatActivityDate(date: Date) {
     if (isToday(date)) return "Today";
@@ -24,24 +23,30 @@ export default function ActivityHistoryList() {
     const activitySessionsDrawerRef =
         useRef<ActivitySessionsDrawerHandle>(null);
     const groupActivityHistory = useActivityHistory();
-    const profile = useUserStore((s) => s.profile);
     const drawerRef = useRef<ActivityDetailsDrawerHandle>(null);
 
     const objectGroupActivityHistory = Object.entries(groupActivityHistory);
+    const totalSessions = objectGroupActivityHistory.reduce(
+        (acc, [, activities]) => acc + activities.length,
+        0,
+    );
     return (
         <>
-            <ColView className="px-4">
-                {objectGroupActivityHistory.map(([date, activities]) => {
-                    const start = new Date(date);
+            <ColView className="gap-4">
+                <RowView className="px-4 hidden justify-between items-end">
+                    <Text className="text-2xl font-medium">Activities</Text>
+                    <Text className="text-base text-primary">
+                        {totalSessions} session
+                        {totalSessions > 1 ? "s" : ""}
+                    </Text>
+                </RowView>
+                <ActivityHistoryFilter />
+                <ColView className="px-4">
+                    {objectGroupActivityHistory.map(([date, activities]) => {
+                        const start = new Date(date);
 
-                    return (
-                        <ColView key={date} className="gap-2">
-                            <RowView className="justify-between items-center">
-                                <Text className="text-sm text-foreground">
-                                    {formatActivityDate(start)}
-                                    {", "}
-                                    {format(start, "MMM d")}
-                                </Text>
+                        return (
+                            <ColView key={date} className="gap-2">
                                 <TouchableOpacity
                                     onPress={() => {
                                         activitySessionsDrawerRef.current?.open();
@@ -50,124 +55,43 @@ export default function ActivityHistoryList() {
                                         );
                                     }}
                                 >
-                                    <Text className="text-sm text-primary">
-                                        {activities.length} session
-                                        {activities.length > 1 ? "s" : ""}
-                                    </Text>
+                                    <RowView className=" justify-between items-center">
+                                        <Text className="text-sm text-foreground">
+                                            {formatActivityDate(start)}
+                                            {", "}
+                                            {format(start, "MMM d")}
+                                        </Text>
+                                        <Text className="text-sm text-primary">
+                                            {activities.length} session
+                                            {activities.length > 1 ? "s" : ""}
+                                        </Text>
+                                    </RowView>
                                 </TouchableOpacity>
-                            </RowView>
-                            <ColView className="gap-1">
-                                {activities.map((activity, i) => {
-                                    const start = new Date(activity.startTime);
-                                    const end = new Date(activity.endTime);
+                                <Card className="p-0">
+                                    <ColView className="gap-0">
+                                        {activities.map((activity, i) => {
+                                            return (
+                                                <View key={activity.id}>
+                                                    <ActivityCard
+                                                        activity={activity}
+                                                        showDay={false}
+                                                        className="border-0"
+                                                    />
 
-                                    const progress =
-                                        (activity.steps / activity.goalStep) *
-                                        100;
-                                    const met =
-                                        activity.steps >= activity.goalStep;
-                                    const stats = getActivityStats({
-                                        activities: [activity],
-                                        profile,
-                                        fields: [
-                                            "duration",
-                                            "distance",
-                                            "calories",
-                                        ],
-                                    });
-                                    return (
-                                        <TouchableOpacity
-                                            key={activity.id}
-                                            onPress={() => {
-                                                drawerRef.current?.open();
-                                                drawerRef.current?.openWithActivity?.(
-                                                    activity,
-                                                );
-                                            }}
-                                        >
-                                            <Card>
-                                                <ColView>
-                                                    <RowView className="justify-between items-center">
-                                                        <Text className="text-[11px] text-muted-foreground">
-                                                            {format(start, "p")}{" "}
-                                                            – {format(end, "p")}
-                                                        </Text>
-                                                        <View
-                                                            className={`px-2 py-0.5 rounded-full ${met ? "bg-primary" : "bg-muted"}`}
-                                                        >
-                                                            <Text
-                                                                className={`text-[10px] font-medium ${met ? "text-white" : "text-muted-foreground"}`}
-                                                            >
-                                                                {met
-                                                                    ? "✓ Goal met"
-                                                                    : `${progress.toFixed(0)}%`}
-                                                            </Text>
-                                                        </View>
-                                                    </RowView>
-
-                                                    <RowView className="items-baseline gap-1">
-                                                        <Text className="text-2xl leading-none font-medium text-foreground">
-                                                            {activity.steps.toLocaleString()}
-                                                        </Text>
-                                                        <Text className="text-[11px] text-muted-foreground">
-                                                            /{" "}
-                                                            {activity.goalStep.toLocaleString()}{" "}
-                                                            steps
-                                                        </Text>
-                                                    </RowView>
-                                                    <View className="h-1 rounded-full bg-muted overflow-hidden">
-                                                        <View
-                                                            className="h-full rounded-full bg-primary"
-                                                            style={{
-                                                                width: `${Math.min(100, progress)}%`,
-                                                            }}
-                                                        />
-                                                    </View>
-                                                    <RowView className="gap-4">
-                                                        {stats.map((stat) => {
-                                                            return (
-                                                                <ColView
-                                                                    key={
-                                                                        stat.label
-                                                                    }
-                                                                    className="justify-start items-center gap-0"
-                                                                >
-                                                                    <RowView className="items-center gap-1">
-                                                                        <Ionicons
-                                                                            name={
-                                                                                stat.icon
-                                                                            }
-                                                                            size={
-                                                                                12
-                                                                            }
-                                                                            className="text-primary"
-                                                                        />
-                                                                        <Text className="text-sm text-foreground font-semibold">
-                                                                            {
-                                                                                stat.value
-                                                                            }{" "}
-                                                                            {stat.unit && (
-                                                                                <Text className="text-xs font-normal text-muted-foreground">
-                                                                                    {
-                                                                                        stat.unit
-                                                                                    }
-                                                                                </Text>
-                                                                            )}
-                                                                        </Text>
-                                                                    </RowView>
-                                                                </ColView>
-                                                            );
-                                                        })}
-                                                    </RowView>
-                                                </ColView>
-                                            </Card>
-                                        </TouchableOpacity>
-                                    );
-                                })}
+                                                    {i <
+                                                        activities.length -
+                                                            1 && (
+                                                        <View className="w-full border-b border-border/40" />
+                                                    )}
+                                                </View>
+                                            );
+                                        })}
+                                    </ColView>
+                                </Card>
                             </ColView>
-                        </ColView>
-                    );
-                })}
+                        );
+                    })}
+                </ColView>
             </ColView>
             <ActivityDetailsDrawer ref={drawerRef} />
             <ActivitySessionsDrawer ref={activitySessionsDrawerRef} />

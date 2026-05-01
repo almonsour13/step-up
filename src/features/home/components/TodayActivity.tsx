@@ -49,66 +49,77 @@ function TodayActivity() {
                 <ColView className="px-4 gap-1">
                     {/* Steps card */}
                     <Card className="w-full">
-                        <RowView className="justify-between items-center">
-                            <ColView className="gap-1">
-                                <RowView className="items-baseline gap-1.5">
-                                    <Text className="text-[40px] leading-none font-medium text-primary">
-                                        {totalSteps.toLocaleString()}
-                                    </Text>
-                                    <Text className="text-xs text-muted-foreground">
-                                        steps today
-                                    </Text>
-                                </RowView>
-                                <Text className="text-[11px] text-muted-foreground">
-                                    {met
-                                        ? `${totalSteps.toLocaleString()} goal · exceeded by ${(totalSteps - totalGoalSteps).toLocaleString()}`
-                                        : `${remainingSteps.toLocaleString()} steps to reach ${totalGoalSteps.toLocaleString()} goal`}
-                                </Text>
-                            </ColView>
-
-                            <View className="relative items-center justify-center">
-                                <RingChart
-                                    pct={Math.min(totalPct, 100)}
-                                    radius={28}
-                                    strokeWidth={6}
-                                    strokeLinecap="round"
-                                    trackColor="rgba(128,128,128,0.1)"
-                                    color={met ? "#639922" : "white"}
-                                />
-                                <Text className="absolute text-[11px] font-medium text-primary">
-                                    {totalPct.toFixed(0)}
-                                    <Text className="text-[9px]">%</Text>
-                                </Text>
-                            </View>
-                        </RowView>
-                    </Card>
-
-                    {/* Stat cards */}
-                    <RowView className="gap-1">
-                        {stats.map((stat) => (
-                            <Card key={stat.label} className="flex-1 gap-1.5">
-                                <RowView className="gap-1">
-                                    <Ionicons
-                                        name={stat.icon}
-                                        size={12}
-                                        className="text-primary"
-                                    />
-                                    <Text className="text-xs text-muted-foreground">
-                                        {stat.label}
-                                    </Text>
-                                </RowView>
-                                <Text className="text-base leading-none font-medium text-foreground">
-                                    {stat.value}
-                                    {stat.unit && (
-                                        <Text className="text-[10px] font-normal text-muted-foreground">
-                                            {" "}
-                                            {stat.unit}
+                        <ColView className="gap-4">
+                            <RowView className="justify-between items-center">
+                                <ColView className="gap-1">
+                                    <RowView className="items-baseline gap-1.5">
+                                        <Text className="text-[40px] leading-none font-medium text-primary">
+                                            {totalSteps.toLocaleString()}
                                         </Text>
-                                    )}
-                                </Text>
-                            </Card>
-                        ))}
-                    </RowView>
+                                        <Text className="text-xs text-muted-foreground">
+                                            steps today
+                                        </Text>
+                                    </RowView>
+                                    <Text className="text-[11px] text-muted-foreground">
+                                        {met
+                                            ? `${totalSteps.toLocaleString()} goal · exceeded by ${(totalSteps - totalGoalSteps).toLocaleString()}`
+                                            : `${remainingSteps.toLocaleString()} steps to reach ${totalGoalSteps.toLocaleString()} goal`}
+                                    </Text>
+                                </ColView>
+
+                                <View className="relative items-center justify-center">
+                                    <RingChart
+                                        pct={Math.min(totalPct, 100)}
+                                        radius={28}
+                                        strokeWidth={6}
+                                        strokeLinecap="round"
+                                        trackColor="rgba(128,128,128,0.1)"
+                                        color={met ? "#639922" : "white"}
+                                    />
+                                    <Text className="absolute text-[11px] font-medium text-primary">
+                                        {totalPct.toFixed(0)}
+                                        <Text className="text-[9px]">%</Text>
+                                    </Text>
+                                </View>
+                            </RowView>
+
+                            <View className="border-b border-border/40" />
+
+                            {/* ── Stats ── */}
+                            <RowView>
+                                {stats.map((stat, i) => (
+                                    <ColView
+                                        key={stat.label}
+                                        className={
+                                            i > 0
+                                                ? "flex-1 pl-4 border-l border-border/40 gap-1"
+                                                : "flex-1 gap-1"
+                                        }
+                                    >
+                                        <RowView className="gap-1 items-center">
+                                            <Ionicons
+                                                name={stat.icon}
+                                                size={11}
+                                                className="text-primary"
+                                            />
+                                            <Text className="text-[11px] text-muted-foreground">
+                                                {stat.label}
+                                            </Text>
+                                        </RowView>
+                                        <Text className="text-[15px] font-medium text-foreground">
+                                            {stat.value}
+                                            {stat.unit && (
+                                                <Text className="text-[10px] font-normal text-muted-foreground">
+                                                    {" "}
+                                                    {stat.unit}
+                                                </Text>
+                                            )}
+                                        </Text>
+                                    </ColView>
+                                ))}
+                            </RowView>
+                        </ColView>
+                    </Card>
                 </ColView>
             </ColView>
             <ActivitySessionsDrawer ref={activitySessionsDrawerRef} />

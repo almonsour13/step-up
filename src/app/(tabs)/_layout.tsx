@@ -5,7 +5,6 @@ import { useActivity } from "@/shared/hooks/use-activity";
 import { useUserStore } from "@/shared/stores/use-user.store";
 import { Stack } from "expo-router";
 import React, { useEffect } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TabLayout() {
     useActivityState();
@@ -26,18 +25,16 @@ export default function TabLayout() {
 
     return (
         <>
-            <SafeAreaView style={{ flex: 1 }}>
-                <Stack
-                    screenOptions={{
-                        headerShown: false,
-                        contentStyle: { backgroundColor: "transparent" },
-                        gestureEnabled: true,
-                        animation: "simple_push", // or "none"
-                    }}
-                />
-                <ActiveActivityBanner />
-                <MainNavigation />
-            </SafeAreaView>
+            <Stack
+                screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: "transparent" },
+                    gestureEnabled: true,
+                    animation: "none", // or "none"
+                }}
+            />
+            <ActiveActivityBanner />
+            <MainNavigation />
         </>
     );
 }

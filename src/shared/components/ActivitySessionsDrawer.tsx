@@ -10,6 +10,7 @@ import { formatActivityDate } from "../utils/utils";
 import { ActivityDetailsDrawerHandle } from "./ActivityDetailsDrawer";
 import { ColView, RowView } from "./CustomView";
 import Drawer, { DrawerHandle } from "./Drawer";
+import Card from "./ui/Card";
 import RingChart from "./ui/RingChart";
 
 type Props = {};
@@ -141,7 +142,7 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
 
                     <View className="border-b border-border/40" />
 
-                    <RowView className="px-4">
+                    <RowView>
                         {stats.map((stat, i) => (
                             <ColView
                                 key={stat.label}
@@ -176,12 +177,12 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
 
                     <View className="border-b border-border/40" />
 
-                    <RowView className="items-center bg-muted p-4 rounded-lg">
+                    <Card className="items-center bg-muted border-0">
                         <Text className="text-xs text-muted-foreground flex-1">
                             You walked {distanceKm} km and burned{" "}
                             {caloriesBurned} kcal in this sessions.
                         </Text>
-                    </RowView>
+                    </Card>
 
                     <ColView className="gap-2">
                         <Text className="text-sm">Sessions</Text>
@@ -191,7 +192,8 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
                                     <ActivityCard
                                         key={activity.id}
                                         activity={activity}
-                                        className="border border-border/40"
+                                        showDay={false}
+                                        className="border border-border/50"
                                     />
                                 );
                             })}

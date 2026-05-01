@@ -46,7 +46,7 @@ export default function ActivityHistoryFilter() {
                 ))}
                 <TouchableOpacity
                     onPress={() => sortDrawerRef.current?.open()}
-                    className="px-4 py-2 bg-card items-center rounded-full border border-border"
+                    className="px-4 py-2 bg-card items-center rounded-lg"
                 >
                     <Text className="text-sm">{sort}</Text>
                 </TouchableOpacity>

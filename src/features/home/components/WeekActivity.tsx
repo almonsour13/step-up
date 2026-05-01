@@ -43,7 +43,7 @@ function WeekActivity() {
     const motivation = getMotivation(totalPct);
     return (
         <View className="px-4">
-            <Card className="bg-primary p-4">
+            <Card className="bg-primary p-4 border-0">
                 <ColView className="gap-4">
                     {/* Header */}
                     <ColView className="gap-2">

@@ -1,5 +1,6 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import { useUserStore } from "@/shared/stores/use-user.store";
+import { useRouter } from "expo-router";
 import { useMemo } from "react";
 import { Text } from "react-native";
 
@@ -28,6 +29,9 @@ const PHRASES = {
 };
 
 export default function Header() {
+    const router = useRouter();
+    const profile = useUserStore((s) => s.profile);
+
     const hour = new Date().getHours();
     const greeting = hour < 12 ? "morning" : hour < 17 ? "noon" : "evening";
 
@@ -35,14 +39,13 @@ export default function Header() {
         const pool = PHRASES[greeting];
         return pool[Math.floor(Math.random() * pool.length)];
     }, [greeting]);
-    const profile = useUserStore((s) => s.profile);
     return (
         <RowView className="px-4 pt-12 justify-between items-start">
             <ColView className="gap-1">
                 <Text className="text-sm text-muted-foreground">
                     Good {greeting}, {profile?.name}
                 </Text>
-                <Text className="text-xl font-medium text-foreground leading-snug">
+                <Text className="text-xl text-foreground leading-snug">
                     {randomPhrase}
                 </Text>
             </ColView>
