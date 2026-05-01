@@ -3,11 +3,11 @@ import { formatDuration } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "expo-router";
-import { useEffect, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 import { Animated, Text, TouchableOpacity } from "react-native";
 import { RowView } from "./CustomView";
 
-export default function ActiveActivityBanner() {
+function ActiveActivityBanner() {
     const translateY = useRef(new Animated.Value(0)).current;
     const isHidden = useRef(false);
 
@@ -110,3 +110,4 @@ export default function ActiveActivityBanner() {
         </Animated.View>
     );
 }
+export default memo(ActiveActivityBanner);

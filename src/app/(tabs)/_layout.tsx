@@ -22,7 +22,7 @@ export default function TabLayout() {
                 gender: "male",
             });
         }
-    }, [profile]);
+    }, []); // remove profile from deps — only run once on mount
 
     return (
         <>
@@ -31,7 +31,8 @@ export default function TabLayout() {
                     screenOptions={{
                         headerShown: false,
                         contentStyle: { backgroundColor: "transparent" },
-                        animation: "fade",
+                        gestureEnabled: true,
+                        animation: "simple_push", // or "none"
                     }}
                 />
                 <ActiveActivityBanner />

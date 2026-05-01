@@ -7,7 +7,7 @@ export default function ActivityScreen() {
     return (
         <ColView className="gap-0 pb-4 flex-1 ">
             <ActivityHeader />
-            <ColView className="flex-1 gap-2 px-4">
+            <ColView className="flex-1 gap-1 px-4">
                 <ActivityProgress />
                 <ActivityStatistic />
             </ColView>

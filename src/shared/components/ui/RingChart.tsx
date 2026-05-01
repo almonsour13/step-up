@@ -8,6 +8,7 @@ interface RingChartProps {
     strokeWidth?: number;
     strokeLinecap?: StrokeLinecap;
     trackColor?: string;
+    trackWidth?: number;
     color?: string;
     gapDeg?: number;
     startDeg?: number; // 0 = 12 o'clock, 90 = 3 o'clock, 180 = 6 o'clock, etc.
@@ -19,6 +20,7 @@ export default function RingChart({
     strokeWidth = 8,
     strokeLinecap = "round",
     trackColor = "#e5e7eb",
+    trackWidth = 8,
     color = "#3b82f6",
     gapDeg = 0,
     startDeg = 0,
@@ -43,7 +45,7 @@ export default function RingChart({
                     r={radius}
                     fill="transparent"
                     stroke={trackColor}
-                    strokeWidth={strokeWidth}
+                    strokeWidth={trackWidth}
                     strokeDasharray={`${trackArcLength} ${CIRCUMFERENCE}`}
                     strokeLinecap={strokeLinecap}
                 />

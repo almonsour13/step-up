@@ -62,7 +62,7 @@ export default function ActivityController() {
                 >
                     <Ionicons
                         name={isRunning ? "pause" : "play"}
-                        size={30}
+                        size={36}
                         color="white"
                     />
                 </TouchableOpacity>

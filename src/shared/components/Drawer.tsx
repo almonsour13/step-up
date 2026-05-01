@@ -1,5 +1,6 @@
 import {
     forwardRef,
+    memo,
     useCallback,
     useImperativeHandle,
     useRef,
@@ -11,6 +12,7 @@ import {
     LayoutChangeEvent,
     Modal,
     PanResponder,
+    ScrollView,
     StyleSheet,
     TouchableWithoutFeedback,
     View,
@@ -33,7 +35,7 @@ interface Props {
     disableHandle?: boolean;
     onClose?: () => void;
 }
-
+const MAX_HEIGHT = SCREEN_HEIGHT * 0.9;
 const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
     {
         children,
@@ -163,7 +165,10 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
             <Animated.View
                 style={[
                     styles.sheet,
-                    { transform: [{ translateY: combinedTranslate }] },
+                    {
+                        transform: [{ translateY: combinedTranslate }],
+                        // maxHeight: MAX_HEIGHT,
+                    },
                 ]}
                 onLayout={(e: LayoutChangeEvent) => {
                     const h = e.nativeEvent.layout.height;
@@ -176,23 +181,29 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
                         "bg-card overflow-hidden rounded-t-2xl",
                         className,
                     )}
+                    style={{ maxHeight: MAX_HEIGHT, flex: 1 }}
                 >
                     {!disableHandle && (
                         <View
-                            className="pt-4 justify-center items-center"
+                            className="py-4 justify-center items-center"
                             {...panResponder.panHandlers}
                         >
                             <View className="w-16 h-1.5 rounded-full bg-muted-foreground/50" />
                         </View>
                     )}
-                    {children}
+                    <ScrollView
+                        showsHorizontalScrollIndicator={false}
+                        showsVerticalScrollIndicator={false}
+                    >
+                        {children}
+                    </ScrollView>
                 </View>
             </Animated.View>
         </Modal>
     );
 });
 const Drawer = DrawerComponent;
-export default Drawer;
+export default memo(Drawer);
 const styles = StyleSheet.create({
     backdrop: {
         backgroundColor: "rgba(0,0,0, 0.5)",

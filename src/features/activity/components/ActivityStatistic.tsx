@@ -37,7 +37,7 @@ export default function ActivityStatistic() {
     ];
 
     return (
-        <RowView className="gap-2.5">
+        <RowView className="gap-1">
             {stats.map((stat) => (
                 <Card key={stat.label} className="flex-1 gap-1">
                     <RowView className="gap-1">

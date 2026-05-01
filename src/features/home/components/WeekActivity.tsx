@@ -1,13 +1,13 @@
-import ActivityDetailsDrawer, {
-    ActivityDetailsDrawerHandle,
-} from "@/shared/components/ActivityDetailsDrawer";
+import ActivitySessionsDrawer, {
+    ActivitySessionsDrawerHandle,
+} from "@/shared/components/ActivitySessionsDrawer";
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
 import clsx from "clsx";
 import { format, isSameDay } from "date-fns";
-import { useRef } from "react";
-import { Text, View } from "react-native";
-import { useThisWeekActivityProgress } from "../hooks/use-this-week-activity-progress";
+import { memo, useRef } from "react";
+import { Text, TouchableOpacity, View } from "react-native";
+import { useWeekActivity } from "../hooks/use-week-activity";
 
 function getMotivation(pct: number) {
     if (pct >= 90) return { emoji: "🔥", text: "On fire this week!" };
@@ -16,9 +16,10 @@ function getMotivation(pct: number) {
     if (pct >= 25) return { emoji: "🚶", text: "Every step counts!" };
     return { emoji: "✨", text: "Let's get moving!" };
 }
-export default function ThisWeekActivityProgress() {
-    const days = useThisWeekActivityProgress();
-    const drawerRef = useRef<ActivityDetailsDrawerHandle>(null);
+function WeekActivity() {
+    const days = useWeekActivity();
+    const activitySessionsDrawerRef =
+        useRef<ActivitySessionsDrawerHandle>(null);
 
     const totalSteps = days
         .filter((d) => !d.isFuture)
@@ -78,9 +79,16 @@ export default function ThisWeekActivityProgress() {
                             const isToday = isSameDay(day.date, today);
 
                             return (
-                                <ColView
+                                <TouchableOpacity
                                     key={i}
+                                    disabled={day.isFuture}
                                     className="flex-1 items-center gap-1"
+                                    onPress={() => {
+                                        activitySessionsDrawerRef.current?.open();
+                                        activitySessionsDrawerRef.current?.openWithActivities?.(
+                                            day.activities,
+                                        );
+                                    }}
                                 >
                                     <View className="h-16 w-full justify-end bg-foreground/16 rounded overflow-hidden">
                                         {!day.isFuture && (
@@ -98,7 +106,6 @@ export default function ThisWeekActivityProgress() {
                                         )}
                                     </View>
 
-                                    {/* Day label */}
                                     <Text
                                         className={`text-xs ${
                                             isToday
@@ -108,7 +115,7 @@ export default function ThisWeekActivityProgress() {
                                     >
                                         {day.label}
                                     </Text>
-                                </ColView>
+                                </TouchableOpacity>
                             );
                         })}
                     </RowView>
@@ -135,7 +142,8 @@ export default function ThisWeekActivityProgress() {
                     </ColView>
                 </ColView>
             </Card>
-            <ActivityDetailsDrawer ref={drawerRef} />
+            <ActivitySessionsDrawer ref={activitySessionsDrawerRef} />
         </View>
     );
 }
+export default memo(WeekActivity);

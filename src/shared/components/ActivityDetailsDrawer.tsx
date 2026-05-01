@@ -1,56 +1,45 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import { Activity } from "@/shared/types/type";
-import {
-    calcCalories,
-    calcDistanceKm,
-    formatDuration,
-} from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
 import React, {
     forwardRef,
+    memo,
     useImperativeHandle,
     useRef,
     useState,
 } from "react";
 import { Text, View } from "react-native";
-import { useActivityStore } from "../stores/use-activity.store";
+import { useUserStore } from "../stores/use-user.store";
+import { getActivityStats } from "../utils/activity-stats.utils";
+import { formatActivityDate } from "../utils/utils";
 import Drawer, { DrawerHandle } from "./Drawer";
+import RingChart from "./ui/RingChart";
 
-const TEMP_USER = {
-    weightKg: 65,
-    heightCm: 165,
-};
 export type ActivityDetailsDrawerHandle = DrawerHandle & {
     openWithActivity: (activity: Activity) => void;
 };
-type Props = {};
 
-const ActivityDetailsDrawer = forwardRef<ActivityDetailsDrawerHandle, Props>(
+const ActivityDetailsDrawer = forwardRef<ActivityDetailsDrawerHandle, {}>(
     (_, ref) => {
-        const activities = useActivityStore((s) => s.activities);
+        const profile = useUserStore((s) => s.profile);
         const drawerRef = useRef<ActivityDetailsDrawerHandle>(null);
         const [activity, setActivity] = useState<Activity | null>(null);
 
         useImperativeHandle(ref, () => ({
             open: () => drawerRef.current?.open(),
             close: () => drawerRef.current?.close(),
-            openWithActivity: openWithActivity,
+            openWithActivity: (data: Activity) => {
+                setActivity(data);
+                drawerRef.current?.open();
+            },
         }));
-
-        const openWithActivity = (data: Activity) => {
-            setActivity(data);
-            drawerRef.current?.open();
-        };
-
-        const start = activity ? new Date(activity.startTime) : null;
-        const end = activity ? new Date(activity.endTime) : null;
 
         if (!activity) {
             return (
                 <Drawer ref={drawerRef}>
-                    <View className="p-4">
-                        <Text className="text-muted-foreground">
+                    <View className="p-6 items-center justify-center">
+                        <Text className="text-sm text-muted-foreground">
                             No activity selected
                         </Text>
                     </View>
@@ -58,84 +47,139 @@ const ActivityDetailsDrawer = forwardRef<ActivityDetailsDrawerHandle, Props>(
             );
         }
 
-        const progress =
-            (activity.steps / (activity.goalStep || activity.steps)) * 100;
+        const start = new Date(activity.startTime);
+        const end = new Date(activity.endTime);
+        const pct = Math.min(
+            (activity.steps / (activity.goalStep || activity.steps)) * 100,
+            100,
+        );
+        const met = activity.steps >= activity.goalStep;
+        const remaining = Math.max(activity.goalStep - activity.steps, 0);
 
-        const stats = [
-            {
-                label: "Duration",
-                value: formatDuration(activity.duration),
-                icon: "time" as const,
-            },
-            {
-                label: "Distance",
-                value: calcDistanceKm(
-                    activity.steps,
-                    TEMP_USER.heightCm,
-                ).toFixed(2),
-                unit: "km",
-                icon: "location" as const,
-            },
-            {
-                label: "Calories",
-                value: calcCalories(activity.steps, TEMP_USER.weightKg).toFixed(
-                    1,
-                ),
-                unit: "kcal",
-                icon: "flame" as const,
-            },
-        ];
+        const stats = getActivityStats({
+            activities: [activity],
+            profile,
+            fields: ["duration", "distance", "calories"],
+        });
+        const distanceKm = stats.find((s) => s.label === "Distance")?.value;
+        const caloriesBurned = stats.find((s) => s.label === "Calories")?.value;
 
         return (
             <Drawer ref={drawerRef}>
-                <ColView className="gap-4 p-4">
-                    {/* Header */}
-                    <ColView className="gap-1">
-                        <Text className="text-lg font-semibold text-foreground">
-                            Activity Details
-                        </Text>
-                        <Text className="text-xs text-muted-foreground">
-                            {start &&
-                                `${format(start, "PPP p")} → ${format(end!, "p")}`}
-                        </Text>
-                    </ColView>
-                    <Text className="text-3xl font-bold text-foreground">
-                        {activity.steps.toLocaleString()}
-                    </Text>
-                    <Text className="text-xs text-muted-foreground">
-                        / {activity.goalStep.toLocaleString()} steps
-                    </Text>
-
-                    <View className="h-2 bg-muted rounded-full mt-3 overflow-hidden">
-                        <View
-                            className="h-full bg-primary rounded-full"
-                            style={{ width: `${Math.min(100, progress)}%` }}
-                        />
-                    </View>
-
-                    <RowView className="justify-between">
-                        {stats.map((s) => (
-                            <ColView key={s.label} className="items-center">
-                                <RowView className="items-center gap-1">
-                                    <Ionicons
-                                        name={s.icon}
-                                        size={14}
-                                        color="#888"
-                                    />
-                                    <Text className="text-sm font-semibold">
-                                        {s.value} {s.unit}
-                                    </Text>
-                                </RowView>
-                                <Text className="text-xs text-muted-foreground">
-                                    {s.label}
+                <ColView className="gap-0">
+                    <ColView className="gap-5 px-5 pt-3 pb-6">
+                        {/* ── Header row ── */}
+                        <RowView className="justify-between items-start">
+                            <ColView className="gap-0.5 flex-1 pr-3">
+                                <Text className="text-base font-medium text-foreground">
+                                    Activity details
+                                </Text>
+                                <Text className="text-[11px] text-muted-foreground">
+                                    <Text>
+                                        {formatActivityDate(start)}
+                                        {", "}
+                                        {format(start, "MMM d")}
+                                    </Text>{" "}
+                                    · {format(start, "p")} – {format(end, "p")}
                                 </Text>
                             </ColView>
-                        ))}
-                    </RowView>
+
+                            {/* Goal badge */}
+
+                            <ColView>
+                                <View className="px-3 py-1 bg-muted rounded-full">
+                                    <Text className="text-xs">
+                                        {met
+                                            ? "✓ Goal met"
+                                            : `${Math.round(pct)}%`}
+                                    </Text>
+                                </View>
+                            </ColView>
+                        </RowView>
+
+                        {/* ── Hero: step count ── */}
+                        <RowView className="justify-between">
+                            <ColView className="gap-0">
+                                <RowView className="items-baseline gap-1.5">
+                                    <Text className="text-[40px] leading-none font-medium text-primary">
+                                        {activity.steps.toLocaleString()}
+                                    </Text>
+                                    <Text className="text-xs text-muted-foreground">
+                                        steps
+                                    </Text>
+                                </RowView>
+                                <Text className="text-[11px] text-muted-foreground">
+                                    {met
+                                        ? `${activity.goalStep.toLocaleString()} goal · exceeded by ${(activity.steps - activity.goalStep).toLocaleString()}`
+                                        : `${remaining.toLocaleString()} steps to reach ${activity.goalStep.toLocaleString()} goal`}
+                                </Text>
+                            </ColView>
+                            <View className="relative items-center justify-center">
+                                <RingChart
+                                    pct={Math.min(pct, 100)}
+                                    radius={28}
+                                    strokeWidth={8}
+                                    strokeLinecap="round"
+                                    trackColor="rgba(128,128,128,0.1)"
+                                    color={met ? "#639922" : "white"}
+                                />
+                                <Text className="absolute text-[11px] font-medium text-primary">
+                                    {pct.toFixed(0)}
+                                    <Text className="text-base">%</Text>
+                                </Text>
+                            </View>
+                        </RowView>
+                        {/* ── Divider ── */}
+                        <View className="border-b border-border/40" />
+
+                        {/* ── Stats ── */}
+                        <RowView>
+                            {stats.map((stat, i) => (
+                                <ColView
+                                    key={stat.label}
+                                    className={
+                                        i > 0
+                                            ? "flex-1 pl-4 border-l border-border/40 gap-1"
+                                            : "flex-1 gap-1"
+                                    }
+                                >
+                                    <RowView className="gap-1 items-center">
+                                        <Ionicons
+                                            name={stat.icon}
+                                            size={11}
+                                            className="text-primary"
+                                        />
+                                        <Text className="text-[11px] text-muted-foreground">
+                                            {stat.label}
+                                        </Text>
+                                    </RowView>
+                                    <Text className="text-[15px] font-medium text-foreground">
+                                        {stat.value}
+                                        {stat.unit && (
+                                            <Text className="text-[10px] font-normal text-muted-foreground">
+                                                {" "}
+                                                {stat.unit}
+                                            </Text>
+                                        )}
+                                    </Text>
+                                </ColView>
+                            ))}
+                        </RowView>
+
+                        {/* ── Divider ── */}
+                        <View className="border-b border-border/40" />
+
+                        <RowView className="items-center bg-muted p-4 rounded">
+                            <Text className="text-xs text-muted-foreground flex-1">
+                                You walked {distanceKm} km and burned{" "}
+                                {caloriesBurned} kcal in this session.
+                            </Text>
+                        </RowView>
+                    </ColView>
                 </ColView>
             </Drawer>
         );
     },
 );
 
-export default ActivityDetailsDrawer;
+export default memo(ActivityDetailsDrawer);

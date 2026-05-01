@@ -2,7 +2,7 @@ import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { addDays, format, isSameDay, startOfWeek } from "date-fns";
 import { useMemo } from "react";
 
-export const useThisWeekActivityProgress = () => {
+export const useWeekActivity = () => {
     const activities = useActivityStore((s) => s.activities);
 
     return useMemo(() => {
@@ -34,6 +34,7 @@ export const useThisWeekActivityProgress = () => {
             const pct = goal > 0 ? Math.min((steps / goal) * 100, 100) : 0;
 
             return {
+                activities: dayActivities,
                 date,
                 label: format(date, "EEE"),
                 dayNumber: format(date, "d"),
