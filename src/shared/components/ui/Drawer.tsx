@@ -1,3 +1,4 @@
+import Constants from "expo-constants";
 import {
     forwardRef,
     memo,
@@ -17,8 +18,8 @@ import {
     TouchableWithoutFeedback,
     View,
 } from "react-native";
-import { cn } from "../utils/cn";
-
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { cn } from "../../utils/cn";
 const { height: SCREEN_HEIGHT } = Dimensions.get("window");
 
 const DISMISS_THRESHOLD = 120;
@@ -36,6 +37,8 @@ interface Props {
     onClose?: () => void;
 }
 const MAX_HEIGHT = SCREEN_HEIGHT * 0.9;
+
+const IS_EXPO_GO = Constants.appOwnership === "expo";
 const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
     {
         children,
@@ -46,6 +49,7 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
     },
     ref,
 ) {
+    const insets = useSafeAreaInsets();
     const [isVisible, setIsVisible] = useState(false);
     const sheetHeightRef = useRef(SCREEN_HEIGHT);
     const translateY = useRef(new Animated.Value(SCREEN_HEIGHT)).current;
@@ -65,7 +69,7 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
             Animated.spring(translateY, {
                 toValue: 0,
                 damping: 20,
-                stiffness: 200,
+                stiffness: 180,
                 useNativeDriver: true,
             }),
             Animated.timing(backdropOpacity, {
@@ -181,7 +185,13 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
                         "bg-card overflow-hidden rounded-t-2xl",
                         className,
                     )}
-                    style={{ maxHeight: MAX_HEIGHT, flex: 1 }}
+                    style={{
+                        maxHeight: MAX_HEIGHT,
+                        flex: 1,
+                        ...(!IS_EXPO_GO
+                            ? { paddingBottom: insets.bottom }
+                            : {}),
+                    }}
                 >
                     {!disableHandle && (
                         <View

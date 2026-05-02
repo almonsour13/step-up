@@ -1,35 +1,34 @@
 import ActivityCard from "@/features/home/components/ui/ActivityCard";
-import { Activity } from "@/shared/types/type";
+import { useActivitySessions } from "@/features/home/hooks/use-activity-sessions";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
 import { forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
 import { Text, View } from "react-native";
-import { useUserStore } from "../stores/use-user.store";
-import { getActivityStats } from "../utils/activity-stats.utils";
-import { formatActivityDate } from "../utils/utils";
-import { ActivityDetailsDrawerHandle } from "./ActivityDetailsDrawer";
-import { ColView, RowView } from "./CustomView";
-import Drawer, { DrawerHandle } from "./Drawer";
-import Card from "./ui/Card";
-import RingChart from "./ui/RingChart";
+import { useUserStore } from "../../stores/use-user.store";
+import { getActivityStats } from "../../utils/activity-stats.utils";
+import { formatActivityDate } from "../../utils/utils";
+import { ColView, RowView } from "../CustomView";
+import Card from "../ui/Card";
+import Drawer, { DrawerHandle } from "../ui/Drawer";
+import RingChart from "../ui/RingChart";
 
 type Props = {};
 
 export type ActivitySessionsDrawerHandle = DrawerHandle & {
-    openWithActivities: (activity: Activity[]) => void;
+    openWithActivities: (day: string) => void;
 };
 
 const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
     const profile = useUserStore((s) => s.profile);
     const drawerRef = useRef<DrawerHandle>(null);
-    const activityDetailsDrawerRef = useRef<ActivityDetailsDrawerHandle>(null);
-    const [activities, setActivity] = useState<Activity[] | []>([]);
+    const [selectedDay, setSelectedDay] = useState<string | null>(null);
+    const activities = useActivitySessions(selectedDay);
 
     useImperativeHandle(ref, () => ({
         open: () => drawerRef.current?.open(),
         close: () => drawerRef.current?.close(),
-        openWithActivities: (data: Activity[]) => {
-            setActivity(data);
+        openWithActivities: (day: string) => {
+            setSelectedDay(day);
             drawerRef.current?.open();
         },
     }));
@@ -131,7 +130,6 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
                                 strokeWidth={8}
                                 strokeLinecap="round"
                                 trackColor="rgba(128,128,128,0.1)"
-                                color={met ? "#639922" : "white"}
                             />
                             <Text className="absolute text-[11px] font-medium text-primary">
                                 {totalPct.toFixed(0)}
