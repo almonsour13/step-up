@@ -1,34 +1,37 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
+import { useActiveActivityControl } from "@/shared/hooks/use-active-activity-control";
+import { useActiveActivityStore } from "@/shared/stores/use-active-activity.store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
 import { Text, TouchableOpacity } from "react-native";
-import { useActivityStore } from "../stores/use-activity.store";
 
 export default function ActivityController() {
-    const status = useActivityStore((s) => s.status);
-    const start = useActivityStore((s) => s.start);
-    const pause = useActivityStore((s) => s.pause);
-    const resume = useActivityStore((s) => s.resume);
-    const finish = useActivityStore((s) => s.stop);
-    const discard = useActivityStore((s) => s.discard);
-
-    const isRunning = status === "active";
-    const isPaused = status === "paused";
+    const activeStatus = useActiveActivityStore(
+        (s) => s.activeActivity?.status,
+    );
+    const activeActivityControl = useActiveActivityControl();
 
     const handleMain = async () => {
         if (isRunning) {
-            await pause();
+            activeActivityControl.pause();
         } else if (isPaused) {
-            await resume();
+            activeActivityControl.resume();
         } else {
-            await start();
+            activeActivityControl.start();
         }
     };
 
     const handleReset = async () => {
-        await discard();
+        activeActivityControl.discard();
+        // await discard();
     };
-    const isDisabled = status === "idle" || isRunning;
+    const handleSave = async () => {
+        activeActivityControl.save();
+    };
+
+    const isRunning = activeStatus === "active";
+    const isPaused = activeStatus === "paused";
+    const isDisabled = activeStatus === "idle" || isRunning;
     return (
         <RowView className="justify-center items-end gap-6">
             {/* Reset */}
@@ -78,7 +81,7 @@ export default function ActivityController() {
                         "h-20 aspect-square rounded-full bg-primary items-center justify-center",
                         isDisabled && "opacity-50",
                     )}
-                    onPress={finish}
+                    onPress={handleSave}
                 >
                     <Ionicons
                         name="checkmark"

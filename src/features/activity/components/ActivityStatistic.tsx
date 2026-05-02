@@ -1,5 +1,7 @@
 import { RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
+import { useActiveActivityStore } from "@/shared/stores/use-active-activity.store";
+import { useUserStore } from "@/shared/stores/use-user.store";
 import {
     calcCalories,
     calcDistanceKm,
@@ -7,30 +9,30 @@ import {
 } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text } from "react-native";
-import { useActivityStore } from "../stores/use-activity.store";
-const TEMP_USER = {
-    weightKg: 65,
-    heightCm: 165,
-};
-
 export default function ActivityStatistic() {
-    const duration = useActivityStore((s) => s.duration);
-    const steps = useActivityStore((s) => s.steps);
+    const profile = useUserStore((s) => s.profile);
+    const activeActivity = useActiveActivityStore((s) => s.activeActivity);
     const stats = [
         {
             label: "Duration",
-            value: formatDuration(duration),
+            value: formatDuration(activeActivity.duration),
             icon: "time" as const,
         },
         {
             label: "Distance",
-            value: calcDistanceKm(steps, TEMP_USER.heightCm).toFixed(2),
+            value: calcDistanceKm(
+                activeActivity.steps,
+                profile?.height || 170,
+            ).toFixed(2),
             unit: "km",
             icon: "location" as const,
         },
         {
             label: "Calories",
-            value: calcCalories(steps, TEMP_USER.weightKg).toFixed(1),
+            value: calcCalories(
+                activeActivity.steps,
+                profile?.weight || 65,
+            ).toFixed(1),
             unit: "kcal",
             icon: "flame" as const,
         },
