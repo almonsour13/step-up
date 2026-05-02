@@ -1,11 +1,11 @@
 import ActivityCard from "@/features/home/components/ui/ActivityCard";
+import { ColView, RowView } from "@/shared/components/CustomView";
 import ActivityDetailsDrawer, {
     ActivityDetailsDrawerHandle,
-} from "@/shared/components/ActivityDetailsDrawer";
+} from "@/shared/components/drawer/ActivityDetailsDrawer";
 import ActivitySessionsDrawer, {
     ActivitySessionsDrawerHandle,
-} from "@/shared/components/ActivitySessionsDrawer";
-import { ColView, RowView } from "@/shared/components/CustomView";
+} from "@/shared/components/drawer/ActivitySessionsDrawer";
 import Card from "@/shared/components/ui/Card";
 import { format, isToday, isYesterday } from "date-fns";
 import { useRef } from "react";
@@ -49,9 +49,8 @@ export default function ActivityHistoryList() {
                             <ColView key={date} className="gap-2">
                                 <TouchableOpacity
                                     onPress={() => {
-                                        activitySessionsDrawerRef.current?.open();
                                         activitySessionsDrawerRef.current?.openWithActivities?.(
-                                            activities,
+                                            date,
                                         );
                                     }}
                                 >

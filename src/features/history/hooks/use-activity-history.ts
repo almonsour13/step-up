@@ -1,12 +1,18 @@
 import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { Activity } from "@/shared/types/type";
-import { format, isAfter, startOfWeek, subMonths } from "date-fns";
+import {
+    endOfWeek,
+    format,
+    isWithinInterval,
+    startOfWeek,
+    subMonths,
+} from "date-fns";
 import { useMemo } from "react";
 import { useFilterStore } from "../stores/use-filter.store";
 
 type GroupedActivities = Record<string, Activity[]>;
 
-export type PeriodType = "All" | "Week" | "Month";
+export type PeriodType = "all" | "week" | "month";
 
 export const useActivityHistory = () => {
     const activities = useActivityStore((s) => s.activities);
@@ -15,23 +21,26 @@ export const useActivityHistory = () => {
 
     return useMemo<GroupedActivities>(() => {
         const now = new Date();
-
-        // 1. FILTER BY PERIOD
         const filtered = activities.filter((activity) => {
             const date = new Date(activity.startTime);
 
-            if (period === "Week") {
-                return isAfter(date, startOfWeek(now, { weekStartsOn: 1 }));
+            if (period === "week") {
+                return isWithinInterval(date, {
+                    start: startOfWeek(now, { weekStartsOn: 1 }),
+                    end: endOfWeek(now, { weekStartsOn: 1 }),
+                });
             }
 
-            if (period === "Month") {
-                return isAfter(date, subMonths(now, 1));
+            if (period === "month") {
+                return isWithinInterval(date, {
+                    start: subMonths(now, 1),
+                    end: now,
+                });
             }
 
-            return true; // "All"
+            return true;
         });
 
-        // 2. GROUP BY DATE
         const grouped = filtered.reduce((acc, activity) => {
             const key = format(new Date(activity.startTime), "yyyy-MM-dd");
 
@@ -41,15 +50,13 @@ export const useActivityHistory = () => {
             return acc;
         }, {} as GroupedActivities);
 
-        // 3. SORT DATES
         const sortedKeys = Object.keys(grouped).sort((a, b) => {
-            if (sort === "Newest") {
+            if (sort === "newest") {
                 return new Date(b).getTime() - new Date(a).getTime();
             }
             return new Date(a).getTime() - new Date(b).getTime();
         });
 
-        // 4. REBUILD ORDERED OBJECT
         const sortedGrouped: GroupedActivities = {};
         sortedKeys.forEach((key) => {
             sortedGrouped[key] = grouped[key];

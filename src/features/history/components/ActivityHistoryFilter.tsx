@@ -1,5 +1,6 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
-import Drawer, { DrawerHandle } from "@/shared/components/Drawer";
+import Drawer, { DrawerHandle } from "@/shared/components/ui/Drawer";
+import { capitalize } from "@/shared/utils/capitalize";
 import { cn } from "@/shared/utils/cn";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
@@ -9,17 +10,17 @@ import { useFilterStore } from "../stores/use-filter.store";
 const SORT_OPTIONS = [
     {
         label: "Newest to Old",
-        value: "Newest",
+        value: "newest",
     },
     {
         label: "Oldest to Newest",
-        value: "Oldest",
+        value: "oldest",
     },
 ] as const;
 const PERIOD_FILTERS = [
-    { label: "All time", value: "All" },
-    { label: "This week", value: "Week" },
-    { label: "This month", value: "Month" },
+    { label: "All time", value: "all" },
+    { label: "This week", value: "week" },
+    { label: "This month", value: "month" },
 ] as const;
 
 export default function ActivityHistoryFilter() {
@@ -41,14 +42,21 @@ export default function ActivityHistoryFilter() {
                         )}
                         onPress={() => setPeriod(p.value)}
                     >
-                        <Text className="text-sm">{p.label}</Text>
+                        <Text
+                            className={cn(
+                                "text-sm",
+                                p.value === period && "text-white",
+                            )}
+                        >
+                            {p.label}
+                        </Text>
                     </TouchableOpacity>
                 ))}
                 <TouchableOpacity
                     onPress={() => sortDrawerRef.current?.open()}
                     className="px-4 py-2 bg-card items-center rounded-lg"
                 >
-                    <Text className="text-sm">{sort}</Text>
+                    <Text className="text-sm">{capitalize(sort)}</Text>
                 </TouchableOpacity>
             </RowView>
 
