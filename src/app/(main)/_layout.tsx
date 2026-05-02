@@ -1,27 +1,13 @@
-import { useActivityState } from "@/features/activity/hooks/use-activity-state";
 import ActiveActivityBanner from "@/shared/components/ActiveActivityBanner";
 import MainNavigation from "@/shared/components/layout/MainNavigation";
+import { useActiveActivity } from "@/shared/hooks/use-active-activity";
 import { useActivity } from "@/shared/hooks/use-activity";
-import { useUserStore } from "@/shared/stores/use-user.store";
 import { Stack } from "expo-router";
-import React, { useEffect } from "react";
+import React from "react";
 
 export default function TabLayout() {
-    useActivityState();
     useActivity();
-    const { profile, setProfile } = useUserStore();
-
-    useEffect(() => {
-        if (!profile) {
-            setProfile({
-                name: "Monsour",
-                age: 23,
-                height: 165,
-                weight: 65,
-                gender: "male",
-            });
-        }
-    }, []); // remove profile from deps — only run once on mount
+    useActiveActivity();
 
     return (
         <>
