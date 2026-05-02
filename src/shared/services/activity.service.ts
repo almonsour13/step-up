@@ -1,5 +1,5 @@
-import { ActivityStatus } from "@/features/activity/stores/use-activity.store";
-import { activityStorageService } from "@/shared/services/activity-storage.service";
+import { activityStorageService } from "@/shared/services/storage/activity.storage.service";
+import { Activity, ActivityStatus } from "../types/type";
 import { generateId } from "../utils/utils";
 import { stepCounterService } from "./step-counter.service";
 
@@ -189,7 +189,7 @@ class ActivityService {
         console.log("Activity resumed, status:", this.currentActivity.status);
     }
 
-    async stop(): Promise<ActivityStats> {
+    async stop(): Promise<Activity> {
         if (!this.currentActivity) {
             console.warn(
                 "[ActivityService] Stop called but no active activity",
@@ -210,8 +210,7 @@ class ActivityService {
                 duration: this.getElapsedMs(),
                 steps: this.currentActivity.steps,
             };
-
-            await activityStorageService.save({
+            const formattedActivity = {
                 id: this.currentActivity.id,
                 startTime: new Date(
                     this.currentActivity.startTime,
@@ -221,7 +220,8 @@ class ActivityService {
                 steps: stats.steps,
                 goalStep: this.goalStep,
                 createdAt: new Date().toISOString(),
-            });
+            };
+            await activityStorageService.save(formattedActivity);
 
             console.log("[ActivityService] Activity saved successfully", {
                 id: this.currentActivity.id,
@@ -242,7 +242,7 @@ class ActivityService {
 
             console.log("[ActivityService] Activity fully stopped");
 
-            return stats;
+            return formattedActivity;
         } catch (error) {
             console.error("[ActivityService] Error stopping activity:", error);
             throw error;

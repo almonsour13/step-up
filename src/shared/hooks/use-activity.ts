@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { activityStorageService } from "../services/activity-storage.service";
+import { activityStorageService } from "../services/storage/activity.storage.service";
 import { useActivityStore } from "../stores/use-activity.store";
 
 export const useActivity = () => {
