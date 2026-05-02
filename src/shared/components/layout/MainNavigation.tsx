@@ -31,11 +31,6 @@ function MainNavigation() {
             icon: "footsteps",
         },
         {
-            label: "Statistic",
-            href: "/statistic",
-            icon: "bar-chart",
-        },
-        {
             label: "Settings",
             href: "../settings",
             icon: "settings",

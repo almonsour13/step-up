@@ -21,7 +21,7 @@ export default function RingChart({
     strokeLinecap = "round",
     trackColor = "#e5e7eb",
     trackWidth = 8,
-    color = "#3b82f6",
+    color = "#f59e0a",
     gapDeg = 0,
     startDeg = 0,
 }: RingChartProps) {

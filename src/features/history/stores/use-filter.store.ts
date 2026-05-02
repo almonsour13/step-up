@@ -1,7 +1,7 @@
 import { create } from "zustand";
 
-export type SortType = "Newest" | "Oldest";
-export type PeriodType = "All" | "Week" | "Month";
+export type SortType = "newest" | "oldest";
+export type PeriodType = "all" | "week" | "month";
 
 type FilterStoreType = {
     sort: SortType;
@@ -11,8 +11,8 @@ type FilterStoreType = {
 };
 
 export const useFilterStore = create<FilterStoreType>((set) => ({
-    sort: "Newest",
-    period: "All",
+    sort: "newest",
+    period: "all",
     setSort: (sort) => set({ sort }),
     setPeriod: (period) => set({ period }),
 }));

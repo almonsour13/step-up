@@ -1,10 +1,11 @@
-import { useActivityStore } from "@/features/activity/stores/use-activity.store";
 import { formatDuration } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "expo-router";
 import { memo, useEffect, useRef } from "react";
 import { Animated, Text, TouchableOpacity } from "react-native";
+import { useActiveActivityControl } from "../hooks/use-active-activity-control";
+import { useActiveActivityStore } from "../stores/use-active-activity.store";
 import { RowView } from "./CustomView";
 
 function ActiveActivityBanner() {
@@ -13,12 +14,12 @@ function ActiveActivityBanner() {
 
     const router = useRouter();
     const pathname = usePathname();
-    const duration = useActivityStore((s) => s.duration);
-    const steps = useActivityStore((s) => s.steps);
-    const status = useActivityStore((s) => s.status);
-    const start = useActivityStore((s) => s.start);
-    const pause = useActivityStore((s) => s.pause);
-    const resume = useActivityStore((s) => s.resume);
+    const activeActivityControl = useActiveActivityControl();
+
+    const activeActivity = useActiveActivityStore((s) => s.activeActivity);
+    const status = activeActivity.status;
+    const duration = activeActivity.duration;
+    const steps = activeActivity.steps;
     const isRunning = status === "active";
     const isPaused = status === "paused";
 
@@ -37,11 +38,11 @@ function ActiveActivityBanner() {
     ];
     const handleStateAction = async () => {
         if (isRunning) {
-            await pause();
+            activeActivityControl.pause();
         } else if (isPaused) {
-            await resume();
+            activeActivityControl.resume();
         } else {
-            await start();
+            activeActivityControl.start();
         }
     };
 

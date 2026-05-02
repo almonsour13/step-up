@@ -6,13 +6,9 @@ module.exports = {
         "./features/**/*.{js,jsx,ts,tsx}",
     ],
     presets: [require("nativewind/preset")],
-    darkMode: "class", // Enables manual theme switching
+    darkMode: "media", // Enables manual theme switching
     theme: {
-        extend: {
-            colors: {
-                primary: "#007AFF",
-            },
-        },
+        extend: {},
     },
     plugins: [],
 };
