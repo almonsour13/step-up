@@ -1,7 +1,7 @@
+import { ColView, RowView } from "@/shared/components/CustomView";
 import ActivitySessionsDrawer, {
     ActivitySessionsDrawerHandle,
-} from "@/shared/components/ActivitySessionsDrawer";
-import { ColView, RowView } from "@/shared/components/CustomView";
+} from "@/shared/components/drawer/ActivitySessionsDrawer";
 import Card from "@/shared/components/ui/Card";
 import clsx from "clsx";
 import { format, isSameDay } from "date-fns";
@@ -84,13 +84,12 @@ function WeekActivity() {
                                     disabled={day.isFuture}
                                     className="flex-1 items-center gap-1"
                                     onPress={() => {
-                                        activitySessionsDrawerRef.current?.open();
                                         activitySessionsDrawerRef.current?.openWithActivities?.(
-                                            day.activities,
+                                            day.date.toDateString(),
                                         );
                                     }}
                                 >
-                                    <View className="h-16 w-full justify-end bg-foreground/16 rounded overflow-hidden">
+                                    <View className="light h-16 w-full justify-end bg-foreground/16 rounded overflow-hidden">
                                         {!day.isFuture && (
                                             <View
                                                 style={{

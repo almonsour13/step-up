@@ -40,14 +40,18 @@ function RecentActivity() {
                         </RowView>
                     </Card>
                 ) : (
-                    recentActivities.map((activity, i) => {
-                        return (
-                            <ActivityCard
-                                key={activity.id}
-                                activity={activity}
-                            />
-                        );
-                    })
+                    <Card className="p-0">
+                        {recentActivities.map((activity, i) => {
+                            return (
+                                <View key={activity.id}>
+                                    <ActivityCard activity={activity} />
+                                    {i < recentActivities.length - 1 && (
+                                        <View className="w-full border-b border-border/40" />
+                                    )}
+                                </View>
+                            );
+                        })}
+                    </Card>
                 )}
             </ColView>
         </ColView>

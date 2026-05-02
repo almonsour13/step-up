@@ -1,7 +1,10 @@
+import { ColView, RowView } from "@/shared/components/CustomView";
+import ActivityCardActionDrawer, {
+    ActivityCardActionDrawerHandle,
+} from "@/shared/components/drawer/ActivityCardActionDrawer";
 import ActivityDetailsDrawer, {
     ActivityDetailsDrawerHandle,
-} from "@/shared/components/ActivityDetailsDrawer";
-import { ColView, RowView } from "@/shared/components/CustomView";
+} from "@/shared/components/drawer/ActivityDetailsDrawer";
 import Card from "@/shared/components/ui/Card";
 import RingChart from "@/shared/components/ui/RingChart";
 import { useUserStore } from "@/shared/stores/use-user.store";
@@ -27,7 +30,10 @@ function ActivityCard({
     showStats = false,
 }: Props) {
     const profile = useUserStore((s) => s.profile);
-    const drawerRef = useRef<ActivityDetailsDrawerHandle>(null);
+    const activityDetailsDrawerRef = useRef<ActivityDetailsDrawerHandle>(null);
+
+    const activityCardActionDrawerRef =
+        useRef<ActivityCardActionDrawerHandle>(null);
     const start = new Date(activity.startTime);
     const end = new Date(activity.endTime);
     const progress = Math.min((activity.steps / activity.goalStep) * 100, 100);
@@ -42,8 +48,16 @@ function ActivityCard({
             <TouchableOpacity
                 key={activity.id}
                 onPress={() => {
-                    drawerRef.current?.open();
-                    drawerRef.current?.openWithActivity?.(activity);
+                    activityDetailsDrawerRef.current?.open();
+                    activityDetailsDrawerRef.current?.openWithActivity?.(
+                        activity,
+                    );
+                }}
+                onLongPress={() => {
+                    activityCardActionDrawerRef.current?.open();
+                    activityCardActionDrawerRef.current?.openWithActivityId(
+                        activity.id,
+                    );
                 }}
             >
                 <Card className={cn("", className)}>
@@ -74,7 +88,6 @@ function ActivityCard({
                                     strokeLinecap="round"
                                     trackColor="rgba(128,128,128,0.1)"
                                     trackWidth={3}
-                                    color={met ? "#639922" : "white"}
                                 />
                                 <Text className="absolute text-[10px] font-medium text-primary">
                                     {Math.round(progress)}%
@@ -115,7 +128,8 @@ function ActivityCard({
                     </ColView>
                 </Card>
             </TouchableOpacity>
-            <ActivityDetailsDrawer ref={drawerRef} />
+            <ActivityDetailsDrawer ref={activityDetailsDrawerRef} />
+            <ActivityCardActionDrawer ref={activityCardActionDrawerRef} />
         </>
     );
 }

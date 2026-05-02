@@ -2,7 +2,7 @@ import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { useMemo } from "react";
 
 export const useRecentActivities = (limit = 10) => {
-    const activities = useActivityStore((s) => s.activities);
+    const { activities } = useActivityStore();
 
     return useMemo(() => {
         return activities

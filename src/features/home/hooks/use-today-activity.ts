@@ -33,6 +33,7 @@ export const useTodayActivity = () => {
         });
 
         return {
+            date: startOfToday,
             todayActivities: filtered,
             totalSteps,
             totalGoalSteps,

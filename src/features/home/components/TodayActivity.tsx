@@ -1,7 +1,7 @@
+import { ColView, RowView } from "@/shared/components/CustomView";
 import ActivitySessionsDrawer, {
     ActivitySessionsDrawerHandle,
-} from "@/shared/components/ActivitySessionsDrawer";
-import { ColView, RowView } from "@/shared/components/CustomView";
+} from "@/shared/components/drawer/ActivitySessionsDrawer";
 import Card from "@/shared/components/ui/Card";
 import RingChart from "@/shared/components/ui/RingChart";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -13,6 +13,7 @@ function TodayActivity() {
     const activitySessionsDrawerRef =
         useRef<ActivitySessionsDrawerHandle>(null);
     const {
+        date,
         totalSteps,
         totalGoalSteps,
         remainingSteps,
@@ -32,9 +33,8 @@ function TodayActivity() {
                     {todayActivities.length > 0 && (
                         <TouchableOpacity
                             onPress={() => {
-                                activitySessionsDrawerRef.current?.open();
                                 activitySessionsDrawerRef.current?.openWithActivities?.(
-                                    todayActivities,
+                                    date.toDateString(),
                                 );
                             }}
                         >
@@ -71,10 +71,9 @@ function TodayActivity() {
                                     <RingChart
                                         pct={Math.min(totalPct, 100)}
                                         radius={28}
-                                        strokeWidth={6}
+                                        strokeWidth={8}
                                         strokeLinecap="round"
                                         trackColor="rgba(128,128,128,0.1)"
-                                        color={met ? "#639922" : "white"}
                                     />
                                     <Text className="absolute text-[11px] font-medium text-primary">
                                         {totalPct.toFixed(0)}
