@@ -1,22 +1,23 @@
 import "@/global.css";
-import clsx from "clsx";
+import { useAppInit } from "@/shared/hooks/use-app-init";
+import ThemeProvider from "@/shared/providers/ThemeProvider";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useColorScheme, View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function RootLayout() {
-    const colorScheme = useColorScheme();
-    const isDark = colorScheme === "dark";
+    const { ready } = useAppInit();
 
+    // if (!ready) {
+    //     return (
+    //         <View className="flex-1 items-center justify-center bg-background">
+    //             <ActivityIndicator />
+    //         </View>
+    //     );
+    // }
     return (
-        <View
-            className={clsx(
-                "bg-accent-foreground/5 flex-1",
-                isDark ? "dark" : "",
-            )}
-        >
+        <ThemeProvider>
             <SafeAreaView style={{ flex: 1 }}>
                 <Stack
                     screenOptions={{
@@ -25,11 +26,13 @@ export default function RootLayout() {
                         animation: "none",
                     }}
                 >
-                    <Stack.Screen name="(tabs)" />
+                    <Stack.Screen name="(main)" />
                     <Stack.Screen name="settings" />
+                    <Stack.Screen name="profile" />
+                    <Stack.Screen name="profile/edit" />
                 </Stack>
                 <StatusBar style="auto" />
             </SafeAreaView>
-        </View>
+        </ThemeProvider>
     );
 }
