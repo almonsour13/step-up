@@ -2,11 +2,10 @@ import { STORAGE_KEYS } from "../constants/constant";
 import { Activity, ActivityStatus } from "../types/type";
 import { logger } from "../utils/logger";
 import { generateId } from "../utils/utils";
+import { stepService } from "./step.service";
 import { activityStorageService } from "./storage/activity.storage.service";
 import { settingsService } from "./storage/settings.storage.service";
 import { StorageService } from "./storage/storage.service";
-// ADD: import stepService
-import { stepService } from "./step.service";
 
 type Metrics = {
     duration: number;
