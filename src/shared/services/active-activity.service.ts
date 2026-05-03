@@ -161,6 +161,8 @@ class ActiveActivityService {
 
             // ADD: start the pedometer alongside the session
             await stepService.start();
+            // await registerBackgroundStepTask();
+            // await activityNotificationService.show(0, 0);
             this.startSession();
         } catch (error) {
             logger.error("[ActiveActivityService] Failed to start activity", {
@@ -196,6 +198,7 @@ class ActiveActivityService {
         });
 
         // ADD: pause the pedometer too; stopSession already unsubscribes steps
+        // await activityNotificationService.update(this.getElapsedMs(), this.activeActivity.steps);
         await stepService.stop();
         this.stopSession();
     }
@@ -240,6 +243,7 @@ class ActiveActivityService {
 
         // ADD: restart the pedometer on resume; startSession re-subscribes steps
         await stepService.start();
+        // await activityNotificationService.update(this.getElapsedMs(), this.activeActivity.steps);
         this.startSession();
     }
 
@@ -285,6 +289,8 @@ class ActiveActivityService {
 
             // ADD: stop pedometer when the whole activity ends
             await stepService.stop();
+            // await unregisterBackgroundStepTask();
+            // await activityNotificationService.dismiss();
             this.stopSession();
 
             return formattedNewActivity;
@@ -313,6 +319,8 @@ class ActiveActivityService {
 
             // ADD: stop pedometer and clean up on discard too
             await stepService.stop();
+            // await unregisterBackgroundStepTask();
+            // await activityNotificationService.dismiss();
             this.stopSession();
 
             logger.log("[ActiveActivityService] Activity discarded");
@@ -337,7 +345,11 @@ class ActiveActivityService {
                 });
 
                 if (stored.status === "active") {
-                    // ADD: restart pedometer if the restored activity was mid-session
+                    // await activityNotificationService.show(
+                    //     // ADD
+                    //     this.getElapsedMs(),
+                    //     stored.steps,
+                    // );
                     await stepService.start();
                     this.startSession();
                 } else {
@@ -354,6 +366,19 @@ class ActiveActivityService {
             });
         }
         return null;
+    }
+    async addSteps(steps: number): Promise<void> {
+        if (!this.activeActivity) return;
+
+        this.activeActivity.steps += steps;
+
+        // Persist so steps survive a full app kill + restore
+        await this.activeActivityStore.update(this.activeActivity);
+
+        logger.log("[ActiveActivityService] Background steps added", {
+            added: steps,
+            total: this.activeActivity.steps,
+        });
     }
 
     onStatsUpdate(callback: (metric: Metrics) => void): () => void {
