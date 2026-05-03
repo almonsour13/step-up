@@ -8,6 +8,7 @@ export const STORAGE_KEYS = {
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];
 
+export const GENDER_OPTIONS = ["Male", "Female"] as const;
 export const THEME_OPTIONS = ["System", "Light", "Dark"] as const;
 export const UNIT_OPTIONS = ["km", "miles"] as const;
 export const STEP_GOAL_OPTIONS = [

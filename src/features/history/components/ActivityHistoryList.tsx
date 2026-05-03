@@ -54,7 +54,7 @@ export default function ActivityHistoryList() {
                                         );
                                     }}
                                 >
-                                    <RowView className=" justify-between items-center">
+                                    <RowView className="justify-between items-center">
                                         <Text className="text-sm text-foreground">
                                             {formatActivityDate(start)}
                                             {", "}
