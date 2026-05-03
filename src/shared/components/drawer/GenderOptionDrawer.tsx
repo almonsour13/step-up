@@ -7,14 +7,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
-const MIN_AGE = 10;
-const MAX_AGE = 80;
-const DEFAULT_AGE = 12;
-const AGES = Array.from(
-    { length: MAX_AGE - MIN_AGE + 1 },
-    (_, i) => MIN_AGE + i,
-);
-
 interface Props {
     value: Gender | null;
     onChange: (gender: Gender) => void;

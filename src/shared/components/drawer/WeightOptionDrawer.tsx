@@ -4,12 +4,11 @@ import { cn } from "@/shared/utils/cn";
 import { forwardRef, useImperativeHandle, useRef } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 
-const MIN_AGE = 10;
-const MAX_AGE = 80;
-const DEFAULT_AGE = 12;
-const AGES = Array.from(
-    { length: MAX_AGE - MIN_AGE + 1 },
-    (_, i) => MIN_AGE + i,
+const MIN_WEIGHT = 30;
+const MAX_WEIGHT = 200;
+const WEIGHTS = Array.from(
+    { length: MAX_WEIGHT - MIN_WEIGHT + 1 },
+    (_, i) => MIN_WEIGHT + i,
 );
 
 const ITEM_HEIGHT = 64;
@@ -19,12 +18,12 @@ const PADDING_ITEMS = Math.floor(VISIBLE_ITEMS / 2);
 
 interface Props {
     value: number | null;
-    onChange: (age: number) => void;
+    onChange: (weight: number) => void;
 }
 
-export type AgeOptionDrawerHandle = DrawerHandle;
+export type WeightOptionDrawerHandle = DrawerHandle;
 
-const AgeOptionDrawer = forwardRef<DrawerHandle, Props>(
+const WeightOptionDrawer = forwardRef<DrawerHandle, Props>(
     ({ value, onChange }, ref) => {
         const drawerRef = useRef<DrawerHandle>(null);
         const listRef = useRef<FlatList>(null);
@@ -34,9 +33,7 @@ const AgeOptionDrawer = forwardRef<DrawerHandle, Props>(
             close: () => drawerRef.current?.close(),
         }));
 
-        const initialIndex = value
-            ? Math.max(0, AGES.indexOf(value))
-            : DEFAULT_AGE;
+        const initialIndex = value ? Math.max(0, WEIGHTS.indexOf(value)) : 0;
 
         const handleLayout = () => {
             listRef.current?.scrollToIndex({
@@ -72,7 +69,10 @@ const AgeOptionDrawer = forwardRef<DrawerHandle, Props>(
                                 isSelected && "text-primary text-xl",
                             )}
                         >
-                            {itemValue}
+                            {itemValue}{" "}
+                            <Text className="text-base text-muted-foreground">
+                                kg
+                            </Text>
                         </Text>
                     </RowView>
                 </TouchableOpacity>
@@ -85,12 +85,12 @@ const AgeOptionDrawer = forwardRef<DrawerHandle, Props>(
                     <ColView className="gap-4">
                         <RowView className="px-4 justify-center">
                             <Text className="text-base font-medium text-foreground">
-                                Select Your Age
+                                Select Your Weight
                             </Text>
                         </RowView>
                         <FlatList
                             ref={listRef}
-                            data={AGES}
+                            data={WEIGHTS}
                             keyExtractor={(item) => String(item)}
                             renderItem={renderItem}
                             getItemLayout={getItemLayout}
@@ -115,4 +115,4 @@ const AgeOptionDrawer = forwardRef<DrawerHandle, Props>(
     },
 );
 
-export default AgeOptionDrawer;
+export default WeightOptionDrawer;
