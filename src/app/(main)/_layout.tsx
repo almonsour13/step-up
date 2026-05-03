@@ -2,12 +2,17 @@ import ActiveActivityBanner from "@/shared/components/ActiveActivityBanner";
 import MainNavigation from "@/shared/components/layout/MainNavigation";
 import { useActiveActivity } from "@/shared/hooks/use-active-activity";
 import { useActivity } from "@/shared/hooks/use-activity";
+import { requestAllPermissions } from "@/shared/hooks/use-permission";
 import { Tabs } from "expo-router";
-import React from "react";
+import React, { useEffect } from "react";
 
 export default function TabLayout() {
     useActivity();
     useActiveActivity();
+
+    useEffect(() => {
+        requestAllPermissions();
+    }, []);
 
     return (
         <>
