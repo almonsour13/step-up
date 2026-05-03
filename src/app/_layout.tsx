@@ -3,6 +3,7 @@ import { useAppInit } from "@/shared/hooks/use-app-init";
 import ThemeProvider from "@/shared/providers/ThemeProvider";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+// import { ActivityIndicator, View } from "react-native";
 import "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -29,7 +30,6 @@ export default function RootLayout() {
                     <Stack.Screen name="(main)" />
                     <Stack.Screen name="settings" />
                     <Stack.Screen name="profile" />
-                    <Stack.Screen name="profile/edit" />
                 </Stack>
                 <StatusBar style="auto" />
             </SafeAreaView>

@@ -218,7 +218,7 @@ class ActivityService {
                 endTime,
                 duration: stats.duration,
                 steps: stats.steps,
-                goalStep: this.goalStep,
+                goal: this.goalStep,
                 createdAt: new Date().toISOString(),
             };
             await activityStorageService.save(formattedActivity);

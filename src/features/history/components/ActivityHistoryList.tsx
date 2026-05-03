@@ -32,12 +32,11 @@ export default function ActivityHistoryList() {
     );
     return (
         <>
-            <ColView className="gap-4">
-                <RowView className="px-4 hidden justify-between items-end">
-                    <Text className="text-2xl font-medium">Activities</Text>
+            <ColView className="gap-2">
+                <RowView className="px-4 justify-between items-end">
+                    <Text className="text-2xl font-medium">Sessions</Text>
                     <Text className="text-base text-primary">
-                        {totalSessions} session
-                        {totalSessions > 1 ? "s" : ""}
+                        {totalSessions}
                     </Text>
                 </RowView>
                 <ActivityHistoryFilter />
@@ -54,7 +53,7 @@ export default function ActivityHistoryList() {
                                         );
                                     }}
                                 >
-                                    <RowView className="justify-between items-center">
+                                    <RowView className="pl-4 justify-between items-center">
                                         <Text className="text-sm text-foreground">
                                             {formatActivityDate(start)}
                                             {", "}

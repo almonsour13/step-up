@@ -1,7 +1,7 @@
 import { RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
 import { useActiveActivityStore } from "@/shared/stores/use-active-activity.store";
-import { useUserStore } from "@/shared/stores/use-user.store";
+import { useProfileStore } from "@/shared/stores/use-profile.store";
 import {
     calcCalories,
     calcDistanceKm,
@@ -10,7 +10,7 @@ import {
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Text } from "react-native";
 export default function ActivityStatistic() {
-    const profile = useUserStore((s) => s.profile);
+    const profile = useProfileStore((s) => s.profile);
     const activeActivity = useActiveActivityStore((s) => s.activeActivity);
     const stats = [
         {

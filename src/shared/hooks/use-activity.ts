@@ -7,6 +7,11 @@ export const useActivity = () => {
     useEffect(() => {
         async function fetchActivities() {
             const activities = await activityStorageService.getAll();
+            // const activities = generateActivities({
+            //     months: 2,
+            //     minSessionsPerDay: 2,
+            //     maxSessionsPerDay: 6,
+            // });
             setActivities(activities);
         }
         fetchActivities();

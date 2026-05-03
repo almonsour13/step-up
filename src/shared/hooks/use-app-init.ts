@@ -13,6 +13,7 @@ export const useAppInit = () => {
     useEffect(() => {
         const init = async () => {
             try {
+                // activityStorageService.clear();
                 const [profile, settings] = await Promise.all([
                     profileService.getProfile(),
                     settingsService.getSettings(),

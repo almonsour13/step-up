@@ -1,4 +1,5 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
+import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { Activity } from "@/shared/types/type";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
@@ -10,7 +11,6 @@ import React, {
     useState,
 } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { useUserStore } from "../../stores/use-user.store";
 import { getActivityStats } from "../../utils/activity-stats.utils";
 import { formatActivityDate } from "../../utils/utils";
 import Drawer, { DrawerHandle } from "../ui/Drawer";
@@ -25,7 +25,7 @@ export type ActivityDetailsDrawerHandle = DrawerHandle & {
 
 const ActivityDetailsDrawer = forwardRef<ActivityDetailsDrawerHandle, {}>(
     (_, ref) => {
-        const profile = useUserStore((s) => s.profile);
+        const profile = useProfileStore((s) => s.profile);
         const drawerRef = useRef<ActivityDetailsDrawerHandle>(null);
         const activityCardActionDrawerRef =
             useRef<ActivityCardActionDrawerHandle>(null);
@@ -54,12 +54,9 @@ const ActivityDetailsDrawer = forwardRef<ActivityDetailsDrawerHandle, {}>(
 
         const start = new Date(activity.startTime);
         const end = new Date(activity.endTime);
-        const pct = Math.min(
-            (activity.steps / (activity.goalStep || activity.steps)) * 100,
-            100,
-        );
-        const met = activity.steps >= activity.goalStep;
-        const remaining = Math.max(activity.goalStep - activity.steps, 0);
+        const pct = (activity.steps / activity.goal) * 100;
+        const met = activity.steps >= activity.goal;
+        const remaining = Math.max(activity.goal - activity.steps, 0);
 
         const stats = getActivityStats({
             activities: [activity],
@@ -118,8 +115,8 @@ const ActivityDetailsDrawer = forwardRef<ActivityDetailsDrawerHandle, {}>(
                                     </RowView>
                                     <Text className="text-[11px] text-muted-foreground">
                                         {met
-                                            ? `${activity.goalStep.toLocaleString()} goal · exceeded by ${(activity.steps - activity.goalStep).toLocaleString()}`
-                                            : `${remaining.toLocaleString()} steps to reach ${activity.goalStep.toLocaleString()} goal`}
+                                            ? `${activity.goal.toLocaleString()} goal · exceeded by ${(activity.steps - activity.goal).toLocaleString()}`
+                                            : `${remaining.toLocaleString()} steps to reach ${activity.goal.toLocaleString()} goal`}
                                     </Text>
                                 </ColView>
                                 <View className="relative items-center justify-center">

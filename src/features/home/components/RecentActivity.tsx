@@ -25,12 +25,8 @@ function RecentActivity() {
                     <Card>
                         <RowView className="items-center gap-4">
                             <View className="flex-1 gap-1">
-                                <Text className="text-[11px] text-muted-foreground">
+                                <Text className="text-[11px] text-foreground">
                                     No activity yet
-                                </Text>
-
-                                <Text className="text-[22px] leading-none font-medium text-foreground">
-                                    0 steps
                                 </Text>
 
                                 <Text className="text-[11px] text-muted-foreground">

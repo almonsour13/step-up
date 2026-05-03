@@ -1,10 +1,10 @@
 import { useActivityStore } from "@/shared/stores/use-activity.store";
-import { useUserStore } from "@/shared/stores/use-user.store";
+import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { getActivityStats } from "@/shared/utils/activity-stats.utils";
 import { useMemo } from "react";
 
 export const useTodayActivity = () => {
-    const profile = useUserStore((s) => s.profile);
+    const profile = useProfileStore((s) => s.profile);
     const activities = useActivityStore((s) => s.activities);
 
     return useMemo(() => {
@@ -21,11 +21,11 @@ export const useTodayActivity = () => {
 
         const totalSteps = filtered.reduce((sum, a) => sum + a.steps, 0);
         const totalGoalSteps = filtered.reduce(
-            (sum, a) => sum + (a.goalStep ?? 0),
+            (sum, a) => sum + (a.goal ?? 0),
             0,
         );
         const remainingSteps = Math.max(totalGoalSteps - totalSteps, 0);
-        const totalPct = Math.min((totalSteps / totalGoalSteps) * 100, 100);
+        const totalPct = (totalSteps / totalGoalSteps) * 100;
         const stats = getActivityStats({
             activities: filtered,
             profile,

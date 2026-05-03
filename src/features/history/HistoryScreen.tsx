@@ -1,6 +1,7 @@
 import { ColView } from "@/shared/components/CustomView";
 import { ScrollView, Text } from "react-native";
 import ActivityHistoryList from "./components/ActivityHistoryList";
+import ActivityHistorySummary from "./components/ActivityHistorySummary";
 import Header from "./components/layout/Header";
 
 const PERIOD_FILTERS = [
@@ -15,7 +16,7 @@ export default function HistoryScreen() {
         <ScrollView showsVerticalScrollIndicator={false}>
             <ColView className="flex-1 gap-4 pb-4">
                 <Header />
-                {/* <ActivityHistorySummary /> */}
+                <ActivityHistorySummary />
                 <ActivityHistoryList />
                 <ColView className="justify-center items-center p-4">
                     <Text className="text-sm text-muted-foreground">

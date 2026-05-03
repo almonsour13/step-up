@@ -4,6 +4,7 @@ export const STORAGE_KEYS = {
     PROFILE: `${APP_PREFIX}/profile`,
     SETTINGS: `${APP_PREFIX}/settings`,
     ACTIVITIES: `${APP_PREFIX}/activities`,
+    ACTIVE_ACTIVITY: `${APP_PREFIX}/active-activity`,
 } as const;
 
 export type StorageKey = (typeof STORAGE_KEYS)[keyof typeof STORAGE_KEYS];

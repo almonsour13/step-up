@@ -14,20 +14,19 @@ export type Activity = {
     endTime: string;
     duration: number;
     steps: number;
-    goalStep: number;
+    goal: number;
     createdAt: string;
     updatedAt?: string;
 };
 
 export type Profile = {
-    id: string;
+    id?: string;
     name: string;
     height: number; // cm
     weight: number; // kg
     age: number; // years
     gender: Gender;
-    activityLevel: ActivityLevel;
-    createdAt: string; // ISO 8601
+    createdAt?: string; // ISO 8601
     updatedAt?: string;
 };
 
@@ -54,5 +53,4 @@ export const DEFAULT_PROFILE: Omit<Profile, "id" | "createdAt" | "updatedAt"> =
         weight: 65,
         age: 20,
         gender: "male",
-        activityLevel: "moderate",
     };

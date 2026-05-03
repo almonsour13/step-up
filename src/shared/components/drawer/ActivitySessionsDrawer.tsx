@@ -1,10 +1,10 @@
 import ActivityCard from "@/features/home/components/ui/ActivityCard";
 import { useActivitySessions } from "@/features/home/hooks/use-activity-sessions";
+import { useProfileStore } from "@/shared/stores/use-profile.store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
 import { forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
 import { Text, View } from "react-native";
-import { useUserStore } from "../../stores/use-user.store";
 import { getActivityStats } from "../../utils/activity-stats.utils";
 import { formatActivityDate } from "../../utils/utils";
 import { ColView, RowView } from "../CustomView";
@@ -19,7 +19,7 @@ export type ActivitySessionsDrawerHandle = DrawerHandle & {
 };
 
 const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
-    const profile = useUserStore((s) => s.profile);
+    const profile = useProfileStore((s) => s.profile);
     const drawerRef = useRef<DrawerHandle>(null);
     const [selectedDay, setSelectedDay] = useState<string | null>(null);
     const activities = useActivitySessions(selectedDay);
@@ -44,13 +44,13 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
     });
     const totalSteps = activities.reduce((acc, a) => acc + a.steps, 0);
     const totalGoalSteps = activities.reduce(
-        (acc, activity) => acc + activity.goalStep,
+        (acc, activity) => acc + activity.goal,
         0,
     );
-    const totalPct = Math.min((totalSteps / totalGoalSteps) * 100, 100);
+    const totalPct = (totalSteps / totalGoalSteps) * 100;
     const remainingSteps = Math.max(0, totalGoalSteps - totalSteps);
     const met = totalSteps >= totalGoalSteps;
-    const metCount = activities.filter((a) => a.steps >= a.goalStep).length;
+    const metCount = activities.filter((a) => a.steps >= a.goal).length;
     const allMet = metCount === activities.length && activities.length > 0;
 
     const distanceKm = stats.find((s) => s.label === "Distance")?.value;

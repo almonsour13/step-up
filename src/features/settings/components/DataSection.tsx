@@ -1,16 +1,31 @@
-import { Alert } from "react-native";
+import { useActivityStore } from "@/shared/stores/use-activity.store";
+import { Alert, ToastAndroid } from "react-native";
 import Section, { SettingsSection } from "./ui/Section";
 
 export default function DataSection() {
+    const clearActivities = useActivityStore((s) => s.clearActivities);
+
     const confirmClearData = () =>
         Alert.alert(
             "Clear Activity Data",
             "This will permanently delete all your activity history. This cannot be undone.",
             [
                 { text: "Cancel", style: "cancel" },
-                { text: "Clear", style: "destructive", onPress: () => {} },
+                {
+                    text: "Clear",
+                    style: "destructive",
+                    onPress: () => {
+                        // Clear data
+                        clearActivities();
+                        ToastAndroid.show(
+                            "Activity data cleared",
+                            ToastAndroid.SHORT,
+                        );
+                    },
+                },
             ],
         );
+
     const section: SettingsSection = {
         title: "Data",
         items: [

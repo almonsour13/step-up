@@ -44,7 +44,7 @@ function MainNavigation() {
     if (HIDE_ON_THIS_ROUTE.includes(pathname)) return null;
 
     return (
-        <View className="px-8 h-20">
+        <View className="px-4 h-20">
             <RowView className="flex-1 justify-between items-center">
                 {menus.map((menu, index) => {
                     const isActive = isItemActive(menu.href);
@@ -53,6 +53,8 @@ function MainNavigation() {
                         <Pressable
                             key={menu.label}
                             onPress={() => router.push(menu.href)}
+                            disabled={isActive}
+                            className="flex-1"
                         >
                             <ColView className="gap-2 min-h-12 justify-center items-center">
                                 <Ionicons

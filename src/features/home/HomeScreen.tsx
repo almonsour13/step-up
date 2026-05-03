@@ -8,7 +8,7 @@ import WeekActivity from "./components/WeekActivity";
 export default function HomeScreen() {
     return (
         <ScrollView showsVerticalScrollIndicator={false}>
-            <ColView className="flex-1 gap-8 pb-4">
+            <ColView className="flex-1 gap-4 pb-4">
                 <Header />
                 <WeekActivity />
                 <TodayActivity />

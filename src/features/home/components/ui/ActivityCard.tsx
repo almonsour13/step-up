@@ -7,7 +7,7 @@ import ActivityDetailsDrawer, {
 } from "@/shared/components/drawer/ActivityDetailsDrawer";
 import Card from "@/shared/components/ui/Card";
 import RingChart from "@/shared/components/ui/RingChart";
-import { useUserStore } from "@/shared/stores/use-user.store";
+import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { Activity } from "@/shared/types/type";
 import { getActivityStats } from "@/shared/utils/activity-stats.utils";
 import { cn } from "@/shared/utils/cn";
@@ -29,15 +29,15 @@ function ActivityCard({
     showDay = true,
     showStats = false,
 }: Props) {
-    const profile = useUserStore((s) => s.profile);
+    const profile = useProfileStore((s) => s.profile);
     const activityDetailsDrawerRef = useRef<ActivityDetailsDrawerHandle>(null);
 
     const activityCardActionDrawerRef =
         useRef<ActivityCardActionDrawerHandle>(null);
     const start = new Date(activity.startTime);
     const end = new Date(activity.endTime);
-    const progress = Math.min((activity.steps / activity.goalStep) * 100, 100);
-    const met = activity.steps >= activity.goalStep;
+    const pct = (activity.steps / activity.goal) * 100;
+    const met = activity.steps >= activity.goal;
     const stats = getActivityStats({
         activities: [activity],
         profile,
@@ -74,15 +74,14 @@ function ActivityCard({
                                         {activity.steps.toLocaleString()}
                                     </Text>
                                     <Text className="text-[11px] text-muted-foreground">
-                                        / {activity.goalStep.toLocaleString()}{" "}
-                                        steps
+                                        / {activity.goal.toLocaleString()} steps
                                     </Text>
                                 </RowView>
                             </ColView>
 
                             <View className="relative items-center justify-center">
                                 <RingChart
-                                    pct={progress}
+                                    pct={pct}
                                     radius={20}
                                     strokeWidth={4}
                                     strokeLinecap="round"
@@ -90,7 +89,7 @@ function ActivityCard({
                                     trackWidth={3}
                                 />
                                 <Text className="absolute text-[10px] font-medium text-primary">
-                                    {Math.round(progress)}%
+                                    {Math.round(pct)}%
                                 </Text>
                             </View>
                         </RowView>

@@ -1,6 +1,8 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import AgeOptionDrawer from "@/shared/components/drawer/AgeOptionDrawer";
 import GenderOptionDrawer from "@/shared/components/drawer/GenderOptionDrawer";
+import HeightOptionDrawer from "@/shared/components/drawer/HeightOptionDrawer";
+import WeightOptionDrawer from "@/shared/components/drawer/WeightOptionDrawer";
 import Card from "@/shared/components/ui/Card";
 import { DrawerHandle } from "@/shared/components/ui/Drawer";
 import { profileService } from "@/shared/services/storage/profile.storage.services";
@@ -34,30 +36,18 @@ export function EditProfileScreen() {
     const handleSave = async () => {
         if (!newProfile) return;
 
-        const updatedProfile = await profileService.updateProfile({
+        const updatedProfile = await profileService.saveProfile({
             name: newProfile.name,
             age: newProfile.age,
             gender: newProfile.gender,
             weight: newProfile.weight,
             height: newProfile.height,
         });
+        if (!updatedProfile) return;
         updateProfile(updatedProfile);
         ToastAndroid.show("Profile Updated", ToastAndroid.SHORT);
         router.back();
     };
-    const handleAgeChange = (age: number) => {
-        setNewProfile((prev) => ({
-            ...prev!,
-            age,
-        }));
-    };
-    const handleGenderChange = (gender: Gender) => {
-        setNewProfile((prev) => ({
-            ...prev!,
-            gender,
-        }));
-    };
-
     const Rows = {
         row1: [
             {
@@ -74,12 +64,12 @@ export function EditProfileScreen() {
         row2: [
             {
                 Label: "Weight",
-                value: newProfile?.weight,
+                value: newProfile?.weight + " kg",
                 onPress: () => weightDrawerRef.current?.open(),
             },
             {
                 Label: "Height",
-                value: newProfile?.height,
+                value: newProfile?.height + " cm",
                 onPress: () => heightDrawerRef.current?.open(),
             },
         ],
@@ -188,7 +178,42 @@ export function EditProfileScreen() {
                             </ColView>
                         ))}
                     </RowView>
+                    <RowView className="px-4">
+                        {Rows.row2.map((row) => (
+                            <ColView key={row.Label} className="flex-1">
+                                <Text className="text-base text-muted-foreground font-medium">
+                                    {row.Label}
+                                </Text>
+                                <TouchableOpacity onPress={() => row.onPress()}>
+                                    <Card className="py-2 h-16 justify-center">
+                                        <Text
+                                            className={cn(
+                                                "text-foreground",
+                                                !row?.value &&
+                                                    "text-muted-foreground",
+                                            )}
+                                        >
+                                            {row.value || "Select"}
+                                        </Text>
+                                    </Card>
+                                </TouchableOpacity>
+                            </ColView>
+                        ))}
+                    </RowView>
                 </ColView>
+                <RowView className="px-4 items-end">
+                    <TouchableOpacity
+                        disabled={!canSave}
+                        className={cn(
+                            "h-16 p-4 flex-1 rounded-full justify-center items-center bg-destructive",
+                        )}
+                        onPress={async () => {
+                            await profileService.deleteProfile();
+                        }}
+                    >
+                        <Text className="text-foreground">Delete Profile</Text>
+                    </TouchableOpacity>
+                </RowView>
                 <RowView className="px-4 mb-8 items-end">
                     <TouchableOpacity
                         disabled={!canSave}
@@ -205,12 +230,42 @@ export function EditProfileScreen() {
             <AgeOptionDrawer
                 ref={ageDrawerRef}
                 value={newProfile?.age || null}
-                onChange={handleAgeChange}
+                onChange={(age: number) => {
+                    setNewProfile((prev) => ({
+                        ...prev!,
+                        age,
+                    }));
+                }}
             />
             <GenderOptionDrawer
                 ref={genderDrawerRef}
                 value={newProfile?.gender || null}
-                onChange={handleGenderChange}
+                onChange={(gender: Gender) => {
+                    setNewProfile((prev) => ({
+                        ...prev!,
+                        gender,
+                    }));
+                }}
+            />
+            <WeightOptionDrawer
+                ref={weightDrawerRef}
+                value={newProfile?.weight || null}
+                onChange={(weight) => {
+                    setNewProfile((prev) => ({
+                        ...prev!,
+                        weight,
+                    }));
+                }}
+            />
+            <HeightOptionDrawer
+                ref={heightDrawerRef}
+                value={newProfile?.height || null}
+                onChange={(height) => {
+                    setNewProfile((prev) => ({
+                        ...prev!,
+                        height,
+                    }));
+                }}
             />
         </>
     );

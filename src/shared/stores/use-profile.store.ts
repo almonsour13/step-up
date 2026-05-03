@@ -15,7 +15,6 @@ export const useProfileStore = create<ProfileStore>((set) => ({
         weight: 70,
         height: 170,
         gender: "male",
-        activityLevel: "moderate",
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
     },

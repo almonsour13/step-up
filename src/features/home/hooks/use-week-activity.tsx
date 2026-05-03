@@ -28,7 +28,7 @@ export const useWeekActivity = () => {
             const steps = dayActivities.reduce((sum, a) => sum + a.steps, 0);
 
             const goal =
-                dayActivities.reduce((sum, a) => sum + (a.goalStep ?? 0), 0) ||
+                dayActivities.reduce((sum, a) => sum + (a.goal ?? 0), 0) ||
                 10000;
 
             const pct = goal > 0 ? Math.min((steps / goal) * 100, 100) : 0;
