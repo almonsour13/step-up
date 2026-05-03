@@ -1,8 +1,9 @@
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { cn } from "../../utils/cn";
 import { ColView, RowView } from "../CustomView";
 import Drawer, { DrawerHandle } from "../ui/Drawer";
+import Text from "../ui/Text";
 import DeleteActionDrawer, {
     DeleteActionDrawerHandle,
 } from "./DeleteActionDrawer";

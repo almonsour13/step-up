@@ -6,7 +6,8 @@ import { cn } from "@/shared/utils/cn";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { usePathname } from "expo-router";
 import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import Text from "../ui/Text";
 
 interface Props {
     children?: React.ReactNode;

@@ -1,6 +1,7 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import StepGoalDrawer from "@/shared/components/drawer/StepGoalDrawer";
 import Drawer, { DrawerHandle } from "@/shared/components/ui/Drawer";
+import Text from "@/shared/components/ui/Text";
 import { THEME_OPTIONS, UNIT_OPTIONS } from "@/shared/constants/constant";
 import { useSettingsStore } from "@/shared/stores/use-settings.store";
 import { Theme, Unit } from "@/shared/types/type";
@@ -8,7 +9,7 @@ import { capitalize } from "@/shared/utils/capitalize";
 import { cn } from "@/shared/utils/cn";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import Section, { SettingsSection } from "./ui/Section";
 
 export default function PreferencesSection() {

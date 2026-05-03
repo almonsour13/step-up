@@ -1,8 +1,9 @@
 import Drawer, { DrawerHandle } from "@/shared/components/ui/Drawer";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { Text, ToastAndroid, TouchableOpacity } from "react-native";
+import { ToastAndroid, TouchableOpacity } from "react-native";
 import { useActivityStore } from "../../stores/use-activity.store";
 import { ColView, RowView } from "../CustomView";
+import Text from "../ui/Text";
 export type DeleteActionDrawerHandle = DrawerHandle & {
     openWithActivityId: (id: string) => void;
 };

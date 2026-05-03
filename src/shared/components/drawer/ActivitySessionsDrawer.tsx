@@ -4,13 +4,14 @@ import { useProfileStore } from "@/shared/stores/use-profile.store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
 import { forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
-import { Text, View } from "react-native";
+import { View } from "react-native";
 import { getActivityStats } from "../../utils/activity-stats.utils";
 import { formatActivityDate } from "../../utils/utils";
 import { ColView, RowView } from "../CustomView";
 import Card from "../ui/Card";
 import Drawer, { DrawerHandle } from "../ui/Drawer";
 import RingChart from "../ui/RingChart";
+import Text from "../ui/Text";
 
 type Props = {};
 

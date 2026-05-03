@@ -1,8 +1,8 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
+import Text from "@/shared/components/ui/Text";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { useRouter } from "expo-router";
 import { useMemo } from "react";
-import { Text } from "react-native";
 
 const PHRASES = {
     morning: [

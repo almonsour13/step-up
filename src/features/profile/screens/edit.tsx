@@ -5,6 +5,7 @@ import HeightOptionDrawer from "@/shared/components/drawer/HeightOptionDrawer";
 import WeightOptionDrawer from "@/shared/components/drawer/WeightOptionDrawer";
 import Card from "@/shared/components/ui/Card";
 import { DrawerHandle } from "@/shared/components/ui/Drawer";
+import Text from "@/shared/components/ui/Text";
 import { profileService } from "@/shared/services/storage/profile.storage.services";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { Gender } from "@/shared/types/type";
@@ -14,13 +15,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
 import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
-import {
-    Text,
-    TextInput,
-    ToastAndroid,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import { TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 export function EditProfileScreen() {
     const router = useRouter();

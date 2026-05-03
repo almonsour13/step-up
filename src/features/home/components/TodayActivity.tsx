@@ -4,9 +4,10 @@ import ActivitySessionsDrawer, {
 } from "@/shared/components/drawer/ActivitySessionsDrawer";
 import Card from "@/shared/components/ui/Card";
 import RingChart from "@/shared/components/ui/RingChart";
+import Text from "@/shared/components/ui/Text";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { memo, useRef } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useTodayActivity } from "../hooks/use-today-activity";
 
 function TodayActivity() {

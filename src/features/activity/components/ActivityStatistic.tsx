@@ -1,5 +1,6 @@
 import { RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
+import Text from "@/shared/components/ui/Text";
 import { useActiveActivityStore } from "@/shared/stores/use-active-activity.store";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import {
@@ -8,7 +9,6 @@ import {
     formatDuration,
 } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { Text } from "react-native";
 export default function ActivityStatistic() {
     const profile = useProfileStore((s) => s.profile);
     const activeActivity = useActiveActivityStore((s) => s.activeActivity);

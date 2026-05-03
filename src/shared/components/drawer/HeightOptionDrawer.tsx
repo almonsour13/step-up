@@ -2,7 +2,8 @@ import { ColView, RowView } from "@/shared/components/CustomView";
 import Drawer, { DrawerHandle } from "@/shared/components/ui/Drawer";
 import { cn } from "@/shared/utils/cn";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, TouchableOpacity, View } from "react-native";
+import Text from "../ui/Text";
 
 const MIN_HEIGHT = 100;
 const MAX_HEIGHT = 220;

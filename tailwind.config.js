@@ -2,13 +2,19 @@
 module.exports = {
     content: [
         "./app/**/*.{js,jsx,ts,tsx}",
-        "./components/**/*.{js,jsx,ts,tsx}",
-        "./features/**/*.{js,jsx,ts,tsx}",
+        "./src/**/*.{js,jsx,ts,tsx}", // ← add this
     ],
     presets: [require("nativewind/preset")],
-    darkMode: "media", // Enables manual theme switching
+    darkMode: "media",
     theme: {
-        extend: {},
+        extend: {
+            fontFamily: {
+                sans: ["DMSans_400Regular"],
+                medium: ["DMSans_500Medium"],
+                semibold: ["DMSans_600SemiBold"],
+                bold: ["DMSans_700Bold"],
+            },
+        },
     },
     plugins: [],
 };

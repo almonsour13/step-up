@@ -5,7 +5,8 @@ import { Gender } from "@/shared/types/type";
 import { cn } from "@/shared/utils/cn";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { forwardRef, useImperativeHandle, useRef } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
+import Text from "../ui/Text";
 
 interface Props {
     value: Gender | null;

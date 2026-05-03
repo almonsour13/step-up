@@ -1,9 +1,10 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
+import Text from "@/shared/components/ui/Text";
 import { useActiveActivityControl } from "@/shared/hooks/use-active-activity-control";
 import { useActiveActivityStore } from "@/shared/stores/use-active-activity.store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 export default function ActivityController() {
     const activeStatus = useActiveActivityStore(

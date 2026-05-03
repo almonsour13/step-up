@@ -10,11 +10,12 @@ import React, {
     useRef,
     useState,
 } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { getActivityStats } from "../../utils/activity-stats.utils";
 import { formatActivityDate } from "../../utils/utils";
 import Drawer, { DrawerHandle } from "../ui/Drawer";
 import RingChart from "../ui/RingChart";
+import Text from "../ui/Text";
 import ActivityCardActionDrawer, {
     ActivityCardActionDrawerHandle,
 } from "./ActivityCardActionDrawer";

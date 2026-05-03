@@ -3,10 +3,11 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "expo-router";
 import { memo, useEffect, useRef } from "react";
-import { Animated, Text, TouchableOpacity } from "react-native";
+import { Animated, TouchableOpacity } from "react-native";
 import { useActiveActivityControl } from "../hooks/use-active-activity-control";
 import { useActiveActivityStore } from "../stores/use-active-activity.store";
 import { RowView } from "./CustomView";
+import Text from "./ui/Text";
 
 function ActiveActivityBanner() {
     const translateY = useRef(new Animated.Value(0)).current;

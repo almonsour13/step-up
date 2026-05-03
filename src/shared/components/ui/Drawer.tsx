@@ -148,6 +148,7 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
             close: animateClose,
         };
     });
+
     return (
         <Modal
             visible={isVisible}
@@ -155,6 +156,7 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
             animationType="none"
             statusBarTranslucent
             onShow={animateOpen}
+            onRequestClose={animateClose}
         >
             <TouchableWithoutFeedback
                 disabled={disableBackdrop}

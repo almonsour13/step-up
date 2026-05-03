@@ -3,10 +3,11 @@ import ActivitySessionsDrawer, {
     ActivitySessionsDrawerHandle,
 } from "@/shared/components/drawer/ActivitySessionsDrawer";
 import Card from "@/shared/components/ui/Card";
+import Text from "@/shared/components/ui/Text";
 import clsx from "clsx";
 import { format, isSameDay } from "date-fns";
 import { memo, useRef } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { useWeekActivity } from "../hooks/use-week-activity";
 
 function getMotivation(pct: number) {
@@ -69,7 +70,6 @@ function WeekActivity() {
                             <Text className="text-5xl leading-none font-medium text-white">
                                 {totalSteps.toLocaleString()}
                             </Text>
-                            <Text className="text-sm text-white/60">steps</Text>
                         </RowView>
                     </ColView>
 

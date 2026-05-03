@@ -1,10 +1,11 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Drawer, { DrawerHandle } from "@/shared/components/ui/Drawer";
+import Text from "@/shared/components/ui/Text";
 import { capitalize } from "@/shared/utils/capitalize";
 import { cn } from "@/shared/utils/cn";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
-import { Text, TouchableOpacity } from "react-native";
+import { TouchableOpacity } from "react-native";
 import { useFilterStore } from "../stores/use-filter.store";
 
 const SORT_OPTIONS = [

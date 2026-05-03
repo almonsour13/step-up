@@ -3,11 +3,12 @@ import StepGoalDrawer from "@/shared/components/drawer/StepGoalDrawer";
 import Card from "@/shared/components/ui/Card";
 import { DrawerHandle } from "@/shared/components/ui/Drawer";
 import RingChart from "@/shared/components/ui/RingChart";
+import Text from "@/shared/components/ui/Text";
 import { useActiveActivityStore } from "@/shared/stores/use-active-activity.store";
 import { useSettingsStore } from "@/shared/stores/use-settings.store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { useRef } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 export default function ActivityProgress() {
     const settings = useSettingsStore((s) => s.settings);

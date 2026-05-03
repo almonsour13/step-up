@@ -1,5 +1,6 @@
 import { ColView } from "@/shared/components/CustomView";
-import { ScrollView, Text } from "react-native";
+import Text from "@/shared/components/ui/Text";
+import { ScrollView } from "react-native";
 import DataSection from "./components/DataSection";
 import SettingsHeader from "./components/layout/SettingsHeader";
 import PreferencesSection from "./components/PreferencesSection";

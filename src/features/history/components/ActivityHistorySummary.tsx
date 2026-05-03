@@ -1,17 +1,11 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
+import Text from "@/shared/components/ui/Text";
 import { StatItem } from "@/shared/utils/activity-stats.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { memo } from "react";
-import { Text } from "react-native";
 import { useActivityHistorySummar } from "../hooks/use-activity-history-summary";
 
-const TEMP_SUMMARY = [
-    { label: "Total Sessions", value: "24" },
-    { label: "Total Steps", value: "182,340" },
-    { label: "Distance", value: "127.6 km" },
-    { label: "Calories", value: "5,312 kcal" },
-];
 function ActivityHistorySummary() {
     const activitySummary = useActivityHistorySummar();
     return (

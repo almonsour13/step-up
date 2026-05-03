@@ -7,6 +7,7 @@ import ActivityDetailsDrawer, {
 } from "@/shared/components/drawer/ActivityDetailsDrawer";
 import Card from "@/shared/components/ui/Card";
 import RingChart from "@/shared/components/ui/RingChart";
+import Text from "@/shared/components/ui/Text";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { Activity } from "@/shared/types/type";
 import { getActivityStats } from "@/shared/utils/activity-stats.utils";
@@ -15,7 +16,7 @@ import { formatActivityDate } from "@/shared/utils/utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
 import { memo, useRef } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 
 interface Props {
     activity: Activity;

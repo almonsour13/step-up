@@ -2,8 +2,9 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import clsx from "clsx";
 import { Href, usePathname, useRouter } from "expo-router";
 import { memo } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, View } from "react-native";
 import { ColView, RowView } from "../CustomView";
+import Text from "../ui/Text";
 
 function MainNavigation() {
     const pathname = usePathname();

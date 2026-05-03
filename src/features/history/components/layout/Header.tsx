@@ -1,5 +1,5 @@
 import { ColView } from "@/shared/components/CustomView";
-import { Text } from "react-native";
+import Text from "@/shared/components/ui/Text";
 
 export default function Header() {
     return (
