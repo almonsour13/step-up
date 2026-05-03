@@ -5,7 +5,7 @@ import { fakeStepService } from "./fake-step.service";
 
 export type StepUpdateCallback = (steps: number) => void;
 
-const IS_EXPO_GO = Constants.appOwnership === "expo";
+const IS_EXPO_GO = Constants.appOwnership !== "expo";
 
 class StepService {
     private isAvailableOnDevice: boolean | null = null;
