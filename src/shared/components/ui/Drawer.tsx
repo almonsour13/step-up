@@ -34,6 +34,7 @@ interface Props {
     children?: React.ReactNode;
     disableBackdrop?: boolean;
     disableHandle?: boolean;
+    disableScrollView?: boolean;
     onClose?: () => void;
 }
 const MAX_HEIGHT = SCREEN_HEIGHT * 0.9;
@@ -45,6 +46,7 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
         className,
         disableBackdrop = false,
         disableHandle = false,
+        disableScrollView = false,
         onClose,
     },
     ref,
@@ -201,12 +203,16 @@ const DrawerComponent = forwardRef<DrawerHandle, Props>(function Drawer(
                             <View className="w-16 h-1.5 rounded-full bg-muted-foreground/50" />
                         </View>
                     )}
-                    <ScrollView
-                        showsHorizontalScrollIndicator={false}
-                        showsVerticalScrollIndicator={false}
-                    >
-                        {children}
-                    </ScrollView>
+                    {!disableScrollView ? (
+                        <ScrollView
+                            showsHorizontalScrollIndicator={false}
+                            showsVerticalScrollIndicator={false}
+                        >
+                            {children}
+                        </ScrollView>
+                    ) : (
+                        children
+                    )}
                 </View>
             </Animated.View>
         </Modal>
