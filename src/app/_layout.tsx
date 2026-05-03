@@ -62,11 +62,7 @@ export default function RootLayout() {
                         contentStyle: { backgroundColor: "transparent" },
                         animation: "none",
                     }}
-                >
-                    <Stack.Screen name="(main)" />
-                    <Stack.Screen name="settings" />
-                    <Stack.Screen name="profile" />
-                </Stack>
+                />
                 <StatusBar style="auto" />
             </SafeAreaView>
         </ThemeProvider>
