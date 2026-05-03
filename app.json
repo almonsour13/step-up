@@ -57,6 +57,7 @@
                     "motionPermission": "Allow $(BUNDLE_ID) to track your steps."
                 }
             ],
+            "expo-task-manager",
             "expo-background-task"
         ],
         "experiments": {
