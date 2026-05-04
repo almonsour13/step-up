@@ -1,7 +1,8 @@
 import Drawer, { DrawerHandle } from "@/shared/components/ui/Drawer";
+import { activityService } from "@/shared/services/storage/activity.service";
+import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { ToastAndroid, TouchableOpacity } from "react-native";
-import { useActivityStore } from "../../stores/use-activity.store";
 import { ColView, RowView } from "../CustomView";
 import Text from "../ui/Text";
 export type DeleteActionDrawerHandle = DrawerHandle & {
@@ -11,6 +12,7 @@ const DeleteActionDrawer = forwardRef<
     DeleteActionDrawerHandle,
     { onClose?: () => void }
 >(({ onClose }, ref) => {
+    const notifyUpdate = useActivityStore((s) => s.notifyUpdate);
     const deleteActivity = useActivityStore((s) => s.deleteActivity);
     const drawerRef = useRef<DrawerHandle>(null);
     const [activityId, setActivityId] = useState("");
@@ -25,7 +27,7 @@ const DeleteActionDrawer = forwardRef<
     }));
 
     const onDelete = () => {
-        // activityStorageService.delete(activityId);
+        activityService.delete(activityId);
         deleteActivity(activityId);
         drawerRef.current?.close();
         ToastAndroid.show("Activity deleted", ToastAndroid.SHORT);

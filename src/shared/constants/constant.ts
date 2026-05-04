@@ -15,3 +15,14 @@ export const UNIT_OPTIONS = ["km", "miles"] as const;
 export const STEP_GOAL_OPTIONS = [
     2000, 3000, 5000, 7500, 10000, 12500, 15000, 20000,
 ];
+
+export const SORT_OPTIONS = [
+    {
+        label: "Newest to Old",
+        value: "newest",
+    },
+    {
+        label: "Oldest to Newest",
+        value: "oldest",
+    },
+] as const;

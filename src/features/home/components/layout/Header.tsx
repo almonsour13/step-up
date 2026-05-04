@@ -42,7 +42,7 @@ export default function Header() {
     return (
         <RowView className="px-4 pt-12 justify-between items-start">
             <ColView className="gap-1">
-                <Text className="text-base text-muted-foreground">
+                <Text className="text-lg text-muted-foreground">
                     Good {greeting}, {profile?.name.split(" ")[0]}
                 </Text>
                 <Text className="text-2xl text-foreground leading-snug">

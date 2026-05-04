@@ -1,4 +1,4 @@
-import { formatDuration } from "@/shared/utils/activity.utils";
+import { formatDurationClock } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
 import { usePathname, useRouter } from "expo-router";
@@ -27,7 +27,7 @@ function ActiveActivityBanner() {
     const stats = [
         {
             label: "Duration",
-            value: formatDuration(duration),
+            value: formatDurationClock(duration),
             icon: "time-outline" as const,
         },
         {

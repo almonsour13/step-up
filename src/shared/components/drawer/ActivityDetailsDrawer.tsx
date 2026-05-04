@@ -34,7 +34,9 @@ const ActivityDetailsDrawer = forwardRef<ActivityDetailsDrawerHandle, {}>(
 
         useImperativeHandle(ref, () => ({
             open: () => drawerRef.current?.open(),
-            close: () => drawerRef.current?.close(),
+            close: () => {
+                (drawerRef.current?.close(), setActivity(null));
+            },
             openWithActivity: (data: Activity) => {
                 setActivity(data);
                 drawerRef.current?.open();
@@ -75,7 +77,7 @@ const ActivityDetailsDrawer = forwardRef<ActivityDetailsDrawerHandle, {}>(
                             {/* ── Header row ── */}
                             <RowView className="justify-between items-start">
                                 <ColView className="gap-0.5 flex-1 pr-3">
-                                    <Text className="text-base font-medium text-foreground">
+                                    <Text className="text-2xl font-medium text-foreground">
                                         Activity details
                                     </Text>
                                     <Text className="text-[11px] text-muted-foreground">

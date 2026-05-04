@@ -23,7 +23,7 @@ export default function ProfileSection() {
         <ColView className="px-4">
             <Text className="text-sm text-muted-foreground px-1">Profile</Text>
             <Card className="p-0">
-                <TouchableOpacity onPress={() => router.push("/profile/edit")}>
+                <TouchableOpacity onPress={() => router.push("/profile")}>
                     <RowView className="items-center justify-between p-4 ">
                         <RowView className="gap-4">
                             <View className="w-12 h-12 rounded-full bg-foreground items-center justify-center">

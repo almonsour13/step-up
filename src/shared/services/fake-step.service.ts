@@ -1,55 +1,85 @@
-import Constants from "expo-constants";
+// fake-step.service.ts
 import { logger } from "../utils/logger";
 
 export type StepUpdateCallback = (steps: number) => void;
-
-const IS_EXPO_GO = Constants.appOwnership === "expo";
-
-// ─── FakeStepService ────────────────────────────────────────────────────────
-
 class FakeStepService {
     private fakeInterval: ReturnType<typeof setInterval> | null = null;
     private fakeSteps: number = 0;
     private callbacks: StepUpdateCallback[] = [];
 
     async start(): Promise<void> {
-        logger.info("Starting fake step service...");
+        logger.info("[FakeStepService] Starting...");
 
         if (this.fakeInterval) {
-            logger.warn("Fake step service already running");
+            logger.warn("[FakeStepService] Already running");
             return;
         }
-
+        // FIX: reset steps on every fresh start
         this.fakeSteps = 0;
 
         this.fakeInterval = setInterval(() => {
-            const increment = Math.floor(Math.random() * 3) + 1;
+            const increment = Math.floor(Math.random() * 40) + 1;
             this.fakeSteps += increment;
-
-            logger.info("Steps updated:", this.fakeSteps);
-
+            logger.info("[FakeStepService] Steps updated:", this.fakeSteps);
             this.callbacks.forEach((cb) => cb(this.fakeSteps));
         }, 1000);
     }
 
+    // FIX: pause stops the interval but preserves fakeSteps
+    // fake-step.service.ts
+
+    async pause(): Promise<void> {
+        logger.info("[FakeStepService] Pausing...");
+
+        if (!this.fakeInterval) {
+            logger.warn("[FakeStepService] Already paused");
+            return;
+        }
+
+        // Stop ticking but DO NOT reset fakeSteps
+        clearInterval(this.fakeInterval);
+        this.fakeInterval = null;
+
+        logger.info("[FakeStepService] Paused at", this.fakeSteps, "steps");
+    }
+
+    async resume(): Promise<void> {
+        logger.info("[FakeStepService] Resuming...");
+
+        if (this.fakeInterval) {
+            logger.warn("[FakeStepService] Already running");
+            return;
+        }
+
+        // Restart interval — fakeSteps continues from where it left off
+        this.fakeInterval = setInterval(() => {
+            const increment = Math.floor(Math.random() * 40) + 1;
+            this.fakeSteps += increment; // accumulates on top of paused value
+            logger.info("[FakeStepService] Steps updated:", this.fakeSteps);
+            this.callbacks.forEach((cb) => cb(this.fakeSteps));
+        }, 1000);
+
+        logger.info("[FakeStepService] Resumed from", this.fakeSteps, "steps");
+    }
     async stop(): Promise<void> {
-        logger.info("Stopping fake step service...");
+        logger.info("[FakeStepService] Stopping...");
 
         if (this.fakeInterval) {
             clearInterval(this.fakeInterval);
             this.fakeInterval = null;
         } else {
-            logger.warn("Fake step service already stopped");
+            logger.warn("[FakeStepService] Already stopped");
         }
+        // FIX: reset steps on every fresh start
+        this.fakeSteps = 0;
     }
 
     onStepUpdate(callback: StepUpdateCallback): () => void {
-        logger.info("Subscriber added");
-
+        logger.info("[FakeStepService] Subscriber added");
         this.callbacks.push(callback);
 
         return () => {
-            logger.info("Subscriber removed");
+            logger.info("[FakeStepService] Subscriber removed");
             this.callbacks = this.callbacks.filter((cb) => cb !== callback);
         };
     }
@@ -59,7 +89,7 @@ class FakeStepService {
     }
 
     reset(): void {
-        logger.info("Resetting steps to 0");
+        logger.info("[FakeStepService] Resetting steps to 0");
         this.fakeSteps = 0;
     }
 }

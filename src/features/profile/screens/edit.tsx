@@ -6,7 +6,7 @@ import WeightOptionDrawer from "@/shared/components/drawer/WeightOptionDrawer";
 import Card from "@/shared/components/ui/Card";
 import { DrawerHandle } from "@/shared/components/ui/Drawer";
 import Text from "@/shared/components/ui/Text";
-import { profileService } from "@/shared/services/storage/profile.storage.services";
+import { profileService } from "@/shared/services/storage/profile.services";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { Gender } from "@/shared/types/type";
 import { capitalize } from "@/shared/utils/capitalize";

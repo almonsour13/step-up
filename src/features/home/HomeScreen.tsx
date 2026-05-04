@@ -1,13 +1,25 @@
 import { ColView } from "@/shared/components/CustomView";
-import { ScrollView } from "react-native";
+import { useActivity } from "@/shared/hooks/use-activity";
+import { useActivityStore } from "@/shared/stores/use-activity.store";
+import { RefreshControl, ScrollView } from "react-native";
 import Header from "./components/layout/Header";
 import RecentActivity from "./components/RecentActivity";
 import TodayActivity from "./components/TodayActivity";
 import WeekActivity from "./components/WeekActivity";
 
 export default function HomeScreen() {
+    const isRefreshing = useActivityStore((s) => s.isRefreshing);
+    const { handleRefresh } = useActivity();
     return (
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+                <RefreshControl
+                    refreshing={isRefreshing}
+                    onRefresh={handleRefresh}
+                />
+            }
+        >
             <ColView className="flex-1 gap-4 pb-4">
                 <Header />
                 <WeekActivity />

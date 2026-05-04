@@ -1,47 +1,65 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
+import Text from "@/shared/components/ui/Text";
+import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { useRouter } from "expo-router";
-import { memo } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { useRecentActivities } from "../hooks/use-recent-activity";
+import { memo, useMemo } from "react";
+import { TouchableOpacity, View } from "react-native";
 import ActivityCard from "./ui/ActivityCard";
 
 function RecentActivity() {
-    const recentActivities = useRecentActivities(5);
     const router = useRouter();
+    // const isLoading = useHomeStore((s) => s.isRecentLoading);
+    // const activities = useHomeStore((s) => s.recentActivity);
+    const isLoading = useActivityStore((s) => s.isLoading);
+    const activities = useMemo(() => {
+        return useActivityStore((s) => s.activities).slice(0, 5);
+    }, []);
     return (
         <ColView className="gap-2">
-            <RowView className="px-4 justify-between items-center">
-                <Text className="text-base font-medium text-foreground">
+            <RowView className="px-4 justify-between items-end">
+                <Text className="text-lg font-medium text-foreground">
                     Recent activity
                 </Text>
                 <TouchableOpacity onPress={() => router.push("/history")}>
-                    <Text className="text-sm text-primary">See all</Text>
+                    <Text className="text-base text-primary">See all</Text>
                 </TouchableOpacity>
             </RowView>
 
-            <ColView className="px-4 gap-1">
-                {recentActivities.length === 0 ? (
+            <ColView className="px-4">
+                {isLoading ? (
+                    <Card className="flex-col p-0">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                            <View key={i}>
+                                <View className="h-20" />
+                                {i < 4 && ( // ← hardcoded since skeleton is always 5 items
+                                    <View className="w-full border-b border-border/40" />
+                                )}
+                            </View>
+                        ))}
+                    </Card>
+                ) : activities.length === 0 ? (
                     <Card>
                         <RowView className="items-center gap-4">
                             <View className="flex-1 gap-1">
-                                <Text className="text-[11px] text-foreground">
+                                <Text className="text-base text-foreground">
                                     No activity yet
                                 </Text>
 
-                                <Text className="text-[11px] text-muted-foreground">
-                                    Start your first run to track progress
+                                <Text className="text-xs text-muted-foreground">
+                                    Consistency beats intensity. Start your
+                                    first session today.
                                 </Text>
                             </View>
                         </RowView>
                     </Card>
                 ) : (
                     <Card className="p-0">
-                        {recentActivities.map((activity, i) => {
+                        {activities.map((activity, i) => {
                             return (
                                 <View key={activity.id}>
                                     <ActivityCard activity={activity} />
-                                    {i < recentActivities.length - 1 && (
+                                    {i < activities.length - 1 && (
                                         <View className="w-full border-b border-border/40" />
                                     )}
                                 </View>

@@ -1,19 +1,8 @@
 import { UserProfile } from "../stores/use-user.store";
-import { Activity } from "../types/type";
+import { Activity, StatItem } from "../types/type";
 import { calcCalories, calcDistanceKm } from "../utils/activity.utils";
 
 type StatKey = "steps" | "duration" | "distance" | "calories";
-
-export type StatItem = {
-    label: string;
-    value: string;
-    unit: string | null;
-    icon:
-        | "walk-outline"
-        | "time-outline"
-        | "location-outline"
-        | "flame-outline";
-};
 
 interface ActivityStatProps {
     activities: Activity[];

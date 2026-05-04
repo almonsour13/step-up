@@ -1,3 +1,4 @@
+import { activityService } from "@/shared/services/storage/activity.service";
 import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { Alert, ToastAndroid } from "react-native";
 import Section, { SettingsSection } from "./ui/Section";
@@ -14,8 +15,9 @@ export default function DataSection() {
                 {
                     text: "Clear",
                     style: "destructive",
-                    onPress: () => {
+                    onPress: async () => {
                         // Clear data
+                        await activityService.clear();
                         clearActivities();
                         ToastAndroid.show(
                             "Activity data cleared",

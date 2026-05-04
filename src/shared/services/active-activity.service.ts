@@ -3,8 +3,8 @@ import { Activity, ActivityStatus } from "../types/type";
 import { logger } from "../utils/logger";
 import { generateId } from "../utils/utils";
 import { stepService } from "./step.service";
-import { activityStorageService } from "./storage/activity.storage.service";
-import { settingsService } from "./storage/settings.storage.service";
+import { activityService } from "./storage/activity.service";
+import { settingsService } from "./storage/settings.service";
 import { StorageService } from "./storage/storage.service";
 
 type Metrics = {
@@ -276,7 +276,7 @@ class ActiveActivityService {
                 createdAt: new Date().toISOString(),
             };
 
-            await activityStorageService.save(formattedNewActivity);
+            await activityService.save(formattedNewActivity);
             await this.activeActivityStore.remove();
 
             logger.log("[ActiveActivityService] Activity stopped and cleared", {

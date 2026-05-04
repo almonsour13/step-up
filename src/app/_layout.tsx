@@ -8,17 +8,6 @@ import {
     DMSans_700Bold,
     useFonts,
 } from "@expo-google-fonts/dm-sans";
-import {
-    Geist_400Regular,
-    Geist_500Medium,
-    Geist_600SemiBold,
-    Geist_700Bold,
-} from "@expo-google-fonts/geist";
-import {
-    Inter_400Regular,
-    Inter_500Medium,
-    Inter_600SemiBold,
-} from "@expo-google-fonts/inter";
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
@@ -38,13 +27,6 @@ export default function RootLayout() {
         DMSans_500Medium,
         DMSans_600SemiBold,
         DMSans_700Bold,
-        Geist_400Regular,
-        Geist_500Medium,
-        Geist_600SemiBold,
-        Geist_700Bold,
-        Inter_400Regular,
-        Inter_500Medium,
-        Inter_600SemiBold,
     });
 
     useEffect(() => {

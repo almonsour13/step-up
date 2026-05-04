@@ -1,6 +1,6 @@
 import { DEFAULT_SETTINGS, Settings } from "@/shared/types/type";
 import { create } from "zustand";
-import { settingsService } from "../services/storage/settings.storage.service";
+import { settingsService } from "../services/storage/settings.service";
 
 type SettingsStore = {
     settings: Settings;

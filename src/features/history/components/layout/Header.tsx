@@ -3,7 +3,7 @@ import Text from "@/shared/components/ui/Text";
 
 export default function Header() {
     return (
-        <ColView className="px-4 pt-12 gap-0.5">
+        <ColView className="px-4 pt-12 gap-0.5 pb-4">
             <Text className="text-2xl font-medium text-foreground">
                 History
             </Text>

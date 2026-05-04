@@ -54,3 +54,22 @@ export const DEFAULT_PROFILE: Omit<Profile, "id" | "createdAt" | "updatedAt"> =
         age: 20,
         gender: "male",
     };
+
+export type PeriodType = "all" | "day" | "week" | "month" | "year";
+export type ActivityFilters = {
+    sort?: "newest" | "oldest";
+    period?: PeriodType;
+    page?: number;
+    limit?: number;
+    dayLimit?: number;
+};
+export type StatItem = {
+    label: string;
+    value: string;
+    unit: string | null;
+    icon:
+        | "walk-outline"
+        | "time-outline"
+        | "location-outline"
+        | "flame-outline";
+};

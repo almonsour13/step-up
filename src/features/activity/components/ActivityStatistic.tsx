@@ -6,7 +6,7 @@ import { useProfileStore } from "@/shared/stores/use-profile.store";
 import {
     calcCalories,
     calcDistanceKm,
-    formatDuration,
+    formatDurationClock,
 } from "@/shared/utils/activity.utils";
 import Ionicons from "@expo/vector-icons/Ionicons";
 export default function ActivityStatistic() {
@@ -15,7 +15,7 @@ export default function ActivityStatistic() {
     const stats = [
         {
             label: "Duration",
-            value: formatDuration(activeActivity.duration),
+            value: formatDurationClock(activeActivity.duration),
             icon: "time" as const,
         },
         {

@@ -1,7 +1,7 @@
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { useEffect, useState } from "react";
-import { profileService } from "../services/storage/profile.storage.services";
-import { settingsService } from "../services/storage/settings.storage.service";
+import { profileService } from "../services/storage/profile.services";
+import { settingsService } from "../services/storage/settings.service";
 import { useSettingsStore } from "../stores/use-settings.store";
 
 export const useAppInit = () => {

@@ -1,9 +1,16 @@
 import ActivityCard from "@/features/home/components/ui/ActivityCard";
-import { useActivitySessions } from "@/features/home/hooks/use-activity-sessions";
+import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { format } from "date-fns";
-import { forwardRef, memo, useImperativeHandle, useRef, useState } from "react";
+import {
+    forwardRef,
+    memo,
+    useImperativeHandle,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 import { View } from "react-native";
 import { getActivityStats } from "../../utils/activity-stats.utils";
 import { formatActivityDate } from "../../utils/utils";
@@ -23,41 +30,48 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
     const profile = useProfileStore((s) => s.profile);
     const drawerRef = useRef<DrawerHandle>(null);
     const [selectedDay, setSelectedDay] = useState<string | null>(null);
-    const activities = useActivitySessions(selectedDay);
+    const activities = useActivityStore((s) => s.activities);
+
+    const sessions = useMemo(() => {
+        if (!selectedDay) return [];
+        const dateObj = new Date(selectedDay);
+        return activities.filter(
+            (a) =>
+                new Date(a.startTime).toDateString() === dateObj.toDateString(),
+        );
+    }, [selectedDay, activities]);
 
     useImperativeHandle(ref, () => ({
         open: () => drawerRef.current?.open(),
         close: () => drawerRef.current?.close(),
-        openWithActivities: (day: string) => {
+        openWithActivities: async (day: string) => {
             setSelectedDay(day);
             drawerRef.current?.open();
         },
     }));
 
-    const dayDate = activities[0]
-        ? new Date(activities[0].startTime)
-        : new Date();
+    const dayDate = sessions[0] ? new Date(sessions[0].startTime) : new Date();
 
     const stats = getActivityStats({
-        activities,
+        activities: sessions,
         profile,
         fields: ["duration", "distance", "calories"],
     });
-    const totalSteps = activities.reduce((acc, a) => acc + a.steps, 0);
-    const totalGoalSteps = activities.reduce(
+    const totalSteps = sessions.reduce((acc, a) => acc + a.steps, 0);
+    const totalGoalSteps = sessions.reduce(
         (acc, activity) => acc + activity.goal,
         0,
     );
     const totalPct = (totalSteps / totalGoalSteps) * 100;
     const remainingSteps = Math.max(0, totalGoalSteps - totalSteps);
     const met = totalSteps >= totalGoalSteps;
-    const metCount = activities.filter((a) => a.steps >= a.goal).length;
-    const allMet = metCount === activities.length && activities.length > 0;
+    const metCount = sessions.filter((a) => a.steps >= a.goal).length;
+    const allMet = metCount === sessions.length && sessions.length > 0;
 
     const distanceKm = stats.find((s) => s.label === "Distance")?.value;
     const caloriesBurned = stats.find((s) => s.label === "Calories")?.value;
 
-    if (activities.length === 0) {
+    if (sessions.length === 0) {
         return (
             <Drawer ref={drawerRef}>
                 <ColView className="items-center justify-center gap-3 px-4 py-16">
@@ -83,18 +97,12 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
         <>
             <Drawer ref={drawerRef}>
                 <ColView className="gap-4 p-4">
-                    <RowView className="justify-between">
+                    <RowView className="justify-between items-center">
                         <ColView className="gap-0.5 flex-1">
-                            <Text className="text-base font-medium text-foreground">
+                            <Text className="text-2xl font-medium text-foreground">
                                 {formatActivityDate(dayDate)}
                                 {", "}
                                 {format(dayDate, "MMM d")}
-                            </Text>
-                            <Text className="text-[11px] text-muted-foreground">
-                                {activities.length} session
-                                {activities.length !== 1 ? "s" : ""} ·{" "}
-                                {metCount} goal
-                                {metCount !== 1 ? "s" : ""} met
                             </Text>
                         </ColView>
                         <ColView>
@@ -102,7 +110,7 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
                                 <Text className="text-xs">
                                     {allMet
                                         ? "✓ All goals met"
-                                        : `${metCount}/${activities.length} goals`}
+                                        : `${metCount}/${sessions.length} goals`}
                                 </Text>
                             </View>
                         </ColView>
@@ -184,9 +192,14 @@ const ActivitySessionsDrawer = forwardRef<DrawerHandle, Props>((_, ref) => {
                     </Card>
 
                     <ColView className="gap-2">
-                        <Text className="text-sm">Sessions</Text>
+                        <RowView className="items-center justify-between">
+                            <Text className="text-lg">Sessions</Text>
+                            <Text className="text-lg text-primary">
+                                {sessions.length}
+                            </Text>
+                        </RowView>
                         <ColView className="gap-1">
-                            {activities.map((activity) => {
+                            {sessions.map((activity) => {
                                 return (
                                     <ActivityCard
                                         key={activity.id}
