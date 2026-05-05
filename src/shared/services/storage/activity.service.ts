@@ -5,9 +5,7 @@ import { logger } from "@/shared/utils/logger";
 import { StorageService } from "./storage.service";
 
 class ActivityService {
-    private activitiesStore = new StorageService<Activity[]>(
-        STORAGE_KEYS.ACTIVITIES,
-    );
+    private activitiesStore = new StorageService(STORAGE_KEYS.ACTIVITIES);
 
     private cachedActivities: Activity[] | null = null;
 
@@ -98,12 +96,7 @@ class ActivityService {
                       ? filtered.length > result.length
                       : false;
 
-            logger.log(
-                "[ActivityStorage] getAll → count:",
-                result.length,
-                "hasMore:",
-                hasMore,
-            );
+            logger.log("[ActivityStorage] getAll → count:", result.length);
             return { activities: result, hasMore };
         } catch (error) {
             logger.error("[ActivityStorage] getAll → error:", error);

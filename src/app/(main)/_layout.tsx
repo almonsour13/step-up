@@ -4,33 +4,32 @@ import { useActiveActivity } from "@/shared/hooks/use-active-activity";
 import { useActivity } from "@/shared/hooks/use-activity";
 import { Tabs } from "expo-router";
 import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function TabLayout() {
+export default function MainLayout() {
     useActivity();
     useActiveActivity();
 
-    // useEffect(() => {
-    //     requestAllPermissions();
-    // }, []);
-
     return (
         <>
-            <Tabs
-                screenOptions={{
-                    headerShown: false,
-                    animation: "none",
-                    sceneStyle: {
-                        backgroundColor: "transparent",
-                    },
-                }}
-                tabBar={() => null} // hide default tab bar — you use MainNavigation
-            >
-                <Tabs.Screen name="index" />
-                <Tabs.Screen name="history" />
-                <Tabs.Screen name="activity" />
-            </Tabs>
-            <ActiveActivityBanner />
-            <MainNavigation />
+            <SafeAreaView style={{ flex: 1 }}>
+                <Tabs
+                    screenOptions={{
+                        headerShown: false,
+                        animation: "none",
+                        sceneStyle: {
+                            backgroundColor: "transparent",
+                        },
+                    }}
+                    tabBar={(props) => null}
+                >
+                    <Tabs.Screen name="index" />
+                    <Tabs.Screen name="history" />
+                    <Tabs.Screen name="activity" />
+                </Tabs>
+                <ActiveActivityBanner />
+                <MainNavigation />
+            </SafeAreaView>
         </>
     );
 }

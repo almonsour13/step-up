@@ -25,7 +25,7 @@ export const useActiveActivityControl = () => {
             steps: 0,
             goalSteps: settings.stepGoal,
         });
-        activeActivityService.start(settings.stepGoal);
+        activeActivityService.start();
     };
 
     const pause = async () => {

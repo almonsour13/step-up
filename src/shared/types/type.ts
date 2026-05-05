@@ -25,7 +25,7 @@ export type Profile = {
     height: number; // cm
     weight: number; // kg
     age: number; // years
-    gender: Gender;
+    gender: Gender | null;
     createdAt?: string; // ISO 8601
     updatedAt?: string;
 };

@@ -22,7 +22,7 @@ type ActiveActivity = {
 };
 
 class ActiveActivityService {
-    private activeActivityStore = new StorageService<ActiveActivity>(
+    private activeActivityStore = new StorageService(
         STORAGE_KEYS.ACTIVE_ACTIVITY,
     );
     private activeActivity: ActiveActivity | null = null;
@@ -255,7 +255,7 @@ class ActiveActivityService {
         }
 
         try {
-            const settings = await settingsService.getSettings();
+            const settings = await settingsService.get();
             logger.log("[ActiveActivityService] Stopping activity", {
                 id: this.activeActivity.id,
                 startTime: this.activeActivity.startTime,

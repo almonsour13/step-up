@@ -4,7 +4,7 @@ import { Settings } from "../../types/type";
 import { StorageService } from "./storage.service";
 
 class SettingsService {
-    private settingsStore = new StorageService<Settings>(STORAGE_KEYS.SETTINGS);
+    private settingsStore = new StorageService(STORAGE_KEYS.SETTINGS);
 
     private readonly DEFAULT_SETTINGS: Settings = {
         theme: "system",
@@ -14,7 +14,7 @@ class SettingsService {
         notifications: true,
     };
 
-    async getSettings(): Promise<Settings> {
+    async get(): Promise<Settings> {
         logger.log("[SettingsService] getSettings → start");
 
         try {
@@ -34,11 +34,11 @@ class SettingsService {
         }
     }
 
-    async updateSettings(updates: Partial<Settings>): Promise<Settings> {
+    async update(updates: Partial<Settings>): Promise<Settings> {
         logger.log("[SettingsService] updateSettings → start");
 
         try {
-            const current = await this.getSettings();
+            const current = await this.get();
 
             const updated: Settings = {
                 ...current,
@@ -61,7 +61,7 @@ class SettingsService {
         }
     }
 
-    async resetSettings(): Promise<Settings> {
+    async reset(): Promise<Settings> {
         logger.warn("[SettingsService] resetSettings → resetting to DEFAULT");
 
         try {

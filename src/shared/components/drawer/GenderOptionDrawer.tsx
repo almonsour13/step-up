@@ -5,7 +5,7 @@ import { Gender } from "@/shared/types/type";
 import { cn } from "@/shared/utils/cn";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { forwardRef, useImperativeHandle, useRef } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { TouchableOpacity } from "react-native";
 import Text from "../ui/Text";
 
 interface Props {
@@ -24,7 +24,7 @@ const GenderOptionDrawer = forwardRef<DrawerHandle, Props>(
 
         return (
             <Drawer ref={drawerRef}>
-                <View className="p-4 px-0">
+                <ColView className="p-4 gap-4 px-0">
                     <RowView className="px-4 justify-center">
                         <Text className="text-base font-medium">
                             Choose Your Gender
@@ -68,7 +68,7 @@ const GenderOptionDrawer = forwardRef<DrawerHandle, Props>(
                             );
                         })}
                     </ColView>
-                </View>
+                </ColView>
             </Drawer>
         );
     },

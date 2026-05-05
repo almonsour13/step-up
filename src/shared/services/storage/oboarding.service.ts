@@ -3,9 +3,7 @@ import { logger } from "@/shared/utils/logger";
 import { StorageService } from "./storage.service";
 
 class OnboardingService {
-    private onboardingStore = new StorageService<boolean>(
-        STORAGE_KEYS.ONBOARDING,
-    );
+    private onboardingStore = new StorageService(STORAGE_KEYS.ONBOARDING);
 
     async isComplete(): Promise<boolean> {
         logger.log("[OnboardingService] isComplete → checking");

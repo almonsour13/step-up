@@ -46,7 +46,7 @@ function MainNavigation() {
     if (HIDE_ON_THIS_ROUTE.includes(pathname)) return null;
 
     return (
-        <Card className="px-4 h-20 bg-card rounded-b-none">
+        <Card className="px-4 h-20 bg-background rounded-b-none">
             <RowView className="flex-1 justify-between items-center">
                 {menus.map((menu, index) => {
                     const isActive = isItemActive(menu.href);

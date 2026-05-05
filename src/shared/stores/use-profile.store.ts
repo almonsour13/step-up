@@ -8,19 +8,20 @@ type ProfileStore = {
 };
 
 export const useProfileStore = create<ProfileStore>((set) => ({
-    profile: {
-        id: "1",
-        name: "John Doe",
-        age: 30,
-        weight: 70,
-        height: 170,
-        gender: "male",
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-    },
+    profile: null, // ✅ null until user fills it in
     setProfile: (profile) => set({ profile }),
     updateProfile: (partial) =>
         set((state) => ({
-            profile: state.profile ? { ...state.profile, ...partial } : null,
+            profile: state.profile
+                ? { ...state.profile, ...partial }
+                : {
+                      id: "",
+                      name: "",
+                      age: 0,
+                      weight: 0,
+                      height: 0,
+                      gender: null,
+                      ...partial,
+                  },
         })),
 }));

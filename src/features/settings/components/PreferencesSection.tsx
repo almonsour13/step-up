@@ -1,10 +1,11 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
 import StepGoalDrawer from "@/shared/components/drawer/StepGoalDrawer";
+import UnitsDrawer from "@/shared/components/drawer/UnitsDrawer";
 import Drawer, { DrawerHandle } from "@/shared/components/ui/Drawer";
 import Text from "@/shared/components/ui/Text";
-import { THEME_OPTIONS, UNIT_OPTIONS } from "@/shared/constants/constant";
+import { THEME_OPTIONS } from "@/shared/constants/constant";
 import { useSettingsStore } from "@/shared/stores/use-settings.store";
-import { Theme, Unit } from "@/shared/types/type";
+import { Theme } from "@/shared/types/type";
 import { capitalize } from "@/shared/utils/capitalize";
 import { cn } from "@/shared/utils/cn";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -101,45 +102,7 @@ export default function PreferencesSection() {
                     })}
                 </ColView>
             </Drawer>
-            <Drawer ref={unitsDrawerRef}>
-                <ColView>
-                    {UNIT_OPTIONS.map((t) => {
-                        const lowerT = t.toLowerCase() as Unit;
-                        const isSelected = settings.units === lowerT;
-                        return (
-                            <TouchableOpacity
-                                key={t}
-                                onPress={() => {
-                                    setUnits(lowerT);
-                                    unitsDrawerRef.current?.close();
-                                }}
-                                className={cn(
-                                    "p-4 px-8 h-16 justify-center",
-                                    isSelected && "bg-muted",
-                                )}
-                            >
-                                <RowView className="justify-between">
-                                    <Text
-                                        className={cn(
-                                            "text-lg",
-                                            isSelected && "text-primary",
-                                        )}
-                                    >
-                                        {t.toLocaleString()}
-                                    </Text>
-                                    {isSelected && (
-                                        <Ionicons
-                                            name="checkmark"
-                                            size={20}
-                                            className="text-primary"
-                                        />
-                                    )}
-                                </RowView>
-                            </TouchableOpacity>
-                        );
-                    })}
-                </ColView>
-            </Drawer>
+            <UnitsDrawer ref={unitsDrawerRef} />
             <StepGoalDrawer ref={stepGoalDrawerRef} />
         </>
     );

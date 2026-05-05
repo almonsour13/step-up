@@ -15,8 +15,8 @@ export const useActivity = () => {
         try {
             isFetchingPageRef.current = true;
             setIsLoading(true);
-            const data = await activityService.getAll();
-            setActivities(data.activities);
+            const activities = await activityService.get();
+            setActivities(activities);
             setIsLoading(false);
         } catch (error) {
             console.error(error);

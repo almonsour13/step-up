@@ -1,5 +1,6 @@
 import "@/global.css";
 import { useAppInit } from "@/shared/hooks/use-app-init";
+import { useOnboarding } from "@/shared/hooks/use-onboarding";
 import ThemeProvider from "@/shared/providers/ThemeProvider";
 import {
     DMSans_400Regular,
@@ -11,42 +12,42 @@ import {
 import { SplashScreen, Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
-import { Text } from "react-native";
 import "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-// ← Patch here, before any render
-if (!Text.defaultProps) Text.defaultProps = {};
-Text.defaultProps.style = { fontFamily: "DMSans_400Regular" };
-
+SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
     const { ready } = useAppInit();
+    const { isLoading } = useOnboarding();
 
-    const [loaded, error] = useFonts({
+    const [loaded] = useFonts({
         DMSans_400Regular,
         DMSans_500Medium,
         DMSans_600SemiBold,
         DMSans_700Bold,
     });
-
+    const isAppReady = loaded && ready && !isLoading;
     useEffect(() => {
-        if (loaded || error) SplashScreen.hideAsync();
-    }, [loaded, error]);
-
-    if (!loaded && !error) return null;
+        if (isAppReady) {
+            SplashScreen.hideAsync();
+        }
+    }, [isAppReady]);
 
     return (
         <ThemeProvider>
-            <SafeAreaView style={{ flex: 1 }}>
-                <Stack
-                    screenOptions={{
-                        headerShown: false,
-                        contentStyle: { backgroundColor: "transparent" },
-                        animation: "none",
-                    }}
-                />
-                <StatusBar style="auto" />
-            </SafeAreaView>
+            <Stack
+                screenOptions={{
+                    headerShown: false,
+                    contentStyle: { backgroundColor: "transparent" },
+                    animation: "none",
+                }}
+            >
+                <Stack.Screen name="index" />
+                <Stack.Screen name="onboarding" />
+                <Stack.Screen name="(main)" />
+                <Stack.Screen name="settings" />
+                <Stack.Screen name="profile" />
+            </Stack>
+            <StatusBar style="auto" />
         </ThemeProvider>
     );
 }

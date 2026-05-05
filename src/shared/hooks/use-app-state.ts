@@ -4,6 +4,7 @@ import { AppState, AppStateStatus } from "react-native";
 import { activeActivityService } from "../services/active-activity.service";
 import { activityNotificationService } from "../services/notification/active-activity.notification.service";
 
+let _initialized = false;
 export function useAppState() {
     const appState = useRef<AppStateStatus>(AppState.currentState);
 

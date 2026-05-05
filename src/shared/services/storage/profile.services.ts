@@ -5,9 +5,9 @@ import { Profile } from "../../types/type";
 import { StorageService } from "./storage.service";
 
 class ProfileService {
-    private profileStore = new StorageService<Profile>(STORAGE_KEYS.PROFILE);
+    private profileStore = new StorageService(STORAGE_KEYS.PROFILE);
 
-    async getProfile(): Promise<Profile | null> {
+    async get(): Promise<Profile | null> {
         logger.log("[ProfileService] getProfile → start");
 
         try {
@@ -25,7 +25,7 @@ class ProfileService {
         }
     }
 
-    async saveProfile(profile: Profile): Promise<Profile | null> {
+    async save(profile: Profile): Promise<Profile | null> {
         logger.log("[ProfileService] saveProfile → start");
 
         try {
@@ -47,18 +47,18 @@ class ProfileService {
 
             logger.log("[ProfileService] saveProfile → success");
 
-            return await this.getProfile();
+            return await this.get();
         } catch (error) {
             logger.error("[ProfileService] saveProfile → error:", error);
             throw error;
         }
     }
 
-    async updateProfile(updates: Partial<Profile>): Promise<Profile> {
+    async update(updates: Partial<Profile>): Promise<Profile> {
         logger.log("[ProfileService] updateProfile → start");
 
         try {
-            const current = await this.getProfile();
+            const current = await this.get();
 
             if (!current) {
                 logger.warn(
@@ -89,7 +89,7 @@ class ProfileService {
         }
     }
 
-    async deleteProfile(): Promise<void> {
+    async delete(): Promise<void> {
         logger.log("[ProfileService] deleteProfile → start");
 
         try {
@@ -106,7 +106,7 @@ class ProfileService {
         logger.log("[ProfileService] isProfileSetup → checking");
 
         try {
-            const profile = await this.getProfile();
+            const profile = await this.get();
             const result = !!profile;
 
             logger.log("[ProfileService] isProfileSetup → result:", result);

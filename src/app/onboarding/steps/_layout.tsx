@@ -1,9 +1,9 @@
+import OnBoardingProvider from "@/features/onboarding/contexts/OnBoardingContext";
 import { Stack } from "expo-router";
-import { SafeAreaView } from "react-native-safe-area-context";
 
-export default function OnboardingLayout() {
+export default function OnboardingStepsLayout() {
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <OnBoardingProvider>
             <Stack
                 screenOptions={{
                     headerShown: false,
@@ -11,6 +11,6 @@ export default function OnboardingLayout() {
                     animation: "slide_from_right",
                 }}
             />
-        </SafeAreaView>
+        </OnBoardingProvider>
     );
 }

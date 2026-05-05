@@ -1,32 +1,28 @@
+import { logger } from "@/shared/utils/logger";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const STORAGE_KEYS = {
-    activeActivity: "@active_activity",
-    activities: "@activities",
-};
-
-export class StorageService<T> {
+export class StorageService {
     private key: string;
 
     constructor(key: string) {
         this.key = key;
     }
 
-    async get(): Promise<T | null> {
+    async get() {
         try {
             const value = await AsyncStorage.getItem(this.key);
-            return value ? (JSON.parse(value) as T) : null;
+            return value ? JSON.parse(value) : null;
         } catch (error) {
-            console.error(`Error getting ${this.key}:`, error);
+            logger.error(`Error getting ${this.key}:`, error);
             return null;
         }
     }
 
-    async set(data: T): Promise<void> {
+    async set<T>(data: T): Promise<void> {
         try {
             await AsyncStorage.setItem(this.key, JSON.stringify(data));
         } catch (error) {
-            console.error(`Error setting ${this.key}:`, error);
+            logger.error(`Error setting ${this.key}:`, error);
         }
     }
 
@@ -34,11 +30,11 @@ export class StorageService<T> {
         try {
             await AsyncStorage.removeItem(this.key);
         } catch (error) {
-            console.error(`Error removing ${this.key}:`, error);
+            logger.error(`Error removing ${this.key}:`, error);
         }
     }
 
-    async update(partial: Partial<T>): Promise<void> {
+    async update<T>(partial: T): Promise<void> {
         try {
             const current = await this.get();
 
@@ -54,7 +50,19 @@ export class StorageService<T> {
 
             await this.set(updated as T);
         } catch (error) {
-            console.error(`Error updating ${this.key}:`, error);
+            logger.error(`Error updating ${this.key}:`, error);
+        }
+    }
+    static async resetAll(): Promise<void> {
+        try {
+            const keys = await AsyncStorage.getAllKeys();
+            const appKeys = keys.filter((k) => k.startsWith("@steps"));
+            if (appKeys.length > 0) {
+                await AsyncStorage.multiRemove(appKeys);
+            }
+        } catch (error) {
+            logger.error("Error resetting all storage:", error);
+            throw error;
         }
     }
 }

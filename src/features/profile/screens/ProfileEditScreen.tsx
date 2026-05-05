@@ -31,7 +31,7 @@ export function EditProfileScreen() {
     const handleSave = async () => {
         if (!newProfile) return;
 
-        const updatedProfile = await profileService.saveProfile({
+        const updatedProfile = await profileService.save({
             name: newProfile.name,
             age: newProfile.age,
             gender: newProfile.gender,
@@ -203,7 +203,7 @@ export function EditProfileScreen() {
                             "h-16 p-4 flex-1 rounded-full justify-center items-center bg-destructive",
                         )}
                         onPress={async () => {
-                            await profileService.deleteProfile();
+                            await profileService.delete();
                         }}
                     >
                         <Text className="text-foreground">Delete Profile</Text>
