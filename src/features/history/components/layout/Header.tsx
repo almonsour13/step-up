@@ -3,10 +3,8 @@ import Text from "@/shared/components/ui/Text";
 
 export default function Header() {
     return (
-        <ColView className="px-4 pt-12 gap-0.5 pb-4">
-            <Text className="text-2xl font-medium text-foreground">
-                History
-            </Text>
+        <ColView className="px-4 pt-8 gap-0.5 pb-4">
+            <Text className="text-xl font-medium text-foreground">History</Text>
             <Text className="text-sm text-muted-foreground">
                 Your activity over time
             </Text>

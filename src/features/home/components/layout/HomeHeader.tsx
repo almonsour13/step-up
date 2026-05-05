@@ -1,8 +1,10 @@
 import { ColView, RowView } from "@/shared/components/CustomView";
+import Card from "@/shared/components/ui/Card";
 import Text from "@/shared/components/ui/Text";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import { useRouter } from "expo-router";
 import { useMemo } from "react";
+import { TouchableOpacity } from "react-native";
 
 const PHRASES = {
     morning: [
@@ -28,7 +30,7 @@ const PHRASES = {
     ],
 };
 
-export default function Header() {
+export default function HomeHeader() {
     const router = useRouter();
     const profile = useProfileStore((s) => s.profile);
 
@@ -39,16 +41,28 @@ export default function Header() {
         const pool = PHRASES[greeting];
         return pool[Math.floor(Math.random() * pool.length)];
     }, [greeting]);
+
+    const initials =
+        profile?.name
+            .trim()
+            .split(" ")
+            .map((w) => w[0])
+            .join("")
+            .slice(0, 2)
+            .toUpperCase() ?? "?";
     return (
-        <RowView className="px-4 pt-12 justify-between items-start">
-            <ColView className="gap-1">
+        <RowView className="px-4 pt-8 gap-4 justify-between items-start">
+            <ColView className="flex-1 gap-1">
                 <Text className="text-lg text-muted-foreground">
                     Good {greeting}, {profile?.name.split(" ")[0]}
                 </Text>
-                <Text className="text-2xl text-foreground leading-snug">
-                    {randomPhrase}
-                </Text>
+                <Text className="text-2xl text-foreground">{randomPhrase}</Text>
             </ColView>
+            <TouchableOpacity onPress={() => router.push("/onboarding")}>
+                <Card className="w-12 p-0 h-12 aspect-square rounded-full justify-center items-center">
+                    <Text className="text-xl text-primary">{initials}</Text>
+                </Card>
+            </TouchableOpacity>
         </RowView>
     );
 }

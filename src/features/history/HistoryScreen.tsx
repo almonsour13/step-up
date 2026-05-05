@@ -143,7 +143,7 @@ export default function HistoryScreen() {
                         onPress={() => sortDrawerRef.current?.open()}
                         className="items-center rounded-lg"
                     >
-                        <Text className="text-sm text-muted-foreground">
+                        <Text className="hidden text-sm text-muted-foreground">
                             {capitalize(sort || "newest")}
                         </Text>
                     </TouchableOpacity>

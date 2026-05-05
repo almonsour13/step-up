@@ -18,8 +18,6 @@ export default function TabLayout() {
             <Tabs
                 screenOptions={{
                     headerShown: false,
-                    // Tabs handles slide direction automatically
-                    // based on tab index order
                     animation: "none",
                     sceneStyle: {
                         backgroundColor: "transparent",
@@ -27,7 +25,7 @@ export default function TabLayout() {
                 }}
                 tabBar={() => null} // hide default tab bar — you use MainNavigation
             >
-                <Tabs.Screen name="home" />
+                <Tabs.Screen name="index" />
                 <Tabs.Screen name="history" />
                 <Tabs.Screen name="activity" />
             </Tabs>

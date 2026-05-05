@@ -59,12 +59,12 @@ export function EditProfileScreen() {
         row2: [
             {
                 Label: "Weight",
-                value: newProfile?.weight + " kg",
+                value: newProfile?.weight && newProfile?.weight + " kg",
                 onPress: () => weightDrawerRef.current?.open(),
             },
             {
                 Label: "Height",
-                value: newProfile?.height + " cm",
+                value: newProfile?.height && newProfile?.height + " cm",
                 onPress: () => heightDrawerRef.current?.open(),
             },
         ],
@@ -98,7 +98,7 @@ export function EditProfileScreen() {
         <>
             <ColView className="flex-1 gap-4">
                 {/* header */}
-                <ColView className="px-4 h-20 justify-center">
+                <ColView className="px-4 pt-8 justify-center">
                     <RowView className="justify-between">
                         <RowView className="items-center gap-4">
                             <TouchableOpacity onPress={() => router.back()}>

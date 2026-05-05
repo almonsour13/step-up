@@ -1,6 +1,7 @@
 const APP_PREFIX = "@steps";
 
 export const STORAGE_KEYS = {
+    ONBOARDING: `${APP_PREFIX}/onboarding`,
     PROFILE: `${APP_PREFIX}/profile`,
     SETTINGS: `${APP_PREFIX}/settings`,
     ACTIVITIES: `${APP_PREFIX}/activities`,

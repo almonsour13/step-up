@@ -2,7 +2,7 @@ import { ColView } from "@/shared/components/CustomView";
 import { useActivity } from "@/shared/hooks/use-activity";
 import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { RefreshControl, ScrollView } from "react-native";
-import Header from "./components/layout/Header";
+import HomeHeader from "./components/layout/HomeHeader";
 import RecentActivity from "./components/RecentActivity";
 import TodayActivity from "./components/TodayActivity";
 import WeekActivity from "./components/WeekActivity";
@@ -21,7 +21,7 @@ export default function HomeScreen() {
             }
         >
             <ColView className="flex-1 gap-4 pb-4">
-                <Header />
+                <HomeHeader />
                 <WeekActivity />
                 <TodayActivity />
                 <RecentActivity />

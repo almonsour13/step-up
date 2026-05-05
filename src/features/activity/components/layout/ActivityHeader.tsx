@@ -11,7 +11,7 @@ export default function ActivityHeader() {
     });
 
     return (
-        <RowView className="px-4 h-20 items-center justify-between">
+        <RowView className="px-4 pt-8 items-center justify-between">
             <RowView className="flex-1 justify-center">
                 <Text className="text-xl font-medium">{date}</Text>
             </RowView>

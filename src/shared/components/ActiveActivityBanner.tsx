@@ -7,6 +7,7 @@ import { Animated, TouchableOpacity } from "react-native";
 import { useActiveActivityControl } from "../hooks/use-active-activity-control";
 import { useActiveActivityStore } from "../stores/use-active-activity.store";
 import { RowView } from "./CustomView";
+import Card from "./ui/Card";
 import Text from "./ui/Text";
 
 function ActiveActivityBanner() {
@@ -62,52 +63,51 @@ function ActiveActivityBanner() {
     if (hide) return null;
     return (
         <Animated.View>
-            <TouchableOpacity
-                className="p-4 py-2 bg-primary"
-                onPress={() => router.push("/activity")}
-            >
-                <RowView className="justify-between items-center">
-                    <RowView className="gap-4">
-                        {stats.map((stat, i) => {
-                            return (
-                                <RowView
-                                    key={stat.label}
-                                    className="items-center gap-2"
-                                >
-                                    <Ionicons
-                                        name={stat.icon}
-                                        size={16}
-                                        className="text-white/50"
-                                    />
-                                    <Text className="text-base text-white font-medium">
-                                        {stat.value}{" "}
-                                        {stat.unit && (
-                                            <Text className="text- font-normal text-muted pb-1">
-                                                {stat.unit}
-                                            </Text>
-                                        )}
-                                    </Text>
-                                </RowView>
-                            );
-                        })}
+            <TouchableOpacity onPress={() => router.push("/activity")}>
+                <Card className="p-4 py-2 pb-4 -mb-2 rounded-b-none bg-primary">
+                    <RowView className="justify-between items-center">
+                        <RowView className="gap-4">
+                            {stats.map((stat, i) => {
+                                return (
+                                    <RowView
+                                        key={stat.label}
+                                        className="items-center gap-2"
+                                    >
+                                        <Ionicons
+                                            name={stat.icon}
+                                            size={16}
+                                            className="text-white/50"
+                                        />
+                                        <Text className="text-base text-white font-medium">
+                                            {stat.value}{" "}
+                                            {stat.unit && (
+                                                <Text className="text- font-normal text-muted pb-1">
+                                                    {stat.unit}
+                                                </Text>
+                                            )}
+                                        </Text>
+                                    </RowView>
+                                );
+                            })}
+                        </RowView>
+                        <TouchableOpacity
+                            onPress={handleStateAction}
+                            className={clsx(
+                                "rounded-full aspect-square justify-center items-center",
+                            )}
+                        >
+                            <Ionicons
+                                name={
+                                    status === "active"
+                                        ? "pause-circle"
+                                        : "play-circle"
+                                }
+                                size={40}
+                                className="text-white"
+                            />
+                        </TouchableOpacity>
                     </RowView>
-                    <TouchableOpacity
-                        onPress={handleStateAction}
-                        className={clsx(
-                            "rounded-full aspect-square justify-center items-center",
-                        )}
-                    >
-                        <Ionicons
-                            name={
-                                status === "active"
-                                    ? "pause-circle"
-                                    : "play-circle"
-                            }
-                            size={40}
-                            className="text-white"
-                        />
-                    </TouchableOpacity>
-                </RowView>
+                </Card>
             </TouchableOpacity>
         </Animated.View>
     );

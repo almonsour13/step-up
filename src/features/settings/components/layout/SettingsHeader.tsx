@@ -7,7 +7,7 @@ import { TouchableOpacity } from "react-native";
 export default function SettingsHeader() {
     const router = useRouter();
     return (
-        <ColView className="px-4 h-20 justify-center">
+        <ColView className="px-4 pb-4 pt-8 justify-center">
             <RowView className="items-center gap-4">
                 <TouchableOpacity onPress={() => router.back()}>
                     <Ionicons
