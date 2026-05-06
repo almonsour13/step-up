@@ -4,7 +4,8 @@ import { useActiveActivityControl } from "@/shared/hooks/use-active-activity-con
 import { useActiveActivityStore } from "@/shared/stores/use-active-activity.store";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { clsx } from "clsx";
-import { TouchableOpacity } from "react-native";
+import { useEffect, useRef } from "react";
+import { Animated, TouchableOpacity } from "react-native";
 
 export default function ActivityController() {
     const activeStatus = useActiveActivityStore(
@@ -33,8 +34,37 @@ export default function ActivityController() {
     const isRunning = activeStatus === "active";
     const isPaused = activeStatus === "paused";
     const isDisabled = activeStatus === "idle" || isRunning;
+
+    const pingScale = useRef(new Animated.Value(1)).current;
+    const pingOpacity = useRef(new Animated.Value(0.6)).current;
+
+    useEffect(() => {
+        if (!isRunning) {
+            pingScale.setValue(1);
+            pingOpacity.setValue(0.6);
+            return;
+        }
+
+        const ping = Animated.loop(
+            Animated.parallel([
+                Animated.timing(pingScale, {
+                    toValue: 1.6,
+                    duration: 1000,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(pingOpacity, {
+                    toValue: 0,
+                    duration: 1000,
+                    useNativeDriver: true,
+                }),
+            ]),
+        );
+
+        ping.start();
+        return () => ping.stop();
+    }, [isRunning]);
     return (
-        <RowView className="justify-center items-end gap-6">
+        <RowView className="justify-center items-end gap-6 pb-8">
             {/* Reset */}
             <ColView className="items-center gap-1.5">
                 <TouchableOpacity
@@ -60,8 +90,7 @@ export default function ActivityController() {
                     onPress={handleMain}
                     activeOpacity={0.8}
                     className={clsx(
-                        "h-32 aspect-square rounded-full items-center justify-center",
-                        isRunning ? "bg-destructive" : "bg-primary",
+                        "relative h-32 aspect-square rounded-full items-center justify-center bg-primary",
                     )}
                 >
                     <Ionicons
@@ -69,6 +98,15 @@ export default function ActivityController() {
                         size={36}
                         color="white"
                     />
+                    {isRunning && (
+                        <Animated.View
+                            style={{
+                                transform: [{ scale: pingScale }],
+                                opacity: pingOpacity,
+                            }}
+                            className="absolute rounded-full inset-0 border-primary border-4"
+                        />
+                    )}
                 </TouchableOpacity>
                 <Text className="text-[10px] text-muted-foreground">
                     {isRunning ? "Pause" : isPaused ? "Resume" : "Start"}

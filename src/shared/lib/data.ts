@@ -1,3 +1,5 @@
+import { generateId } from "../utils/utils";
+
 export type Activity = {
     id: string;
     startTime: string;
@@ -20,8 +22,6 @@ type GenerateOptions = {
 
 const randomBetween = (min: number, max: number) =>
     Math.floor(Math.random() * (max - min + 1)) + min;
-
-const randomId = () => Math.random().toString(36).substring(2, 10);
 
 export function generateActivities(options?: GenerateOptions): Activity[] {
     const {
@@ -64,7 +64,7 @@ export function generateActivities(options?: GenerateOptions): Activity[] {
             const steps = randomBetween(minStepsPerSession, maxStepsPerSession);
 
             activities.push({
-                id: randomId(),
+                id: generateId(),
                 startTime: start.toISOString(),
                 endTime: end.toISOString(),
                 duration,

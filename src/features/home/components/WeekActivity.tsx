@@ -184,7 +184,8 @@ function WeekActivity() {
 
                             <RowView className="justify-between">
                                 <Text className="text-sm text-white/80">
-                                    {motivation.emoji} {motivation.text}
+                                    {/* {motivation.emoji} */}
+                                    {motivation.text}
                                 </Text>
                                 <Text className="text-sm text-white">
                                     {totalPct.toFixed(0)}%

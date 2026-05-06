@@ -1,4 +1,4 @@
-import ActivityCard from "@/features/home/components/ui/ActivityCard";
+import ActivityCard from "@/shared/components/ActivityCard";
 import { useActivityStore } from "@/shared/stores/use-activity.store";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import Ionicons from "@expo/vector-icons/Ionicons";

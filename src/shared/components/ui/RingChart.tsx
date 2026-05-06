@@ -25,15 +25,15 @@ export default function RingChart({
     gapDeg = 0,
     startDeg = 0,
 }: RingChartProps) {
+    const clampedPct = Math.min(Math.max(pct, 0), 100); // ✅ clamp 0–100
+
     const CENTER = radius + strokeWidth;
     const CIRCUMFERENCE = 2 * Math.PI * radius;
     const SIZE = (radius + strokeWidth) * 2;
-
     const gapLength = (gapDeg / 360) * CIRCUMFERENCE;
     const trackArcLength = CIRCUMFERENCE - gapLength * 2;
-    const progressArcLength = (pct / 100) * trackArcLength;
+    const progressArcLength = (clampedPct / 100) * trackArcLength; // ✅ use clamped
 
-    // -90 normalizes 0 to 12 o'clock, startDeg rotates from there, gapDeg offsets for the gap
     const rotation = -90 + startDeg + gapDeg;
 
     return (
@@ -54,7 +54,7 @@ export default function RingChart({
                     cy={CENTER}
                     r={radius}
                     fill="transparent"
-                    stroke={color}
+                    stroke={color ? color : "#22c55e"} // ✅ green when complete
                     strokeWidth={strokeWidth}
                     strokeDasharray={`${progressArcLength} ${CIRCUMFERENCE}`}
                     strokeLinecap={strokeLinecap}

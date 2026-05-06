@@ -1,7 +1,9 @@
 import { ColView } from "@/shared/components/CustomView";
 import Text from "@/shared/components/ui/Text";
-// finish screen
-export default function Screen() {
+import { Dimensions } from "react-native";
+
+const { width } = Dimensions.get("window");
+export default function FinishSteps() {
     return (
         <ColView className="flex-1 gap-12">
             <ColView className="px-4 justify-center gap-4">

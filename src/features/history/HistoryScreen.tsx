@@ -24,7 +24,7 @@ import {
     TouchableOpacity,
     View,
 } from "react-native";
-import ActivityCard from "../home/components/ui/ActivityCard";
+import ActivityCard from "../../shared/components/ActivityCard";
 import ActivityHistoryFilter from "./components/ActivityHistoryFilter";
 import ActivityHistorySummary from "./components/ActivityHistorySummary";
 import Header from "./components/layout/Header";
@@ -161,7 +161,7 @@ export default function HistoryScreen() {
                         ? []
                         : activityHistory
                 }
-                contentContainerClassName="gap-2 pb-4"
+                contentContainerClassName="gap-2 pb-28"
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={RenderHeader}
                 keyExtractor={([date]) => date}

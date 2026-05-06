@@ -2,15 +2,13 @@ import { ColView, RowView } from "@/shared/components/CustomView";
 import Card from "@/shared/components/ui/Card";
 import Text from "@/shared/components/ui/Text";
 import { useActivityStore } from "@/shared/stores/use-activity.store";
-import { useRouter } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { memo, useMemo } from "react";
 import { TouchableOpacity, View } from "react-native";
-import ActivityCard from "./ui/ActivityCard";
+import ActivityCard from "../../../shared/components/ActivityCard";
 
 function RecentActivity() {
-    const router = useRouter();
-    // const isLoading = useHomeStore((s) => s.isRecentLoading);
-    // const activities = useHomeStore((s) => s.recentActivity);
+    const navigation = useNavigation();
     const isLoading = useActivityStore((s) => s.isLoading);
     const activities = useMemo(() => {
         return useActivityStore((s) => s.activities).slice(0, 5);
@@ -21,7 +19,9 @@ function RecentActivity() {
                 <Text className="text-lg font-medium text-foreground">
                     Recent activity
                 </Text>
-                <TouchableOpacity onPress={() => router.push("/history")}>
+                <TouchableOpacity
+                    onPress={() => navigation.navigate("history" as never)}
+                >
                     <Text className="text-base text-primary">See all</Text>
                 </TouchableOpacity>
             </RowView>

@@ -12,13 +12,13 @@ import { Gender } from "@/shared/types/type";
 import { capitalize } from "@/shared/utils/capitalize";
 import { cn } from "@/shared/utils/cn";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
-import { useRouter } from "expo-router";
 import { useRef, useState } from "react";
 import { TextInput, ToastAndroid, TouchableOpacity, View } from "react-native";
 
 export function EditProfileScreen() {
-    const router = useRouter();
+    const navigation = useNavigation();
     const profile = useProfileStore((s) => s.profile);
     const updateProfile = useProfileStore((s) => s.updateProfile);
     const [newProfile, setNewProfile] = useState(profile);
@@ -41,7 +41,7 @@ export function EditProfileScreen() {
         if (!updatedProfile) return;
         updateProfile(updatedProfile);
         ToastAndroid.show("Profile Updated", ToastAndroid.SHORT);
-        router.back();
+        navigation.goBack();
     };
     const Rows = {
         row1: [
@@ -101,7 +101,9 @@ export function EditProfileScreen() {
                 <ColView className="px-4 pt-8 justify-center">
                     <RowView className="justify-between">
                         <RowView className="items-center gap-4">
-                            <TouchableOpacity onPress={() => router.back()}>
+                            <TouchableOpacity
+                                onPress={() => navigation.goBack()}
+                            >
                                 <Ionicons
                                     name="arrow-back"
                                     size={24}
@@ -196,19 +198,6 @@ export function EditProfileScreen() {
                         ))}
                     </RowView>
                 </ColView>
-                <RowView className="px-4 items-end">
-                    <TouchableOpacity
-                        disabled={!canSave}
-                        className={cn(
-                            "h-16 p-4 flex-1 rounded-full justify-center items-center bg-destructive",
-                        )}
-                        onPress={async () => {
-                            await profileService.delete();
-                        }}
-                    >
-                        <Text className="text-foreground">Delete Profile</Text>
-                    </TouchableOpacity>
-                </RowView>
                 <RowView className="px-4 mb-8 items-end">
                     <TouchableOpacity
                         disabled={!canSave}

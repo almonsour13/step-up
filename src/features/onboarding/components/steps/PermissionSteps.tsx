@@ -5,7 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import * as Notifications from "expo-notifications";
 import { Pedometer } from "expo-sensors";
 import { useEffect, useState } from "react";
-import { Alert, TouchableOpacity, View } from "react-native";
+import { Alert, Dimensions, TouchableOpacity, View } from "react-native";
 
 type PermissionStatus = "idle" | "granted" | "denied";
 
@@ -19,7 +19,8 @@ type Permission = {
     request: () => Promise<boolean>;
 };
 
-export default function OnBoardingPermissionScreen() {
+const { width } = Dimensions.get("window");
+export default function PermissionSteps() {
     const [statuses, setStatuses] = useState<Record<string, PermissionStatus>>({
         pedometer: "idle",
         notifications: "idle",
@@ -102,7 +103,7 @@ export default function OnBoardingPermissionScreen() {
 
     return (
         <>
-            <ColView className="flex-1 gap-12">
+            <ColView className="flex-1 gap-12" style={{ width }}>
                 <ColView className="px-4 justify-center gap-4">
                     <Text className="text-4xl font-semibold">
                         Allow access{"\n"}to get started

@@ -58,7 +58,7 @@ export default function HomeHeader() {
                 </Text>
                 <Text className="text-2xl text-foreground">{randomPhrase}</Text>
             </ColView>
-            <TouchableOpacity onPress={() => router.push("/onboarding")}>
+            <TouchableOpacity>
                 <Card className="w-12 p-0 h-12 aspect-square rounded-full justify-center items-center">
                     <Text className="text-xl text-primary">{initials}</Text>
                 </Card>

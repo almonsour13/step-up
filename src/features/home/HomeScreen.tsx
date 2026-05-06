@@ -20,7 +20,7 @@ export default function HomeScreen() {
                 />
             }
         >
-            <ColView className="flex-1 gap-4 pb-4">
+            <ColView className="flex-1 gap-4 pb-28">
                 <HomeHeader />
                 <WeekActivity />
                 <TodayActivity />

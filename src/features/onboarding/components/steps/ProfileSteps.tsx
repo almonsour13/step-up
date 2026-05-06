@@ -11,9 +11,10 @@ import { Gender } from "@/shared/types/type";
 import { capitalize } from "@/shared/utils/capitalize";
 import { cn } from "@/shared/utils/cn";
 import { useRef } from "react";
-import { TextInput, TouchableOpacity } from "react-native";
+import { Dimensions, TextInput, TouchableOpacity } from "react-native";
 
-export default function OnBoardingProfileScreen() {
+const { width } = Dimensions.get("window");
+export default function ProfileSteps() {
     const profile = useProfileStore((s) => s.profile);
     const setProfile = useProfileStore((s) => s.setProfile);
     const updateProfile = useProfileStore((s) => s.updateProfile);
@@ -52,7 +53,7 @@ export default function OnBoardingProfileScreen() {
 
     return (
         <>
-            <ColView className="flex-1 gap-12">
+            <ColView className="flex-1 gap-12" style={{ width }}>
                 <ColView className="px-4 justify-center gap-4">
                     <Text className="text-4xl font-semibold">
                         Tell us about{"\n"}yourself

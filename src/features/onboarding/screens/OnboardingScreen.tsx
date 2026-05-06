@@ -1,11 +1,11 @@
 import { ColView } from "@/shared/components/CustomView";
 import FootprintBanner from "@/shared/components/FootPrints";
 import Text from "@/shared/components/ui/Text";
-import { useRouter } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View } from "react-native";
 
-export default function Screen() {
-    const router = useRouter();
+export default function OnboardingScreen() {
+    const navigation = useNavigation();
     return (
         <ColView className="flex-1 gap-8">
             <ColView className="flex-1">
@@ -29,7 +29,7 @@ export default function Screen() {
             </ColView>
             <View className="px-4 pb-16">
                 <TouchableOpacity
-                    onPress={() => router.push("/onboarding/steps")}
+                    onPress={() => navigation.navigate("onboardingSteps")}
                     className="h-16 rounded-full justify-center items-center bg-primary "
                 >
                     <Text className="text-white font-medium">Get Started</Text>

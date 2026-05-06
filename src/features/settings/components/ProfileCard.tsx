@@ -3,11 +3,11 @@ import Card from "@/shared/components/ui/Card";
 import Text from "@/shared/components/ui/Text";
 import { useProfileStore } from "@/shared/stores/use-profile.store";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useRouter } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity, View } from "react-native";
 
 export default function ProfileSection() {
-    const router = useRouter();
+    const navigation = useNavigation();
     const profile = useProfileStore((s) => s.profile);
 
     const initials =
@@ -23,7 +23,13 @@ export default function ProfileSection() {
         <ColView className="px-4">
             <Text className="text-sm text-muted-foreground px-1">Profile</Text>
             <Card className="p-0">
-                <TouchableOpacity onPress={() => router.push("/profile/edit")}>
+                <TouchableOpacity
+                    onPress={() =>
+                        navigation.navigate("profile", {
+                            screen: "editProfile",
+                        })
+                    }
+                >
                     <RowView className="items-center justify-between p-4 ">
                         <RowView className="gap-4">
                             <View className="w-12 h-12 rounded-full bg-foreground items-center justify-center">
